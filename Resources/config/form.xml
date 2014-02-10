@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="form.type.behat_launcher_run" class="Alex\BehatLauncherBundle\Form\Type\RunType">
+            <tag name="form.type" alias="behat_launcher_run" />
+        </service>
+
+        <service id="form.type.behat_launcher_features" class="Alex\BehatLauncherBundle\Form\Type\FeaturesType">
+            <tag name="form.type" alias="behat_launcher_features" />
+        </service>
+    </services>
+
+</container>

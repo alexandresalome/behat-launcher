@@ -1,0 +1,55 @@
+{% extends "AlexBehatLauncherBundle::layout.html.twig" %}
+
+{% block title 'Show a run' %}
+
+{% set menu_active = {
+    href: path('_behat_launcher_run_show', {id: run.id}),
+    label: run.projectName ~ " - #" ~ run.id
+} %}
+
+{% block content %}
+    <h1>
+        #{{ run.id }}: {% if run.title %}{{ run.title }}{% else %}<em>no title</em>{% endif %}
+        <small><span class="label label-{{ run.status }}">{{ run.status }}</span></small>
+    </h1>
+    <hr />
+    <div class="block-counters">
+        <div class="counter{{ run.countPending == 0 ? ' counter-empty' : '' }}">
+            <span class="number">{{ run.countPending }}</span>
+            <span class="label">pending</span>
+        </div>
+        <div class="counter{{ run.countRunning == 0 ? ' counter-empty' : '' }}">
+            <span class="number">{{ run.countRunning }}</span>
+            <span class="label">running</span>
+        </div>
+        <div class="counter{{ run.countSucceeded == 0 ? ' counter-empty' : '' }}">
+            <span class="number">{{ run.countSucceeded }}</span>
+            <span class="label">succeeded</span>
+        </div>
+        <div class="counter{{ run.countFailed == 0 ? ' counter-empty' : '' }}">
+            <span class="number">{{ run.countFailed }}</span>
+            <span class="label">failed</span>
+        </div>
+    </div>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Status</th>
+                <th>Started at</th>
+                <th>Finished at</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for unit in run.units %}
+                <tr>
+                    <td>{{ unit.feature }}</td>
+                    <td><span class="label label-{{ run.status }}">{{ run.status }}</span></td>
+                    <td>{{ unit.startedAt ? unit.startedAt.format('Y-m-d') : '-' }}
+                    <td>{{ unit.finishedAt ? unit.finishedAt.format('Y-m-d') : '-' }}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

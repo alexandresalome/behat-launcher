@@ -1,0 +1,21 @@
+{
+    "name": "alexandresalome/behat-launcher-bundle",
+    "description": "Behat Launcher Bundle",
+    "license": "MIT",
+
+    "autoload": {
+        "psr-4": {
+            "Alex\\BehatLauncherBundle\\": "."
+        }
+    },
+
+    "require": {
+        "php": ">=5.4",
+        "symfony/symfony": "~2.4",
+        "behat/behat": "~2.4"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "~3.7"
+    }
+}

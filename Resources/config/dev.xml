@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="behat_launcher.project_list" class="Alex\BehatLauncherBundle\Behat\ProjectList">
+            <argument></argument> <!-- projects -->
+        </service>
+
+        <service id="behat_launcher.run_storage" class="Alex\BehatLauncherBundle\Behat\Storage\MysqlStorage">
+            <argument type="service" id="behat_launcher.dbal_connection" />
+        </service>
+
+        <service id="data_collector.behat_launcher" class="Alex\BehatLauncherBundle\DataCollector\BehatLauncherDataCollector" public="false">
+            <tag name="data_collector" template="@AlexBehatLauncher/Collector/behat_launcher.html.twig" id="behat_launcher" />
+        </service>
+    </services>
+
+</container>

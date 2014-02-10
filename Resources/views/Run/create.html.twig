@@ -1,0 +1,14 @@
+{% extends "AlexBehatLauncherBundle::layout.html.twig" %}
+
+{% block title 'Create a run' %}
+
+{% set menu_active = {
+    href: path('_behat_launcher_run_create', {project: project.name}),
+    label: project.name ~ " - new run"
+} %}
+
+{% block content %}
+    <h1>Create a run for project {{ project.name }}</h1>
+    {% form_theme form "AlexBehatLauncherBundle::form_theme.html.twig" %}
+    {{ form(form, {action: path('_behat_launcher_run_create', {project: project.name})}) }}
+{% endblock %}
