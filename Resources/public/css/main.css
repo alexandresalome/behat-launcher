@@ -83,6 +83,75 @@ div.block-counters > div.counter > span.number {
     font-weight: bold;
 }
 
+span.label {
+    font-size: 0.7em;
+    display: inline-block;
+    padding: 3px 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+span.label-pending {
+    background-color: #08f;
+    color: white;
+}
+
+span.label-running {
+    background-color: #f80;
+    color: white;
+}
+
+span.label-succeeded {
+    background-color: #0a0;
+    color: white;
+}
+
+span.label-failed {
+    background-color: #a00;
+    color: white;
+}
+
+table.table tr.row-pending {
+    background-color: #ccf;
+}
+
+table.table tr.row-running {
+    background-color: #fc8;
+}
+
+table.table tr.row-succeeded {
+    background-color: #cfc;
+}
+
+table.table tr.row-failed {
+    background-color: #f88;
+}
+
+table.table td {
+    padding: 6px;
+}
+
+table.table {
+    border-collapse: collapse;
+    border: 0;
+}
+
+div.block-counters > div.counter-pending {
+    color: #08f;
+}
+
+div.block-counters > div.counter-running {
+    color: #f80;
+}
+
+div.block-counters > div.counter-succeeded {
+    color: #0a0;
+}
+
+div.block-counters > div.counter-failed {
+    color: #a00;
+}
+
 div.block-counters > div.counter-empty {
     color: #bbb;
 }
