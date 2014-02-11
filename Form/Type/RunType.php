@@ -26,7 +26,7 @@ class RunType extends AbstractType
         }
 
         $builder
-            ->add('title', 'text')
+            ->add('title', 'text', array('required' => false))
             ->add('features', 'behat_launcher_features', array(
                 'project' => $options['project'],
                 'mapped' => false

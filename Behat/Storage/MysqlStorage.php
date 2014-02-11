@@ -174,7 +174,6 @@ class MysqlStorage implements RunStorageInterface
                 U.id AS id,
                 U.feature AS feature,
                 U.created_at AS created_at,
-                U.started_at AS started_at,
                 U.finished_at AS finished_at,
                 U.return_code AS return_code,
                 U.output_files AS output_files,
@@ -186,7 +185,7 @@ class MysqlStorage implements RunStorageInterface
                 bl_run R
                 INNER JOIN bl_run_unit U ON R.id = U.run_id
             WHERE U.started_at IS NULL '.$whereProject.'
-            ORDER BY U.created_at DESC
+            ORDER BY U.created_at ASC
             LIMIT 1
         ');
 
@@ -220,7 +219,7 @@ class MysqlStorage implements RunStorageInterface
             ->setId($row['id'])
             ->setFeature($row['feature'])
             ->setCreatedAt(new \DateTime($row['created_at']))
-            ->setStartedAt($row['started_at'] !== null ? new \DateTime($row['started_at']) : null)
+            ->setStartedAt(new \DateTime()) // UPDATEd above
             ->setFinishedAt($row['finished_at'] !== null ? new \DateTime($row['finished_at']) : null)
             ->setReturnCode($row['return_code'])
             ->setOutputFiles(json_decode($row['output_files'], true))

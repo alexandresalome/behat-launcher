@@ -197,7 +197,6 @@ class RunUnit
 
         $this->returnCode = $process->getExitCode();
         $this->finishedAt = new \DateTime();
-
     }
 
     public function getFinishedAt()

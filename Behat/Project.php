@@ -73,7 +73,7 @@ class Project
             throw new \RuntimeException(sprintf('Path "%s" does not exist.', $this->path));
         }
 
-        $path = $this->path.'/'.$this->getFeatureDir();
+        $path = $this->path.'/'.$this->getFeaturesPath();
         if (!is_dir($path)) {
             throw new \RuntimeException(sprintf('Folder "%s" does not exist.', $path));
         }
