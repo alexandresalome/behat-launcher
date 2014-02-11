@@ -63,5 +63,5 @@ interface RunStorageInterface
      *
      * @return array
      */
-    public function getRuns(Project $project, $offset = 0, $limit = 100);
+    public function getRuns(Project $project = null, $offset = 0, $limit = 100);
 }

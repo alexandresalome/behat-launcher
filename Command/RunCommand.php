@@ -30,18 +30,34 @@ HELP
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $storage = $this->getContainer()->get('behat_launcher.run_storage');
+        $storage     = $this->getContainer()->get('behat_launcher.run_storage');
+        $projectList = $this->getContainer()->get('behat_launcher.project_list');
+
+        if (null !== $input->getArgument('project')) {
+            $project = $projectList->get($input->getArgument('project'));
+        } else {
+            $project = null;
+        }
 
         while (true) {
-            $run = $storage->getRunnable($input->getArgument('project'));
+            $unit = $storage->getRunnableUnit($project);
 
-            if (!$run) {
+            if (!$unit) {
                 $output->writeln('Found no run to process. Try again in 5 seconds...');
                 sleep(5);
 
                 continue;
             }
 
+            try {
+                $output->writeln(sprintf("Processing unit#%s", $unit->getId()));
+                $process = $unit->getProcess($projectList->get($unit->getRun()->getProjectName()));
+            } catch (\InvalidArgumentException $e) {
+                $output->write(sprintf('<error>Project %s not found.</error>', $unit->getRun()->getProjectName()));
+            }
+            $process->run();
+            $unit->finish($process);
+            $storage->saveRunUnit($unit);
         }
     }
 }

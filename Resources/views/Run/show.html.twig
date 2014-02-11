@@ -45,9 +45,9 @@
             {% for unit in run.units %}
                 <tr>
                     <td>{{ unit.feature }}</td>
-                    <td><span class="label label-{{ run.status }}">{{ run.status }}</span></td>
-                    <td>{{ unit.startedAt ? unit.startedAt.format('Y-m-d') : '-' }}
-                    <td>{{ unit.finishedAt ? unit.finishedAt.format('Y-m-d') : '-' }}
+                    <td><span class="label label-{{ unit.status }}">{{ unit.status }}</span></td>
+                    <td>{{ unit.startedAt ? unit.startedAt.format('Y-m-d H:i:s') : '-' }}
+                    <td>{{ unit.finishedAt ? unit.finishedAt.format('Y-m-d H:i:s') : '-' }}
                 </tr>
             {% endfor %}
         </tbody>

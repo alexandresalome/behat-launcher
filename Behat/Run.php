@@ -118,30 +118,6 @@ class Run
     }
 
     /**
-     * @return boolean
-     */
-    public function isPending()
-    {
-        return null === $this->startedAt;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isRunning()
-    {
-        return null !== $this->startedAt && null === $this->finishedAt;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isFinished()
-    {
-        return null !== $this->finishedAt;
-    }
-
-    /**
      * @return DateTime|null
      */
     public function getStartedAt()
@@ -256,11 +232,27 @@ class Run
     }
 
     /**
+     * @return boolean
+     */
+    public function isPending()
+    {
+        return $this->units->isPending();
+    }
+
+    /**
      * @return integer
      */
     public function countRunning()
     {
         return $this->units->countRunning();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRunning()
+    {
+        return $this->units->isRunning();
     }
 
     /**
@@ -274,6 +266,14 @@ class Run
     /**
      * @return integer
      */
+    public function isSucceeded()
+    {
+        return $this->units->isSucceeded();
+    }
+
+    /**
+     * @return integer
+     */
     public function countFailed()
     {
         return $this->units->countFailed();
@@ -282,8 +282,24 @@ class Run
     /**
      * @return integer
      */
+    public function isFailed()
+    {
+        return $this->units->isFailed();
+    }
+
+    /**
+     * @return integer
+     */
     public function countFinished()
     {
         return $this->units->countFinished();
+    }
+
+    /**
+     * @return integer
+     */
+    public function isFinished()
+    {
+        return $this->units->isFinished();
     }
 }

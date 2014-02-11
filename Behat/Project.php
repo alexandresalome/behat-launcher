@@ -73,14 +73,14 @@ class Project
             throw new \RuntimeException(sprintf('Path "%s" does not exist.', $this->path));
         }
 
-        $path = $this->path.'/features';
+        $path = $this->path.'/'.$this->getFeatureDir();
         if (!is_dir($path)) {
             throw new \RuntimeException(sprintf('Folder "%s" does not exist.', $path));
         }
 
         $finder = new FeatureFinder();
 
-        return $finder->findFeatures($path);
+        return $finder->findFeatures($path, $this->path);
     }
 
     /**
@@ -91,6 +91,16 @@ class Project
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Returns directory containing .features files.
+     *
+     * @return string
+     */
+    public function getFeaturesPath()
+    {
+        return 'features';
     }
 
     /**

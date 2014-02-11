@@ -2,6 +2,10 @@
 
 namespace Alex\BehatLauncherBundle\Behat;
 
+use Alex\BehatLauncherBundle\Behat\Project;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
+
 class RunUnit
 {
     private $id;
@@ -16,6 +20,33 @@ class RunUnit
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+    }
+
+    public function getProcess(Project $project)
+    {
+        $path = $project->getPath();
+        $pb = new ProcessBuilder(array('php', $this->findBehatBinary($path)));
+
+        $feature = $project->getFeaturesPath().'/'.$this->feature;
+        $pb->add($feature);
+
+        return $pb->getProcess();
+    }
+
+    private function findBehatBinary($path)
+    {
+        $possiblePaths = array(
+            $path.'/bin/behat',
+            $path.'/vendor/behat/behat/bin/behat'
+        );
+
+        foreach ($possiblePaths as $path) {
+            if (file_exists($path)) {
+                return $path;
+            }
+        }
+
+        throw new \RuntimeException(sprintf('Unable to find Behat path in %s.', implode(', ', $possiblePaths)));
     }
 
     public function getId()
@@ -103,7 +134,7 @@ class RunUnit
      */
     public function isSucceeded()
     {
-        return $this->isFinished() && $this->returnCode != 0;
+        return $this->isFinished() && $this->returnCode == 0;
     }
 
     public function getOutputFiles()
@@ -142,6 +173,33 @@ class RunUnit
         return $this;
     }
 
+    /**
+     * @return RunUnit
+     *
+     * @throws LogicException already started
+     */
+    public function start()
+    {
+        if (null !== $this->startedAt) {
+            throw new \LogicException('Run unit already started.');
+        }
+
+        $this->startedAt = new \DateTime();
+
+        return $this;
+    }
+
+    public function finish(Process $process)
+    {
+        if (null !== $this->finishedAt) {
+            throw new \LogicException('Run unit already finished.');
+        }
+
+        $this->returnCode = $process->getExitCode();
+        $this->finishedAt = new \DateTime();
+
+    }
+
     public function getFinishedAt()
     {
         return $this->finishedAt;
@@ -152,5 +210,27 @@ class RunUnit
         $this->finishedAt = $finishedAt;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        if ($this->isPending()) {
+            return 'pending';
+        }
+
+        if ($this->isRunning()) {
+            return 'running';
+        }
+
+        if ($this->isSucceeded()) {
+            return 'succeeded';
+        }
+
+        if ($this->isFailed()) {
+            return 'failed';
+        }
     }
 }

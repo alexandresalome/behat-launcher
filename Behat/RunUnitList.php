@@ -33,123 +33,6 @@ class RunUnitList implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return integer
-     */
-    public function countPending()
-    {
-        $count = 0;
-        foreach ($this->all() as $one) {
-            if ($one->isPending()) {
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * @return integer
-     */
-    public function countRunning()
-    {
-        $count = 0;
-        foreach ($this->all() as $one) {
-            if ($one->isRunning()) {
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * @return integer
-     */
-    public function countSucceeded()
-    {
-        $count = 0;
-        foreach ($this->all() as $one) {
-            if ($one->isSucceeded()) {
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * @return integer
-     */
-    public function countFailed()
-    {
-        $count = 0;
-        foreach ($this->all() as $one) {
-            if ($one->isFailed()) {
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * @return integer
-     */
-    public function countFinished()
-    {
-        $count = 0;
-        foreach ($this->all() as $one) {
-            if ($one->isFinished()) {
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isFinished()
-    {
-        foreach ($this->all() as $one) {
-            if (!$one->isFinished()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isFailed()
-    {
-        foreach ($this->all() as $one) {
-            if ($one->isFailed()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isSucceeded()
-    {
-        foreach ($this->all() as $one) {
-            if (!$one->isSucceeded()) {
-                return false;
-            }
-        }
-
-        return truefalse;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getIterator()
@@ -189,5 +72,162 @@ class RunUnitList implements \IteratorAggregate, \Countable
         $this->units[] = $unit;
 
         return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function countPending()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if ($one->isPending()) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPending()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if (!$one->isPending()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return integer
+     */
+    public function countRunning()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if ($one->isRunning()) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRunning()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if ($one->isRunning()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return integer
+     */
+    public function countFailed()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if ($one->isFailed()) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFailed()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if (!$one->isFinished()) {
+                return false;
+            }
+
+            if ($one->isFailed()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return integer
+     */
+    public function countSucceeded()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if ($one->isSucceeded()) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSucceeded()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if (!$one->isFinished()) {
+                return false;
+            }
+
+            if (!$one->isSucceeded()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return integer
+     */
+    public function countFinished()
+    {
+        $count = 0;
+        foreach ($this->all() as $one) {
+            if ($one->isFinished()) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFinished()
+    {
+        foreach ($this->all() as $one) {
+            if (!$one->isFinished()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

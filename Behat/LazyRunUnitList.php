@@ -31,10 +31,23 @@ class LazyRunUnitList extends RunUnitList
      * @param RunStorage $storage a storage for fetching run units
      * @param Run        $run     the concerned run
      */
-    public function __construct(RunStorageInterface $storage, Run $run)
+    public function __construct(RunStorageInterface $storage, Run $run, $pending, $running, $succeeded, $failed)
     {
         $this->storage = $storage;
         $this->run = $run;
+
+        $this->cacheCount['all']       = $all = $pending + $running + $succeeded + $failed;
+        $this->cacheCount['pending']   = $pending;
+        $this->cacheCount['running']   = $running;
+        $this->cacheCount['succeeded'] = $succeeded;
+        $this->cacheCount['failed']    = $failed;
+        $this->cacheCount['finished']  = $finished = $succeeded + $failed;
+
+        $this->cacheCount['is_pending'] = $pending == $all;
+        $this->cacheCount['is_running'] = $running > 0;
+        $this->cacheCount['is_succeeded'] = $all == $succeeded;
+        $this->cacheCount['is_failed'] = $all == $finished && $failed > 0;
+        $this->cacheCount['is_finished'] = $all == $finished;
     }
 
     /**
@@ -50,79 +63,90 @@ class LazyRunUnitList extends RunUnitList
     }
 
     /**
-     * @return integer
+     * {@inheritdoc}
      */
-    public function setCount($count)
+    public function count()
     {
-        $this->cacheCount['all'] = $count;
-
-        return $this;
+        return $this->cacheCount['all'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function count()
-    {
-        if (!isset($this->cacheCount['all'])) {
-            $this->cacheCount['all'] = parent::count();
-        }
-
-        return $this->cacheCount['all'];
-    }
-
-    public function setCountPending($countPending)
-    {
-        $this->cacheCount['pending'] = $countPending;
-
-        return $this;
-    }
-
     public function countPending()
     {
-        if (!isset($this->cacheCount['pending'])) {
-            $this->cacheCount['pending'] = parent::countPending();
-        }
-
         return $this->cacheCount['pending'];
     }
 
-    public function setCountRunning($countRunning)
+    /**
+     * {@inheritdoc}
+     */
+    public function isPending()
     {
-        $this->cacheCount['running'] = $countRunning;
-
-        return $this;
+        return $this->cacheCount['is_pending'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function countRunning()
     {
-        if (!isset($this->cacheCount['running'])) {
-            $this->cacheCount['running'] = parent::countRunning();
-        }
-
         return $this->cacheCount['running'];
     }
 
-    public function setCountFinished($countFinished)
+    /**
+     * {@inheritdoc}
+     */
+    public function isRunning()
     {
-        $this->cacheCount['finished'] = $countFinished;
-
-        return $this;
+        return $this->cacheCount['is_running'];
     }
 
-    public function setCountSucceeded($countFinished)
+    /**
+     * {@inheritdoc}
+     */
+    public function countSucceeded()
     {
-        $this->cacheCount['finished'] = $countFinished;
-
-        return $this;
+        return $this->cacheCount['succeeded'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function isSucceeded()
+    {
+        return $this->cacheCount['is_succeeded'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countFailed()
+    {
+        return $this->cacheCount['failed'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFailed()
+    {
+        return $this->cacheCount['is_failed'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countFinished()
     {
-        if (!isset($this->cacheCount['finished'])) {
-            $this->cacheCount['finished'] = parent::countFinished();
-        }
-
         return $this->cacheCount['finished'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFinished()
+    {
+        return $this->cacheCount['is_finished'];
     }
 }
