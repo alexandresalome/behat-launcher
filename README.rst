@@ -1,13 +1,12 @@
 Behat Launcher
 ==============
 
-An application to launch Behat tests from your browser.
+An application to **launch your Behat tests from your browser**.
 
-Features
---------
+Installation
+------------
 
-* Launch tests and get reports on a web interface
-* Override Behat configuration
+Clone or download code, install dependencies and create a **config.php** file.
 
 Usage
 -----
@@ -19,3 +18,22 @@ Launch background jobs:
     php behat-launcher run
 
 Access ``http://localhost/`` and make tests.
+
+Changelog
+---------
+
+**v0.1**
+
+* First release
+
+Roadmap
+-------
+
+**v0.1**
+
+* Override Behat parameters
+* Popin for output files
+
+**Unplanned**
+
+* Automatic refresh of the page
