@@ -1,7 +1,9 @@
 Behat Launcher
 ==============
 
-An application to **launch your Behat tests from your browser**.
+An application to **launch your Behat tests from your browser**:
+
+.. image:: src/Alex/BehatLauncher/Resources/demo.png
 
 Installation
 ------------
