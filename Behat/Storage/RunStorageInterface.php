@@ -2,6 +2,7 @@
 
 namespace Alex\BehatLauncherBundle\Behat\Storage;
 
+use Alex\BehatLauncherBundle\Behat\OutputFile;
 use Alex\BehatLauncherBundle\Behat\Project;
 use Alex\BehatLauncherBundle\Behat\Run;
 use Alex\BehatLauncherBundle\Behat\RunUnit;
@@ -64,4 +65,18 @@ interface RunStorageInterface
      * @return array
      */
     public function getRuns(Project $project = null, $offset = 0, $limit = 100);
+
+    /**
+     * Returns a new OutputFile.
+     *
+     * @return OutputFile
+     */
+    public function createOutputFile();
+
+    /**
+     * Returns absolute path to a file from an ID.
+     *
+     * @return OutputFile
+     */
+    public function getOutputFile($id);
 }

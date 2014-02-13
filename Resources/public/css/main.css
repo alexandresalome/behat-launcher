@@ -136,6 +136,21 @@ table.table {
     border: 0;
 }
 
+a.output-file {
+    color: #333;
+    border: 1px solid #aeaeae;
+    text-decoration: none;
+    background-color: #fefefe;
+    border-radius: 2px;
+    font-size: 0.8em;
+    display: block;
+    padding: 2px 6px;
+}
+
+a.output-file-empty {
+    opacity: 0.2;
+}
+
 div.block-counters > div.counter-pending {
     color: #08f;
 }

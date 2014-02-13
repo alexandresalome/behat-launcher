@@ -2,7 +2,6 @@
 
 namespace Alex\BehatLauncherBundle\Behat;
 
-use Alex\BehatLauncherBundle\Behat\Project;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -15,13 +14,21 @@ class RunUnit
     private $startedAt;
     private $finishedAt;
     private $returnCode;
-    private $outputFiles;
+    private $outputFiles = array();
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->outputFiles = new OutputFileList();
     }
 
+    /**
+     * Returns the process to execute for this unit.
+     *
+     * @param Project $project
+     *
+     * @return Process
+     */
     public function getProcess(Project $project)
     {
         $path = $project->getPath();
@@ -31,22 +38,6 @@ class RunUnit
         $pb->add($feature);
 
         return $pb->getProcess();
-    }
-
-    private function findBehatBinary($path)
-    {
-        $possiblePaths = array(
-            $path.'/bin/behat',
-            $path.'/vendor/behat/behat/bin/behat'
-        );
-
-        foreach ($possiblePaths as $path) {
-            if (file_exists($path)) {
-                return $path;
-            }
-        }
-
-        throw new \RuntimeException(sprintf('Unable to find Behat path in %s.', implode(', ', $possiblePaths)));
     }
 
     public function getId()
@@ -66,7 +57,7 @@ class RunUnit
         return $this->run;
     }
 
-    public function setRun(Run $run)
+    public function setRun(Run $run = null)
     {
         $this->run = $run;
 
@@ -142,9 +133,21 @@ class RunUnit
         return $this->outputFiles;
     }
 
-    public function setOutputFiles($outputFiles)
+    /**
+     * Returns an OutputFile.
+     *
+     * @return OutputFile
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getOutputFile($name)
     {
-        $this->outputFiles = $outputFiles;
+        return $this->outputFiles->get($name);
+    }
+
+    public function setOutputFile($name, $file)
+    {
+        $this->outputFiles->set($name, $file);
 
         return $this;
     }
@@ -195,8 +198,12 @@ class RunUnit
             throw new \LogicException('Run unit already finished.');
         }
 
-        $this->returnCode = $process->getExitCode();
+        $this->returnCode = rand(0, 1); $process->getExitCode();
+        file_put_contents($output = tempnam(sys_get_temp_dir(), 'bl_'), $process->getOutput());
+        file_put_contents($error  = tempnam(sys_get_temp_dir(), 'bl_'), $process->getErrorOutput());
         $this->finishedAt = new \DateTime();
+        $this->setOutputFile('_stdout', $output);
+        $this->setOutputFile('_stderr', $error);
     }
 
     public function getFinishedAt()
@@ -231,5 +238,21 @@ class RunUnit
         if ($this->isFailed()) {
             return 'failed';
         }
+    }
+
+    private function findBehatBinary($path)
+    {
+        $possiblePaths = array(
+            $path.'/bin/behat',
+            $path.'/vendor/behat/behat/bin/behat'
+        );
+
+        foreach ($possiblePaths as $path) {
+            if (file_exists($path)) {
+                return $path;
+            }
+        }
+
+        throw new \RuntimeException(sprintf('Unable to find Behat path in %s.', implode(', ', $possiblePaths)));
     }
 }

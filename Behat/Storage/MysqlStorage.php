@@ -7,15 +7,18 @@ use Alex\BehatLauncherBundle\Behat\Project;
 use Alex\BehatLauncherBundle\Behat\Run;
 use Alex\BehatLauncherBundle\Behat\RunUnit;
 use Alex\BehatLauncherBundle\Behat\RunUnitList;
+use Alex\BehatLauncherBundle\Behat\OutputFile;
 use Doctrine\DBAL\Connection;
 
 class MysqlStorage implements RunStorageInterface
 {
     private $connection;
+    private $filesDir;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, $filesDir)
     {
         $this->connection = $connection;
+        $this->filesDir   = $filesDir;
     }
 
     public function initDb()
@@ -84,7 +87,8 @@ class MysqlStorage implements RunStorageInterface
             $stmt->bindValue('started_at', $unit->getStartedAt(), "datetime");
             $stmt->bindValue('finished_at', $unit->getFinishedAt(), "datetime");
             $stmt->bindValue('return_code', $unit->getReturnCode());
-            $stmt->bindValue('output_files', $unit->getOutputFiles());
+            $stmt->bindValue('output_files', json_encode($unit->getOutputFiles()->toArrayOfID()));
+
 
             $stmt->execute();
             $unit->setId($this->connection->lastInsertId());
@@ -104,14 +108,18 @@ class MysqlStorage implements RunStorageInterface
             throw new \RuntimeException('Cannot save run unit: no ID set in instance.');
         }
 
+        $unit->getOutputFiles()->save($this);
+
         $stmt = $this->connection->prepare('UPDATE bl_run_unit SET started_at = :started_at, finished_at = :finished_at, return_code = :return_code, output_files = :output_files WHERE id = :id');
         $stmt->bindValue('started_at', $unit->getStartedAt(), "datetime");
         $stmt->bindValue('finished_at', $unit->getFinishedAt(), "datetime");
-        $stmt->bindValue('output_files', json_encode($unit->getOutputFiles()));
+        $stmt->bindValue('output_files', json_encode($unit->getOutputFiles()->toArrayOfID()));
         $stmt->bindValue('return_code', json_encode($unit->getReturnCode()));
         $stmt->bindValue('id', $unit->getId());
 
+        $this->connection->beginTransaction();
         $stmt->execute();
+        $this->connection->commit();
 
         return $this;
     }
@@ -146,7 +154,7 @@ class MysqlStorage implements RunStorageInterface
                 ->setStartedAt($row['started_at'] !== null ? new \DateTime($row['started_at']) : null)
                 ->setFinishedAt($row['finished_at'] !== null ? new \DateTime($row['finished_at']) : null)
                 ->setReturnCode($row['return_code'])
-                ->setOutputFiles(json_decode($row['output_files'], true))
+                ->getOutputFiles()->fromArrayOfID($this, json_decode($row['output_files'], true))
             ;
 
             $units[] = $unit;
@@ -222,7 +230,7 @@ class MysqlStorage implements RunStorageInterface
             ->setStartedAt(new \DateTime()) // UPDATEd above
             ->setFinishedAt($row['finished_at'] !== null ? new \DateTime($row['finished_at']) : null)
             ->setReturnCode($row['return_code'])
-            ->setOutputFiles(json_decode($row['output_files'], true))
+            ->getOutputFiles()->fromArrayOfID($this, json_decode($row['output_files'], true))
         ;
 
         return $unit;
@@ -256,6 +264,31 @@ class MysqlStorage implements RunStorageInterface
         }
 
         return $this->getRunsByWhere('R.project_name = :project_name', array('project_name' => $project->getName()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createOutputFile()
+    {
+        do {
+            $id = md5(uniqid().microtime(true));
+            $file = $this->getOutputFile($id);
+        } while ($file->exists());
+
+        return $file;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOutputFile($id)
+    {
+        $path = $this->filesDir.'/'.substr($id, 0, 2).'/'.substr($id, 2, 2).'/'.substr($id, 4);
+
+        return new OutputFile($path, $id);
+
+        return $of;
     }
 
     private function getRunsByWhere($where, array $params = array())

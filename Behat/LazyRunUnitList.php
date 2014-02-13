@@ -2,6 +2,7 @@
 
 namespace Alex\BehatLauncherBundle\Behat;
 
+use Alex\BehatLauncherBundle\Behat\RunUnit;
 use Alex\BehatLauncherBundle\Behat\Storage\RunStorageInterface;
 
 /**
@@ -148,5 +149,13 @@ class LazyRunUnitList extends RunUnitList
     public function isFinished()
     {
         return $this->cacheCount['is_finished'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(RunUnit $unit)
+    {
+        throw new \LogicException('Cannot add a RunUnit to a LazyRunUnitList');
     }
 }

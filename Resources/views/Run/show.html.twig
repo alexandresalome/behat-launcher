@@ -39,6 +39,7 @@
                 <th>Feature</th>
                 <th>Started at</th>
                 <th>Finished at</th>
+                <th>Output</th>
             </tr>
         </thead>
         <tbody>
@@ -48,6 +49,11 @@
                     <td>{{ unit.feature }}</td>
                     <td>{{ unit.startedAt ? unit.startedAt.format('Y-m-d H:i:s') : '-' }}
                     <td>{{ unit.finishedAt ? unit.finishedAt.format('Y-m-d H:i:s') : '-' }}
+                    <td>
+                        {% for name, of in unit.outputFiles %}
+                            <a class="output-file{% if of.empty %} output-file-empty{% endif %}" href="{{ path('_behat_launcher_runUnit_showOutputFile', {id: of.id}) }}">{{ name }}</a>
+                        {% endfor %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

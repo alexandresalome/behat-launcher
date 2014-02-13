@@ -18,3 +18,7 @@ _behat_launcher_run_show:
     path: /run/{id}
     requirements: { id: \d+ }
     defaults: { _controller: "AlexBehatLauncherBundle:Run:show" }
+
+_behat_launcher_runUnit_showOutputFile:
+    path: /output/{id}
+    defaults: { _controller: "AlexBehatLauncherBundle:OutputFile:show" }
