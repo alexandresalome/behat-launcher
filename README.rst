@@ -1,6 +1,8 @@
 Behat Launcher
 ==============
 
+**This project is not tested and not production ready. Use it at your own risk**
+
 An application to **launch your Behat tests from your browser**:
 
 .. image:: src/Alex/BehatLauncher/Resources/demo.png
