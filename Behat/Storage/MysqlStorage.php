@@ -14,6 +14,7 @@ class MysqlStorage implements RunStorageInterface
 {
     private $connection;
     private $filesDir;
+    private $initDb = false;
 
     public function __construct(Connection $connection, $filesDir)
     {
@@ -23,6 +24,12 @@ class MysqlStorage implements RunStorageInterface
 
     public function initDb()
     {
+        if (true === $this->initDb) {
+            return;
+        }
+
+        $this->initDb = true;
+
         $this->connection->exec('CREATE TABLE IF NOT EXISTS bl_run (
             id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(64),
