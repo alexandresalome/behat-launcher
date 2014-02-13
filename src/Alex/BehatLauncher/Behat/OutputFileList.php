@@ -2,8 +2,6 @@
 
 namespace Alex\BehatLauncher\Behat;
 
-use Alex\BehatLauncher\Behat\Storage\RunStorageInterface;
-
 class OutputFileList implements \IteratorAggregate, \Countable
 {
     private $pendingFiles = array();
@@ -67,7 +65,7 @@ class OutputFileList implements \IteratorAggregate, \Countable
     /**
      * Persits the list to a storage
      */
-    public function save(RunStorageInterface $storage)
+    public function save(MysqlStorage $storage)
     {
         foreach ($this->pendingFiles as $name => $file) {
             $outputFile = $storage->createOutputFile();
@@ -84,7 +82,7 @@ class OutputFileList implements \IteratorAggregate, \Countable
      *
      * @return OutputFileList
      */
-    public function fromArrayOfID(RunStorageInterface $storage, array $array)
+    public function fromArrayOfID(MysqlStorage $storage, array $array)
     {
         foreach ($array as $name => $id) {
             $this->files[$name] = $storage->getOutputFile($id);

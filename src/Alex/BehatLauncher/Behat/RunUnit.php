@@ -33,9 +33,11 @@ class RunUnit
     {
         $path = $project->getPath();
         $pb = new ProcessBuilder(array('php', $this->findBehatBinary($path)));
+        $pb->setWorkingDirectory($project->getPath());
 
         $feature = $project->getFeaturesPath().'/'.$this->feature;
         $pb->add($feature);
+        $pb->setTimeout(null);
 
         return $pb->getProcess();
     }

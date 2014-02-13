@@ -19,6 +19,14 @@ class Command extends BaseCommand
         parent::__construct();
     }
 
+    /**
+     * @return Application
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
     protected function getProjectList()
     {
         return $this->application['project_list'];
@@ -27,5 +35,10 @@ class Command extends BaseCommand
     protected function getRunStorage()
     {
         return $this->application['run_storage'];
+    }
+
+    public function getDB()
+    {
+        return $this->application['db'];
     }
 }

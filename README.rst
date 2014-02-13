@@ -8,6 +8,12 @@ Installation
 
 Clone or download code, install dependencies and create a **config.php** file.
 
+Initialize database:
+
+.. code-block:: bash
+
+    php behat-launcher init-db
+
 Usage
 -----
 
@@ -33,7 +39,11 @@ Roadmap
 
 * Override Behat parameters
 * Popin for output files
+* Configure expected output formats
 
 **Unplanned**
 
+* Relaunch one unit
+* Relaunch whole run
+* Duplicate a run
 * Automatic refresh of the page

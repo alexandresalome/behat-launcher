@@ -4,7 +4,7 @@ namespace Alex\BehatLauncher;
 
 use Alex\BehatLauncher\Behat\Project;
 use Alex\BehatLauncher\Behat\ProjectList;
-use Alex\BehatLauncher\Behat\Storage\MysqlStorage;
+use Alex\BehatLauncher\Behat\MysqlStorage;
 use Alex\BehatLauncher\Form\BehatLauncherExtension;
 use Doctrine\DBAL\DriverManager;
 use Silex\Application as BaseApplication;

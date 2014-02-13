@@ -4,6 +4,7 @@ namespace Alex\BehatLauncher\Controller;
 
 use Alex\BehatLauncher\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Base controller for Behat Launcher.
@@ -48,5 +49,10 @@ abstract class Controller
     public function createForm($name, $data = null, array $options = array())
     {
         return $this->application['form.factory']->create($name, $data, $options);
+    }
+
+    public function createNotFoundException($message = 'Not Found')
+    {
+        return new NotFoundHttpException($message);
     }
 }

@@ -3,7 +3,6 @@
 namespace Alex\BehatLauncher\Behat;
 
 use Alex\BehatLauncher\Behat\RunUnit;
-use Alex\BehatLauncher\Behat\Storage\RunStorageInterface;
 
 /**
  * Lazy-load run units from storage on call.
@@ -32,7 +31,7 @@ class LazyRunUnitList extends RunUnitList
      * @param RunStorage $storage a storage for fetching run units
      * @param Run        $run     the concerned run
      */
-    public function __construct(RunStorageInterface $storage, Run $run, $pending, $running, $succeeded, $failed)
+    public function __construct(MysqlStorage $storage, Run $run, $pending, $running, $succeeded, $failed)
     {
         $this->storage = $storage;
         $this->run = $run;

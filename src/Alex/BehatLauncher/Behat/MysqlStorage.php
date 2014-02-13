@@ -1,6 +1,6 @@
 <?php
 
-namespace Alex\BehatLauncher\Behat\Storage;
+namespace Alex\BehatLauncher\Behat;
 
 use Alex\BehatLauncher\Behat\LazyRunUnitList;
 use Alex\BehatLauncher\Behat\Project;
@@ -10,11 +10,10 @@ use Alex\BehatLauncher\Behat\RunUnitList;
 use Alex\BehatLauncher\Behat\OutputFile;
 use Doctrine\DBAL\Connection;
 
-class MysqlStorage implements RunStorageInterface
+class MysqlStorage
 {
     private $connection;
     private $filesDir;
-    private $initDb = false;
 
     public function __construct(Connection $connection, $filesDir)
     {
@@ -22,13 +21,26 @@ class MysqlStorage implements RunStorageInterface
         $this->filesDir   = $filesDir;
     }
 
-    public function initDb()
+    public function purge()
     {
-        if (true === $this->initDb) {
-            return;
+        $iterator = new \RecursiveDirectoryIterator($this->filesDir, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS);
+        $iterator = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($iterator as $file) {
+            chmod($file, 0777);
+            if (is_dir($file)) {
+                rmdir($file);
+            } else {
+                unlink($file);
+            }
         }
 
-        $this->initDb = true;
+        $this->connection->exec('DELETE FROM bl_run_unit');
+        $this->connection->exec('DELETE FROM bl_run');
+    }
+
+    public function initDb()
+    {
+        $this->connection->exec('CREATE DATABASE IF NOT EXISTS '.$this->connection->getDatabase());
 
         $this->connection->exec('CREATE TABLE IF NOT EXISTS bl_run (
             id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -53,8 +65,6 @@ class MysqlStorage implements RunStorageInterface
      */
     public function saveRun(Run $run)
     {
-        $this->initDb();
-
         // Just UPDATE title
         if ($run->getId()) {
             $stmt = $this->connection
@@ -109,8 +119,6 @@ class MysqlStorage implements RunStorageInterface
      */
     public function saveRunUnit(RunUnit $unit)
     {
-        $this->initDb();
-
         if (!$unit->getId()) {
             throw new \RuntimeException('Cannot save run unit: no ID set in instance.');
         }
@@ -136,8 +144,6 @@ class MysqlStorage implements RunStorageInterface
      */
     public function getUnits(Run $run)
     {
-        $this->initDb();
-
         $stmt = $this->connection->prepare('
             SELECT
                 id, feature, created_at, started_at, finished_at, return_code, output_files
@@ -175,8 +181,6 @@ class MysqlStorage implements RunStorageInterface
      */
     public function getRunnableUnit(Project $project = null)
     {
-        $this->initDb();
-
         $whereProject = '';
         if ($project) {
             $whereProject = 'AND R.project_name = :project_name';
@@ -211,6 +215,7 @@ class MysqlStorage implements RunStorageInterface
         $stmt->execute();
 
         if (!$row = $stmt->fetch()) {
+            $this->connection->commit();
             return; // nothing to process
         }
 
@@ -248,8 +253,6 @@ class MysqlStorage implements RunStorageInterface
      */
     public function getRun($id)
     {
-        $this->initDb();
-
         $runs = $this->getRunsByWhere('R.id = :id', array('id' => $id));
 
         if (count($runs) == 0) {
@@ -264,8 +267,6 @@ class MysqlStorage implements RunStorageInterface
      */
     public function getRuns(Project $project = null, $offset = 0, $limit = 100)
     {
-        $this->initDb();
-
         if (null === $project) {
             return $this->getRunsByWhere('1 = 1');
         }
