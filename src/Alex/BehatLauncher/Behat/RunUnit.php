@@ -198,7 +198,7 @@ class RunUnit
             throw new \LogicException('Run unit already finished.');
         }
 
-        $this->returnCode = rand(0, 1); $process->getExitCode();
+        $this->returnCode = $process->getExitCode();
         file_put_contents($output = tempnam(sys_get_temp_dir(), 'bl_'), $process->getOutput());
         file_put_contents($error  = tempnam(sys_get_temp_dir(), 'bl_'), $process->getErrorOutput());
         $this->finishedAt = new \DateTime();

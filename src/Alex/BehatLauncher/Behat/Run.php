@@ -53,7 +53,8 @@ class Run
     public function createUnits(array $features, $currentPath = '')
     {
         foreach ($features as $key => $value) {
-            $path = $currentPath === '' ? $key : $currentPath.'/'.$key;
+            $name = is_array($value) ? $key : $value;
+            $path = $currentPath === '' ? $name : $currentPath.'/'.$name;
             if (is_array($value)) {
                 $this->createUnits($value, $path);
             } elseif ($value) {
@@ -352,7 +353,6 @@ class Run
         $foolGuard = 0;
         while ($extra != 0 && $total > 0) {
             if ($foolGuard++ > $total) {
-                var_dump($extra, $ratios);exit;
                 throw new \RuntimeException('Smells like an infinite loop.');
             }
 

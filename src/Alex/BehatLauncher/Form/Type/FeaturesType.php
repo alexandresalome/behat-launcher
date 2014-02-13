@@ -6,6 +6,8 @@ use Alex\BehatLauncher\Behat\Project;
 use Alex\BehatLauncher\Behat\ProjectList;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -14,18 +16,44 @@ class FeaturesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['features'] as $name => $content) {
-            $sanitizedName = str_replace('.', '_', $name);
             if (is_array($content)) {
+                $sanitizedName = $this->sanitizeName($name);
                 $builder->add($sanitizedName, 'behat_launcher_features', array(
                     'project' => $options['project'],
                     'features' => $content,
                     'label' => $name.'/'
                 ));
             } else {
-                $sanitizedName = str_replace('.', '_', $content);
+                $sanitizedName = $this->sanitizeName($content);
                 $builder->add($sanitizedName, 'checkbox', array('label' => $content, 'required' => false));
             }
         }
+
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            $result = array();
+            foreach ($form->getConfig()->getOption('features') as $key => $content) {
+                if (is_array($content)) {
+                    $name = $key;
+                    $sanitizeName = $this->sanitizeName($name);
+                    $value = $data[$sanitizeName];
+                    if (count($value)) {
+                        $result[$name] = $value;
+                    }
+                } else {
+                    $name = $content;
+                    $sanitizeName = $this->sanitizeName($name);
+                    $value = $content;
+                    if ($data[$sanitizeName]) {
+                        $result[] = $name;
+                    }
+                }
+            }
+
+            $event->setData($result);
+        });
     }
 
     /**
@@ -54,5 +82,10 @@ class FeaturesType extends AbstractType
     public function getName()
     {
         return 'behat_launcher_features';
+    }
+
+    private function sanitizeName($name)
+    {
+        return strtr($name, array('.' => '_'));
     }
 }
