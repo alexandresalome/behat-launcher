@@ -223,6 +223,26 @@ class Run
     }
 
     /**
+     * @param string $status a status (pending, running, succeeded, failed)
+     *
+     * @return int
+     */
+    public function countStatus($status)
+    {
+        if ($status === 'pending') {
+            return $this->countPending();
+        } elseif ($status === 'running') {
+            return $this->countRunning();
+        } elseif ($status === 'succeeded') {
+            return $this->countSucceeded();
+        } elseif ($status === 'failed') {
+            return $this->countFailed();
+        }
+
+        throw new \InvalidArgumentException(sprintf('Status "%s" seems not to be a good status.', $status));
+    }
+
+    /**
      * @return integer
      */
     public function countPending()
@@ -300,5 +320,59 @@ class Run
     public function isFinished()
     {
         return $this->units->isFinished();
+    }
+
+    /**
+     * Returns an array of status progress, as integers.
+     *
+     * @param string $count number of count to distribute
+     *
+     * @return int[]
+     */
+    public function getProgress($count = 100)
+    {
+        $counters = array(
+            'pending'   => $this->countPending(),
+            'running'   => $this->countRunning(),
+            'succeeded' => $this->countSucceeded(),
+            'failed'    => $this->countFailed(),
+        );
+
+        $total = array_sum($counters);
+        $ratios = array_map(function ($x) use ($total, $count) {
+            if ($total === 0) {
+                return 0;
+            }
+
+            return round($x*$count/$total);
+        }, $counters);
+        $extra = $count - array_sum($ratios);
+
+        reset($counters);
+        $foolGuard = 0;
+        while ($extra != 0 && $total > 0) {
+            if ($foolGuard++ > $total) {
+                var_dump($extra, $ratios);exit;
+                throw new \RuntimeException('Smells like an infinite loop.');
+            }
+
+            $current = key($counters);
+
+            if ($ratios[$current] > 0) {
+                if ($extra > 0) {
+                    $ratios[$current]++;
+                    $extra--;
+                } else {
+                    $ratios[$current]--;
+                    $extra++;
+                }
+            }
+
+            if (end($counters)) {
+                reset($counters);
+            }
+        }
+
+        return $ratios;
     }
 }

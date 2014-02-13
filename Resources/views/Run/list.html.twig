@@ -6,30 +6,5 @@
 
 {% block content %}
     <h1>Last {{ runs|length }} runs</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Status</th>
-                <th>Project name</th>
-                <th>Properties</th>
-                <th>Progress</th>
-            </tr>
-        </thead>
-        {% for run in runs %}
-            <tr class="row-{{ run.status }}">
-                <td>
-                    <a href="{{ path('_behat_launcher_run_show', {id: run.id}) }}">#{{ run.id ~ (run.title ? ': ' ~ run.title : '') }}</a>
-                </td>
-                <td><span class="label label-{{ run.status }}">{{ run.status }}</span></td>
-                <td>{{ run.projectName }}</td>
-                <td>
-                    {% for name, value in run.properties %}
-                        <strong>{{ name }}</strong>: {{ value }}<br />
-                    {% endfor %}
-
-                <td>{{ run.countPending }} / {{ run.countRunning }} / {{ run.countSucceeded }} / {{ run.countFailed }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    {{ include('AlexBehatLauncherBundle:Run:_list.html.twig') }}
 {% endblock %}

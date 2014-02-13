@@ -127,6 +127,10 @@ table.table tr.row-failed {
     background-color: #f88;
 }
 
+table.table tr.row-with-separator {
+    border-bottom: 3px solid white;
+}
+
 table.table td {
     padding: 6px;
 }
@@ -212,3 +216,37 @@ div.block-features > div.header > label {
 div.block-features > div.rows {
     padding-left: 10px;
 }
+
+/** Run progress bar **/
+.run-progress {
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.run-progress > div {
+    line-height: 20px;
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+    overflow: hidden;
+    float: left;
+}
+
+.run-progress > div.run-progress-pending {
+    background-color: #08f;
+}
+
+.run-progress > div.run-progress-running {
+    background-color: #f80;
+}
+
+.run-progress > div.run-progress-succeeded {
+    background-color: #0a0;
+}
+
+.run-progress > div.run-progress-failed {
+    background-color: #a00;
+}
+
