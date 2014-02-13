@@ -1,21 +1,31 @@
 {
-    "name": "alexandresalome/behat-launcher-bundle",
-    "description": "Behat Launcher Bundle",
+    "name": "alexandresalome/behat-launcher",
+    "description": "Launch Behat tests from your browser",
     "license": "MIT",
 
     "autoload": {
-        "psr-4": {
-            "Alex\\BehatLauncherBundle\\": "."
+        "psr-0": {
+            "Alex\\BehatLauncher": "src"
         }
     },
 
     "require": {
-        "php": ">=5.4",
-        "symfony/symfony": "~2.4",
-        "behat/behat": "~2.4"
+        "php"                 : ">=5.5",
+        "silex/silex"         : "~1.1",
+        "silex/web-profiler"  : "~1.0",
+        "symfony/console"     : "~2.4",
+        "symfony/form"        : "~2.4",
+        "symfony/locale"      : "~2.4",
+        "symfony/translation" : "~2.4",
+        "symfony/twig-bridge" : "~2.4",
+        "symfony/validator"   : "~2.4",
+        "symfony/process"     : "~2.4",
+        "twig/twig"           : "~1.15",
+        "doctrine/dbal"       : "~2.4"
     },
 
     "require-dev": {
+        "behat/behat": "~2.4",
         "phpunit/phpunit": "~3.7"
     }
 }

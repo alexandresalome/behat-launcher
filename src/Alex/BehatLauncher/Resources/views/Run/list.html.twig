@@ -1,0 +1,10 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'Last 100 runs' %}
+
+{% set menu_active = "run_list" %}
+
+{% block content %}
+    <h1>Last {{ runs|length }} runs</h1>
+    {{ include('Run/_list.html.twig') }}
+{% endblock %}

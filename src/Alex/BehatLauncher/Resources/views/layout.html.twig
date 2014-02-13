@@ -1,0 +1,27 @@
+{% set menu_active = menu_active|default(null) %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title 'Welcome!' %} - Behat Launcher</title>
+        <link rel="stylesheet" href="/css/main.css" />
+    </head>
+    <body class="behat-launcher">
+        <div class="container">
+            <nav>
+                <a class="brand">Behat Launcher</a>
+                <a{% if menu_active == 'project_list' %} class="active"{% endif %} href="{{ path('project_list') }}">Projects list</a>
+                <a{% if menu_active == 'run_list' %} class="active"{% endif %} href="{{ path('run_list') }}">All runs</a>
+                {% if menu_active is iterable %}
+                    <a class="active" href="{{ menu_active.href }}">{{ menu_active.label }}</a>
+                {% endif %}
+            </nav>
+            {% block content '' %}
+            <footer>
+                <hr />
+                <p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspired by <a href="http://blablacar.com">BlaBlaCar</a>.</p>
+            </footer>
+        </div>
+        <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+    </body>
+</html>

@@ -1,0 +1,66 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'Show a run' %}
+
+{% set menu_active = {
+    href: path('run_show', {id: run.id}),
+    label: run.projectName ~ " - #" ~ run.id
+} %}
+
+{% block content %}
+    <h1>
+        #{{ run.id }}: {% if run.title %}{{ run.title }}{% else %}<em>no title</em>{% endif %}
+        <small><span class="label label-{{ run.status }}">{{ run.status }}</span></small>
+    </h1>
+    <hr />
+    <div class="run-progress">
+        {% for status, width in run.progress(100) %}
+            <div class="run-progress-{{ status }}" style="width:{{ width}}%">{{ run.countStatus(status) }}</div>
+        {% endfor %}
+    </div>
+    <div class="block-counters">
+        <div class="counter counter-pending{{ run.countPending == 0 ? ' counter-empty' : '' }}">
+            <span class="number">{{ run.countPending }}</span>
+            <span class="label">pending</span>
+        </div>
+        <div class="counter counter-running{{ run.countRunning == 0 ? ' counter-empty' : '' }}">
+            <span class="number">{{ run.countRunning }}</span>
+            <span class="label">running</span>
+        </div>
+        <div class="counter counter-succeeded{{ run.countSucceeded == 0 ? ' counter-empty' : '' }}">
+            <span class="number">{{ run.countSucceeded }}</span>
+            <span class="label">succeeded</span>
+        </div>
+        <div class="counter counter-failed{{ run.countFailed == 0 ? ' counter-empty' : '' }}">
+            <span class="number">{{ run.countFailed }}</span>
+            <span class="label">failed</span>
+        </div>
+    </div>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Feature</th>
+                <th>Started at</th>
+                <th>Finished at</th>
+                <th>Output</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for unit in run.units %}
+                <tr class="row-{{ unit.status }}">
+                    <td><span class="label label-{{ unit.status }}">{{ unit.status }}</span></td>
+                    <td>{{ unit.feature }}</td>
+                    <td>{{ unit.startedAt ? unit.startedAt.format('Y-m-d H:i:s') : '-' }}
+                    <td>{{ unit.finishedAt ? unit.finishedAt.format('Y-m-d H:i:s') : '-' }}
+                    <td>
+                        {% for name, of in unit.outputFiles %}
+                            <a class="output-file{% if of.empty %} output-file-empty{% endif %}" href="{{ path('outputFile_show', {id: of.id}) }}">{{ name }}</a>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
