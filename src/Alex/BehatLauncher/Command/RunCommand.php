@@ -4,6 +4,7 @@ namespace Alex\BehatLauncher\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class RunCommand extends Command
@@ -16,6 +17,7 @@ class RunCommand extends Command
         $this
             ->setName('run')
             ->setDescription('Runs Behat tests')
+            ->addOption('stop-on-finish', null, InputOption::VALUE_NONE, 'Don\'t wait for new runs to come')
             ->addArgument('project', InputArgument::OPTIONAL, 'Project to run')
             ->setHelp(<<<HELP
 Runs a test registered in Behat-Launcher.
@@ -63,8 +65,10 @@ HELP
             pcntl_signal(SIGUSR1, $sigHandler);
         }
 
+        $stopOnFinish = $input->getOption('stop-on-finish');
+
         $cycle = 0;
-        while (true) {
+        while (!$stopOnFinish) {
             $this->currentUnit = $storage->getRunnableUnit($project);
 
             if (!$this->currentUnit) {
