@@ -6,6 +6,8 @@ $(function () {
         var $row = $(e);
         var path = $row.attr('data-path');
         $cb.attr('data-path', path);
+        $exp.attr('data-path', path);
+        $col.attr('data-path', path);
 
         $col.hide();
 
