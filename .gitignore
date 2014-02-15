@@ -1,4 +1,6 @@
+/bin/
 /cache/
 /data/
 /vendor/
-config.php
+/config.php
+/behat.yml

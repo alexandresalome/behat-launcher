@@ -1,6 +1,6 @@
 {% extends "layout.html.twig" %}
 
-{% block title 'Show a run' %}
+{% block title 'Run #' ~ run.id ~ ( run.title ? ': ' ~ run.title : '') %}
 
 {% set menu_active = {
     href: path('run_show', {id: run.id}),

@@ -9,8 +9,10 @@
         {% if not loop.first %}
             <hr />
         {% endif %}
-        <h2>{{ project.name }}</h2>
-        <p><a href="{{ path('run_create', {project: project.name}) }}">Create a run</a></p>
-        {{ include('Run/_list.html.twig', {runs: run_storage.runs(project, 0, 5)}) }}
+        <div data-project="{{ project.name }}">
+            <h2>{{ project.name }}</h2>
+            <p><a href="{{ path('run_create', {project: project.name}) }}">Create a run</a></p>
+            {{ include('Run/_list.html.twig', {runs: run_storage.runs(project, 0, 5)}) }}
+        </div>
     {% endfor %}
 {% endblock %}

@@ -8,20 +8,29 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FeaturesType extends AbstractType
 {
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['path'] = $options['path'];
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['features'] as $name => $content) {
             if (is_array($content)) {
+                $path = null === $options['path'] ? $name : $options['path'].'/'.$name;
                 $sanitizedName = $this->sanitizeName($name);
                 $builder->add($sanitizedName, 'behat_launcher_features', array(
-                    'project' => $options['project'],
+                    'project'  => $options['project'],
+                    'path'     => $path,
                     'features' => $content,
-                    'label' => $name.'/'
+                    'label'    => $name.'/'
                 ));
             } else {
                 $sanitizedName = $this->sanitizeName($content);
@@ -63,6 +72,7 @@ class FeaturesType extends AbstractType
     {
         $resolver->setDefaults(array(
             'project' => null,
+            'path'    => null,
             'features' => function (Options $options, $v) {
                 if (null === $v) {
                     return $options['project']->getFeatures();

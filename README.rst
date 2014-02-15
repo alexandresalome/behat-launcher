@@ -1,7 +1,15 @@
 Behat Launcher
 ==============
 
-**This project is not tested and not production ready. Use it at your own risk**
+|test_status| |last_version|
+
+.. |test_status| image:: https://travis-ci.org/alexandresalome/behat-launcher.png
+   :alt: Build status
+   :target: https://travis-ci.org/alexandresalome/behat-launcher
+
+.. |last_version| image:: https://poser.pugx.org/alexandresalome/behat-launcher/v/stable.png
+   :alt: Latest stable version
+   :target: https://packagist.org/packages/alexandresalome/behat-launcher
 
 An application to **launch your Behat tests from your browser**:
 
@@ -49,6 +57,6 @@ Roadmap
 **Unplanned**
 
 * Relaunch one unit
-* Relaunch whole run
 * Duplicate a run
 * Automatic refresh of the page
+

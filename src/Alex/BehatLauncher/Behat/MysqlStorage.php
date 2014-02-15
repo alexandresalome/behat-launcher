@@ -3,12 +3,13 @@
 namespace Alex\BehatLauncher\Behat;
 
 use Alex\BehatLauncher\Behat\LazyRunUnitList;
+use Alex\BehatLauncher\Behat\OutputFile;
 use Alex\BehatLauncher\Behat\Project;
 use Alex\BehatLauncher\Behat\Run;
 use Alex\BehatLauncher\Behat\RunUnit;
 use Alex\BehatLauncher\Behat\RunUnitList;
-use Alex\BehatLauncher\Behat\OutputFile;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
 
 class MysqlStorage
 {
@@ -23,14 +24,16 @@ class MysqlStorage
 
     public function purge()
     {
-        $iterator = new \RecursiveDirectoryIterator($this->filesDir, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS);
-        $iterator = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);
-        foreach ($iterator as $file) {
-            chmod($file, 0777);
-            if (is_dir($file)) {
-                rmdir($file);
-            } else {
-                unlink($file);
+        if (is_dir($this->filesDir)) {
+            $iterator = new \RecursiveDirectoryIterator($this->filesDir, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS);
+            $iterator = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);
+            foreach ($iterator as $file) {
+                chmod($file, 0777);
+                if (is_dir($file)) {
+                    rmdir($file);
+                } else {
+                    unlink($file);
+                }
             }
         }
 
@@ -40,15 +43,23 @@ class MysqlStorage
 
     public function initDb()
     {
-        $this->connection->exec('CREATE DATABASE IF NOT EXISTS '.$this->connection->getDatabase());
+        $params = $this->connection->getParams();
+        $name = $params['dbname'];
+        unset($params['dbname']);
+        $conn = DriverManager::getConnection($params);
 
-        $this->connection->exec('CREATE TABLE IF NOT EXISTS bl_run (
+
+        $conn->exec('CREATE DATABASE IF NOT EXISTS '.$name);
+
+        $conn->exec('USE '.$name);
+
+        $conn->exec('CREATE TABLE IF NOT EXISTS bl_run (
             id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(64),
             project_name VARCHAR(64) NOT NULL,
             properties TEXT NOT NULL
         )');
-        $this->connection->exec('CREATE TABLE IF NOT EXISTS bl_run_unit (
+        $conn->exec('CREATE TABLE IF NOT EXISTS bl_run_unit (
             id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
             run_id INTEGER NOT NULL,
             feature TEXT NOT NULL,

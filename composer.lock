@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "da6db4131185fbf08070af6ca0694f0e",
+    "hash": "1e86d20229d88c72c206c442cc45ce6b",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -686,7 +686,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "A WebProfiler for Silex",
@@ -1939,6 +1941,51 @@
     ],
     "packages-dev": [
         {
+            "name": "alexandresalome/php-webdriver",
+            "version": "v0.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alexandresalome/php-webdriver.git",
+                "reference": "350df5750709cb17fefc73e42d3e55452a7f44e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alexandresalome/php-webdriver/zipball/350df5750709cb17fefc73e42d3e55452a7f44e4",
+                "reference": "350df5750709cb17fefc73e42d3e55452a7f44e4",
+                "shasum": ""
+            },
+            "require": {
+                "kriswallsmith/buzz": "~0.7",
+                "php": ">=5.4",
+                "symfony/process": "~2.1"
+            },
+            "require-dev": {
+                "behat/behat": "~2.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "WebDriver": [
+                        "src/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandre Salomé",
+                    "email": "alexandre.salome@gmail.com",
+                    "homepage": "http://alexandre-salome.fr"
+                }
+            ],
+            "description": "PHP-WebDriver is a client for WebDriver and a Behat extension",
+            "time": "2014-02-10 10:34:08"
+        },
+        {
             "name": "behat/behat",
             "version": "v2.5.2",
             "source": {
@@ -2060,6 +2107,54 @@
                 "parser"
             ],
             "time": "2013-10-15 11:22:17"
+        },
+        {
+            "name": "kriswallsmith/buzz",
+            "version": "v0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kriswallsmith/Buzz.git",
+                "reference": "759432d66387e3433d3b06cb6f773b97225b9b17"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/759432d66387e3433d3b06cb6f773b97225b9b17",
+                "reference": "759432d66387e3433d3b06cb6f773b97225b9b17",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "suggest": {
+                "ext-curl": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Buzz": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kris Wallsmith",
+                    "email": "kris.wallsmith@gmail.com",
+                    "homepage": "http://kriswallsmith.net/"
+                }
+            ],
+            "description": "Lightweight HTTP client",
+            "homepage": "https://github.com/kriswallsmith/Buzz",
+            "keywords": [
+                "curl",
+                "http client"
+            ],
+            "time": "2013-05-19 03:41:15"
         },
         {
             "name": "phpunit/php-code-coverage",

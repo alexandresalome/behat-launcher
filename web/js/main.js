@@ -4,6 +4,8 @@ $(function () {
         var $exp = $('<a class="expand">&nbsp; +</a>');
         var $col = $('<a class="collapse">&nbsp; -</a>')
         var $row = $(e);
+        var path = $row.attr('data-path');
+        $cb.attr('data-path', path);
 
         $col.hide();
 
