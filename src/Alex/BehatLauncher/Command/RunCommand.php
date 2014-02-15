@@ -68,10 +68,14 @@ HELP
         $stopOnFinish = $input->getOption('stop-on-finish');
 
         $cycle = 0;
-        while (!$stopOnFinish) {
+        while (true) {
             $this->currentUnit = $storage->getRunnableUnit($project);
 
             if (!$this->currentUnit) {
+                if ($stopOnFinish) {
+                    break;
+                }
+
                 $output->writeln('Found no run to process. Try again in 5 seconds...');
                 sleep(5);
 

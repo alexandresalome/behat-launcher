@@ -5,6 +5,7 @@ $app->configureMysql('localhost', 'behat_launcher', 'root', '');
 $app->createProject('Bros', '/var/www/bros');
 
 $app->createProject('Gitonomy', '/var/www/gitonomy')
+    ->setBehatBin('bin/behat')
     ->createProperty('Browser')
         ->setConfig('default.extensions.WebDriver\Behat\WebDriverExtension\Extension.browser')
         ->setFormType('choice')

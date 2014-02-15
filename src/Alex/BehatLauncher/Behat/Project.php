@@ -21,6 +21,11 @@ class Project
     private $path;
 
     /**
+     * @var string
+     */
+    private $behatBin;
+
+    /**
      * @var array
      */
     private $properties = array();
@@ -140,6 +145,45 @@ class Project
         $this->path = $path;
 
         return $this;
+    }
+
+    /**
+     * Changes path to behat binary.
+     *
+     * @param string $behatBin
+     *
+     * @return Project
+     */
+    public function setBehatBin($behatBin)
+    {
+        $this->behatBin = $behatBin;
+
+        return $this;
+    }
+
+    /**
+     * Returns path to behat binary
+     *
+     * @return string
+     */
+    public function getBehatBin()
+    {
+        if (null !== $this->behatBin) {
+            return $this->behatBin;
+        }
+
+        $possiblePaths = array(
+            $this->path.'/bin/behat',
+            $this->path.'/vendor/behat/behat/bin/behat'
+        );
+
+        foreach ($possiblePaths as $path) {
+            if (file_exists($path)) {
+                return $path;
+            }
+        }
+
+        throw new \RuntimeException(sprintf('Unable to find Behat path in %s.', implode(', ', $possiblePaths)));
     }
 
     /**

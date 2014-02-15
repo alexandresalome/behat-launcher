@@ -40,7 +40,7 @@ class RunUnit
     public function getProcess(Project $project)
     {
         $path = $project->getPath();
-        $pb = new ProcessBuilder(array('php', $this->findBehatBinary($path)));
+        $pb = new ProcessBuilder(array('php', $project->getBehatBin()));
         $pb->setWorkingDirectory($project->getPath());
 
         $feature = $project->getFeaturesPath().'/'.$this->feature;
@@ -248,21 +248,5 @@ class RunUnit
         if ($this->isFailed()) {
             return 'failed';
         }
-    }
-
-    private function findBehatBinary($path)
-    {
-        $possiblePaths = array(
-            $path.'/bin/behat',
-            $path.'/vendor/behat/behat/bin/behat'
-        );
-
-        foreach ($possiblePaths as $path) {
-            if (file_exists($path)) {
-                return $path;
-            }
-        }
-
-        throw new \RuntimeException(sprintf('Unable to find Behat path in %s.', implode(', ', $possiblePaths)));
     }
 }

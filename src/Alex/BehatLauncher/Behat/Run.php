@@ -352,7 +352,7 @@ class Run
         reset($counters);
         $foolGuard = 0;
         while ($extra != 0 && $total > 0) {
-            if ($foolGuard++ > $total) {
+            if ($foolGuard++ >= $total) {
                 throw new \RuntimeException('Smells like an infinite loop.');
             }
 
