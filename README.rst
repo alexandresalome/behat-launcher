@@ -35,6 +35,7 @@ Changelog
 **v0.1**
 
 * First release
+* Relaunch whole run
 
 Roadmap
 -------

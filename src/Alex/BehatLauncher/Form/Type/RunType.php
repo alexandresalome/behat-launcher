@@ -6,6 +6,7 @@ use Alex\BehatLauncher\Behat\Project;
 use Alex\BehatLauncher\Behat\ProjectList;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\Options;
@@ -44,11 +45,18 @@ class RunType extends AbstractType
                 }
 
                 // features
-                $run->createUnits($form->get('features')->getData());
+                $features = $form->get('features')->getData();
+                if (!count($features)) {
+                    $form->get('features')->addError(new FormError('You must select at least one feature'));
+
+                    return;
+                }
+
+                $run->createUnits($features);
             })
         ;
 
-        $builder->add('submit', 'submit');
+        $builder->add('submit', 'submit', array('label' => 'Create run'));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
