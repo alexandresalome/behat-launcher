@@ -49,4 +49,28 @@ class RunController extends Controller
             'run' => $run
         ));
     }
+
+    public function restartAction(Request $request, $id)
+    {
+        try {
+            $run = $this->getRunStorage()->getRun($id);
+        } catch (\InvalidArgumentException $e) {
+            throw $this->createNotFoundException(sprintf('Run #%s not found.', $id));
+        }
+
+        $failed = $request->query->get('failed');
+
+        foreach ($run->getUnits() as $unit) {
+            if ($failed && !$unit->isFailed()) {
+                continue;
+            }
+
+            if ($unit->isFinished()) {
+                $unit->reset();
+                $this->getRunStorage()->saveRunUnit($unit);
+            }
+        }
+
+        return $this->redirect($this->generateUrl('run_show', array('id' => $id)));
+    }
 }

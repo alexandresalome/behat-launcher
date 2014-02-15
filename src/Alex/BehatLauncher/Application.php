@@ -77,6 +77,7 @@ class Application extends BaseApplication
         $this->get('/project/{project}/create-run', 'controller.run:createAction')->bind('run_create')->method('GET|POST');
         $this->get('/runs', 'controller.run:listAction')->bind('run_list');
         $this->get('/runs/{id}', 'controller.run:showAction')->bind('run_show');
+        $this->get('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
         $this->get('/output/{id}', 'controller.outputFile:showAction')->bind('outputFile_show');
 
         $this->extend('form.extensions', function ($extensions, $app) {
