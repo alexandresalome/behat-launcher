@@ -63,6 +63,7 @@ HELP
             pcntl_signal(SIGUSR1, $sigHandler);
         }
 
+        $cycle = 0;
         while (true) {
             $this->currentUnit = $storage->getRunnableUnit($project);
 
@@ -77,12 +78,18 @@ HELP
                 $output->writeln(sprintf("Processing unit#%s", $this->currentUnit->getId()));
                 $process = $this->currentUnit->getProcess($projectList->get($this->currentUnit->getRun()->getProjectName()));
             } catch (\InvalidArgumentException $e) {
-                $output->write(sprintf('<error>Project %s not found.</error>', $this->currentUnit->getRun()->getProjectName()));
+                $output->writeln(sprintf('<error>Project %s not found.</error>', $this->currentUnit->getRun()->getProjectName()));
             }
             $this->currentProcess = $process;
             $this->currentProcess->run();
             $this->currentUnit->finish($this->currentProcess);
             $storage->saveRunUnit($this->currentUnit);
+
+            if ($cycle++ > 100) {
+                $output->writeln("GC collect");
+                gc_collect_cycles();
+                $cycle = 0;
+            }
         }
     }
 }
