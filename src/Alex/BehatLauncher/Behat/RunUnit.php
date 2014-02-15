@@ -14,12 +14,20 @@ class RunUnit
     private $startedAt;
     private $finishedAt;
     private $returnCode;
-    private $outputFiles = array();
+    private $outputFiles;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->outputFiles = new OutputFileList();
+    }
+
+    public function reset()
+    {
+        $this->startedAt   = null;
+        $this->finishedAt  = null;
+        $this->returnCode  = null;
+        $this->outputFiles->reset();
     }
 
     /**

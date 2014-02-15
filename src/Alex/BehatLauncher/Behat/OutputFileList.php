@@ -12,6 +12,11 @@ class OutputFileList implements \IteratorAggregate, \Countable
         $this->files = $files;
     }
 
+    public function reset()
+    {
+        $this->files = array();
+    }
+
     /**
      * {@inheritdoc}
      */
