@@ -8,6 +8,16 @@ body {
     display: none;
 }
 
+a.btn, a.btn, input[type=submit], button[type=submit] {
+    border: 1px solid #888;
+    background-color: #eee;
+    color: black;
+    display: inline-block;
+    padding: 0.4em 0.8em;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
 footer {
     margin-top: 2em;
     font-size: 0.8em;

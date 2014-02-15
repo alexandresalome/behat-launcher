@@ -12,9 +12,10 @@
         #{{ run.id }}: {% if run.title %}{{ run.title }}{% else %}<em>no title</em>{% endif %}
         <small><span class="label label-{{ run.status }}">{{ run.status }}</span></small>
     </h1>
-    <p>
-        Restart <a href="{{ path('run_restart', {id: run.id}) }}">all</a> - <a href="{{ path('run_restart', {id: run.id, failed: 1}) }}">failed</a>
-    </p>
+    <div class="actions">
+        <a class="btn" href="{{ path('run_restart', {id: run.id}) }}">Restart all</a>
+        <a class="btn" href="{{ path('run_restart', {id: run.id, failed: 1}) }}">Restart failed</a>
+    </div>
     <hr />
     <div class="run-progress">
         {% for status, width in run.progress(100) %}
