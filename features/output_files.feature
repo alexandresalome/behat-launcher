@@ -12,8 +12,3 @@ Feature: Get all sort of output files
           And I should see "html"
           And I should see "failed"
           And I should not see "invalidformat"
-         When I click on "html"
-         Then I should see "xpath=//title[contains(., 'Behat Test Suite')]"
-         When I go back
-          And I click on "progress"
-         Then I should see "."

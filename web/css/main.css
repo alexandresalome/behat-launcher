@@ -161,8 +161,25 @@ a.output-file {
     padding: 2px 6px;
 }
 
+a.output-file.current {
+    font-weight: bold;
+    color: black;
+    border: 1px solid #333;
+}
+
 a.output-file-empty {
     opacity: 0.2;
+}
+
+tr.output-file > td {
+    margin: 0;
+    padding: 0;
+}
+
+tr.output-file > td > iframe {
+    height: 500px;
+    width: 100%;
+    border: 0;
 }
 
 div.block-counters > div.counter-pending {
@@ -259,4 +276,3 @@ div.block-features > div.rows {
 .run-progress > div.run-progress-failed {
     background-color: #a00;
 }
-

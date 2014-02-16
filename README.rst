@@ -52,7 +52,6 @@ Roadmap
 
 **v0.1**
 
-* Popin for output files
 * Usage manual
 
 **Unplanned**
