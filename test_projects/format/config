@@ -1,0 +1,7 @@
+$app
+    ->createProject($name, $path)
+    ->setBehatBin($behatBin)
+    ->addFormat('invalidformat')
+    ->setFormats(array('html'))
+    ->addFormat('progress')
+;
