@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1e86d20229d88c72c206c442cc45ce6b",
+    "hash": "986d76ecf83881a381a26dc5476eb485",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1984,6 +1984,37 @@
             ],
             "description": "PHP-WebDriver is a client for WebDriver and a Behat extension",
             "time": "2014-02-10 10:34:08"
+        },
+        {
+            "name": "alom/journal-extension",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alexandresalome/journal-extension.git",
+                "reference": "b16ae884aff8b6f95d96036130b1fe3a3e5edf29"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alexandresalome/journal-extension/zipball/b16ae884aff8b6f95d96036130b1fe3a3e5edf29",
+                "reference": "b16ae884aff8b6f95d96036130b1fe3a3e5edf29",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "*",
+                "php": ">=5.3.2"
+            },
+            "type": "behat-extension",
+            "autoload": {
+                "psr-0": {
+                    "Behat\\JournalExtension": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Behat extension adding screenshots to HTML reports",
+            "time": "2013-09-22 11:24:27"
         },
         {
             "name": "behat/behat",

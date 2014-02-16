@@ -27,7 +27,8 @@
     "require-dev": {
         "behat/behat": "~2.4",
         "phpunit/phpunit": "~3.7",
-        "alexandresalome/php-webdriver": "~0.6"
+        "alexandresalome/php-webdriver": "~0.6",
+        "alom/journal-extension": "~0.2"
     },
 
     "config": {
