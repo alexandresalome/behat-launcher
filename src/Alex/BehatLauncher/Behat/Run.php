@@ -23,6 +23,22 @@ class Run
         $this->createdAt = new \DateTime();
     }
 
+    public function toArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'status' => $this->getStatus(),
+            'properties' => $this->getProperties(),
+            'count' => array(
+                'pending'   => $this->countStatus('pending'),
+                'running'   => $this->countStatus('running'),
+                'succeeded' => $this->countStatus('succeeded'),
+                'failed'    => $this->countStatus('failed'),
+            ),
+            'progress' => $this->getProgress()
+        );
+    }
+
     public function getTitle()
     {
         return $this->title;

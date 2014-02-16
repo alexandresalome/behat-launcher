@@ -21,6 +21,11 @@ abstract class Controller
         $this->application = $application;
     }
 
+    public function getTwig()
+    {
+        return $this->application['twig'];
+    }
+
     public function getProjectList()
     {
         return $this->application['project_list'];
