@@ -65,21 +65,31 @@ class RunUnit
         $pb->add($feature);
         $pb->setTimeout(null);
 
-        $formats = array('pretty');
-        $outputs = array('null');
-        $outputFiles = array();
+        $formats = $project->getFormats();
 
-        foreach ($project->getFormats() as $format) {
-            $formats[] = $format;
-            $outputFiles[$format] = tempnam(sys_get_temp_dir(), 'bl_');
-            $outputs[] = $outputFiles[$format];
+        $outputFiles = array();
+        if (count($formats)) {
+            $argFormats  = array();
+            $argOutputs  = array();
+
+            foreach ($formats as $format) {
+                $argFormats[] = $format;
+                $outputFiles[$format] = tempnam(sys_get_temp_dir(), 'bl_');
+                $argOutputs[] = $outputFiles[$format];
+            }
+
+            $argFormats[] = 'pretty';
+            $argOutputs[] = 'null';
+
+            $pb->add('-f')->add(implode(',', $argFormats));
+            $pb->add('--out')->add(implode(',', $argOutputs));
         }
 
-        $pb->add('-f')->add(implode(',', $formats));
-        $pb->add('--out')->add(implode(',', $outputs));
+        $pb->add('--ansi');
 
         $process = $pb->getProcess();
         $process->run();
+
         unlink($configFile);
 
         $this->returnCode = $process->getExitCode();
@@ -89,8 +99,8 @@ class RunUnit
         $this->setOutputFile('_stdout', $output);
         $this->setOutputFile('_stderr', $error);
 
-        foreach ($project->getFormats() as $format) {
-            $this->setOutputFile($format, $outputFiles[$format]);
+        foreach ($outputFiles as $format => $file) {
+            $this->setOutputFile($format, $file);
         }
     }
 

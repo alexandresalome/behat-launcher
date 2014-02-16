@@ -2,6 +2,8 @@
 
 namespace Alex\BehatLauncher\Controller;
 
+use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
+
 class OutputFileController extends Controller
 {
     public function showAction($id)
@@ -18,6 +20,8 @@ class OutputFileController extends Controller
         if (false !== strpos($content, '<html')) {
             $template = 'OutputFile/html.html.twig';
         } else {
+            $converter = new AnsiToHtmlConverter();
+            $content = $converter->convert($content);
             $template = 'OutputFile/text.html.twig';
         }
 

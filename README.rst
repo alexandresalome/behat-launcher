@@ -45,6 +45,7 @@ Changelog
 * Launch Behat tests from your browser
 * Relaunch whole run or just failed
 * Change behat.yml configuration values
+* Collect additional formats
 
 Roadmap
 -------
@@ -52,7 +53,6 @@ Roadmap
 **v0.1**
 
 * Popin for output files
-* Configure expected output formats
 * Usage manual
 
 **Unplanned**

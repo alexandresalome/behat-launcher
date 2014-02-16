@@ -78,7 +78,7 @@ HELP
             }
 
             try {
-                $project = $projectList->get($this->currentUnit->getRun()->getProjectName());
+                $currentProject = $projectList->get($this->currentUnit->getRun()->getProjectName());
             } catch (\InvalidArgumentException $e) {
                 $output->writeln(sprintf('<error>Project %s not found.</error>', $this->currentUnit->getRun()->getProjectName()));
 
@@ -86,7 +86,7 @@ HELP
             }
 
             $output->writeln(sprintf("Processing unit#%s", $this->currentUnit->getId()));
-            $this->currentUnit->run($project);
+            $this->currentUnit->run($currentProject);
             $storage->saveRunUnit($this->currentUnit);
 
             if ($cycle++ > 100) {
