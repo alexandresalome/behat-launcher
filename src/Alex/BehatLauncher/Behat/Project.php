@@ -31,6 +31,11 @@ class Project
     private $properties = array();
 
     /**
+     * @var array
+     */
+    private $formats = array();
+
+    /**
      * Creates a new Behat Launcher project, to execute runs on it.
      *
      * @param string $name project name
@@ -249,5 +254,37 @@ class Project
         $this->addProperty($property);
 
         return $property;
+    }
+
+    /**
+     * @param string $format a behat format (pretty, html, failed)
+     *
+     * @return Project
+     */
+    public function addFormat($format)
+    {
+        $this->formats[] = $format;
+
+        return $this;
+    }
+
+    /**
+     * @param string $format a behat format (pretty, html, failed)
+     *
+     * @return Project
+     */
+    public function setFormats(array $formats)
+    {
+        $this->formats = $formats;
+
+        return $this;
+    }
+
+    /**
+     * @return array an array of string, behat format (pretty, html, failed)
+     */
+    public function getFormats()
+    {
+        return $this->formats;
     }
 }

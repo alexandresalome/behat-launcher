@@ -9,6 +9,10 @@ class FeatureContext extends BehatContext
     public function __construct(array $parameters)
     {
         $this->success = isset($parameters['success']) ? $parameters['success'] : false;
+
+        if (!isset($parameters['mandatory'])) {
+            throw new \RuntimeException('Mandatory parameter is missing. Was it lost?');
+        }
     }
 
     /**

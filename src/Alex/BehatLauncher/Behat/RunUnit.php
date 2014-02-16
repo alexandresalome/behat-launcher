@@ -65,8 +65,20 @@ class RunUnit
         $pb->add($feature);
         $pb->setTimeout(null);
 
-        $process = $pb->getProcess();
+        $formats = array('pretty');
+        $outputs = array('null');
+        $outputFiles = array();
 
+        foreach ($project->getFormats() as $format) {
+            $formats[] = $format;
+            $outputFiles[$format] = tempnam(sys_get_temp_dir(), 'bl_');
+            $outputs[] = $outputFiles[$format];
+        }
+
+        $pb->add('-f')->add(implode(',', $formats));
+        $pb->add('--out')->add(implode(',', $outputs));
+
+        $process = $pb->getProcess();
         $process->run();
         unlink($configFile);
 
@@ -76,6 +88,10 @@ class RunUnit
         $this->finishedAt = new \DateTime();
         $this->setOutputFile('_stdout', $output);
         $this->setOutputFile('_stderr', $error);
+
+        foreach ($project->getFormats() as $format) {
+            $this->setOutputFile($format, $outputFiles[$format]);
+        }
     }
 
     public function getId()
