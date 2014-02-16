@@ -2,3 +2,5 @@ default:
     extensions:
         WebDriver\Behat\WebDriverExtension\Extension:
             base_url: http://localhost/app_dev.php
+        Behat\JournalExtension\Extension:
+            driver: webdriver

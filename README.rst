@@ -53,6 +53,7 @@ Roadmap
 
 * Popin for output files
 * Configure expected output formats
+* Usage manual
 
 **Unplanned**
 

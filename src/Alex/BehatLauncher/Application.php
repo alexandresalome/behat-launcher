@@ -48,12 +48,12 @@ class Application extends BaseApplication
         $this->register(new TwigServiceProvider(), array(
             'twig.path'    => __DIR__.'/Resources/views',
             'debug'        => $this['debug'],
-            'twig.options' => array('cache' => __DIR__.'/../../../cache/twig'),
+            'twig.options' => array('cache' => __DIR__.'/../../../data/cache/twig'),
         ));
 
         if ($this['debug']) {
             $this->register($profiler = new WebProfilerServiceProvider(), array(
-                'profiler.cache_dir' => __DIR__.'/../../../cache/profiler',
+                'profiler.cache_dir' => __DIR__.'/../../../data/cache/profiler',
             ));
             $this->mount('/_profiler', $profiler);
         }
