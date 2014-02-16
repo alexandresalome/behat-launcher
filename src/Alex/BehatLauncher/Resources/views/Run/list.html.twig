@@ -10,3 +10,10 @@
     <h1>{{ title }}</h1>
     {{ include('Run/_list.html.twig') }}
 {% endblock %}
+
+{% block angular %}
+{% verbatim %}
+    <h1>Last {{ runs.length }} runs</h1>
+    <div ng-include="'/templates/_run_list.html'" />
+{% endverbatim %}
+{% endblock %}
