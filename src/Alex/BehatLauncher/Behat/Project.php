@@ -63,6 +63,21 @@ class Project
     }
 
     /**
+     * Merges values with actual project configuration (from behat.yml).
+     *
+     * @return array
+     */
+    public function getConfig(array $values = array())
+    {
+        foreach ($this->getProperties() as $property) {
+            $value = isset($values[$property->getName()]) ? $values[$property->getName()] : null;
+            $values = $property->mergeConfig($values, $value);
+        }
+
+        return $values;
+    }
+
+    /**
      * Example return value:
      *
      *     array(

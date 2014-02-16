@@ -1,0 +1,9 @@
+$app
+    ->createProject($name, $path)
+    ->setBehatBin($behatBin)
+    ->createProperty('Result')
+        ->setConfig('default.context.parameters.success')
+        ->setFormType('choice')
+        ->setFormOptions(array('choices' => array('1' => 'Success', '0' => 'Fail')))
+    ->endProperty()
+;

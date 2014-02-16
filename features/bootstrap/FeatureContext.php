@@ -43,7 +43,11 @@ class FeatureContext extends BehatContext
 
         $behatBin = realpath(__DIR__.'/../../vendor/behat/behat/bin/behat');
 
-        $testContent = '$app->createProject("TEST-'.$name.'", "'.$path.'")->setBehatBin("'.$behatBin.'");';
+        $testContent = strtr(file_get_contents($path.'/config'), array(
+            '$name'     => var_export('TEST-'.$name, true),
+            '$path'     => var_export($path, true),
+            '$behatBin' => var_export($behatBin, true),
+        ));
 
         if (false === $pos = strpos($content, self::CONFIG_HEADER)) {
             $content = $content.self::CONFIG_HEADER.$testContent;

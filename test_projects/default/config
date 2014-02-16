@@ -1,0 +1,4 @@
+$app
+    ->createProject($name, $path)
+    ->setBehatBin($behatBin)
+;

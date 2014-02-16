@@ -40,3 +40,27 @@ Feature: Create a run
          Then I should see "css=h1 .label-succeeded"
           And I should see "0 PENDING"
           And I should see "2 SUCCEEDED"
+
+    Scenario: Execute test with properties
+        Given test project "properties"
+          And I am on "/"
+         When I click on "xpath=//div[@data-project='TEST-properties']//a[contains(., 'Create a run')]"
+          And I fill:
+            | Result | Success |
+          And I click on "xpath=//input[@type='checkbox' and @data-path='']"
+          And I click on "Create run"
+         Then I should see "1 PENDING"
+         When I run all units
+          And I refresh
+         Then I should see "1 SUCCEEDED"
+
+          And I am on "/"
+         When I click on "xpath=//div[@data-project='TEST-properties']//a[contains(., 'Create a run')]"
+          And I fill:
+            | Result | Fail |
+          And I click on "xpath=//input[@type='checkbox' and @data-path='']"
+          And I click on "Create run"
+         Then I should see "1 PENDING"
+         When I run all units
+          And I refresh
+         Then I should see "1 FAILED"

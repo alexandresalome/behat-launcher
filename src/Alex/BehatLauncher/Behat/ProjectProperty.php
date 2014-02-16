@@ -17,6 +17,15 @@ class ProjectProperty
         $this->name = $name;
     }
 
+    public function mergeConfig(array $config, $value)
+    {
+        if ($this->config) {
+            $config = $this->doMergeConfig($config, $value, $this->config);
+        }
+
+        return $config;
+    }
+
     public function getProject()
     {
         return $this->project;
@@ -92,5 +101,31 @@ class ProjectProperty
     public function endProperty()
     {
         return $this->project;
+    }
+
+    private function doMergeConfig(array $config, $value, $path)
+    {
+        if (false === $pos = strpos($path, '.')) {
+            $config[$path] = $value;
+
+            return $config;
+        }
+
+        $prefix = substr($path, 0, $pos);
+        $suffix = substr($path, $pos + 1);
+
+        if (!isset($config[$prefix])) {
+            $config[$prefix] = $this->doMergeConfig(array(), $value, $suffix);
+
+            return $config;
+        }
+
+        if (is_array($config[$prefix])) {
+            $config[$prefix] = $this->doMergeConfig($config[$prefix], $value, $suffix);
+
+            return $config;
+        }
+
+        throw new \RuntimeException(sprintf('Error at configuration key "%s": expected an array or empty, got "%s".', $prefix, $config[$prefix]));
     }
 }

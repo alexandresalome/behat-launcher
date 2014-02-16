@@ -10,7 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RunCommand extends Command
 {
     private $currentUnit;
-    private $currentProcess;
 
     public function configure()
     {
@@ -46,10 +45,6 @@ HELP
         if (function_exists('pcntl_signal')) {
             declare(ticks = 1);
             $sigHandler = function () use ($storage) {
-                if ($this->currentProcess) {
-                    $this->currentProcess->stop();
-                }
-
                 if ($this->currentUnit) {
                     $this->currentUnit->reset();
                     $storage->saveRunUnit($this->currentUnit);
@@ -83,14 +78,15 @@ HELP
             }
 
             try {
-                $output->writeln(sprintf("Processing unit#%s", $this->currentUnit->getId()));
-                $process = $this->currentUnit->getProcess($projectList->get($this->currentUnit->getRun()->getProjectName()));
+                $project = $projectList->get($this->currentUnit->getRun()->getProjectName());
             } catch (\InvalidArgumentException $e) {
                 $output->writeln(sprintf('<error>Project %s not found.</error>', $this->currentUnit->getRun()->getProjectName()));
+
+                continue;
             }
-            $this->currentProcess = $process;
-            $this->currentProcess->run();
-            $this->currentUnit->finish($this->currentProcess);
+
+            $output->writeln(sprintf("Processing unit#%s", $this->currentUnit->getId()));
+            $this->currentUnit->run($project);
             $storage->saveRunUnit($this->currentUnit);
 
             if ($cycle++ > 100) {

@@ -4,6 +4,7 @@ namespace Alex\BehatLauncher\Behat;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Yaml\Yaml;
 
 class RunUnit
 {
@@ -37,17 +38,44 @@ class RunUnit
      *
      * @return Process
      */
-    public function getProcess(Project $project)
+    public function run(Project $project)
     {
         $path = $project->getPath();
+
+        do {
+            $tmp = 'bl_'.md5(uniqid().microtime(true));
+            $configFile = $path.'/'.$tmp;
+        } while (file_exists($configFile));
+
+        if (file_exists($file = $project->getPath().'/behat.yml')) {
+            $content = Yaml::parse($file);
+        } else {
+            $content = array();
+        }
+
+        $config = $project->getConfig($this->getRun()->getProperties());
+        file_put_contents($configFile, Yaml::dump($config));
+
         $pb = new ProcessBuilder(array('php', $project->getBehatBin()));
         $pb->setWorkingDirectory($project->getPath());
+
+        $pb->add('-c')->add($configFile);
 
         $feature = $project->getFeaturesPath().'/'.$this->feature;
         $pb->add($feature);
         $pb->setTimeout(null);
 
-        return $pb->getProcess();
+        $process = $pb->getProcess();
+
+        $process->run();
+        unlink($configFile);
+
+        $this->returnCode = $process->getExitCode();
+        file_put_contents($output = tempnam(sys_get_temp_dir(), 'bl_'), $process->getOutput());
+        file_put_contents($error  = tempnam(sys_get_temp_dir(), 'bl_'), $process->getErrorOutput());
+        $this->finishedAt = new \DateTime();
+        $this->setOutputFile('_stdout', $output);
+        $this->setOutputFile('_stderr', $error);
     }
 
     public function getId()
@@ -200,20 +228,6 @@ class RunUnit
         $this->startedAt = new \DateTime();
 
         return $this;
-    }
-
-    public function finish(Process $process)
-    {
-        if (null !== $this->finishedAt) {
-            throw new \LogicException('Run unit already finished.');
-        }
-
-        $this->returnCode = $process->getExitCode();
-        file_put_contents($output = tempnam(sys_get_temp_dir(), 'bl_'), $process->getOutput());
-        file_put_contents($error  = tempnam(sys_get_temp_dir(), 'bl_'), $process->getErrorOutput());
-        $this->finishedAt = new \DateTime();
-        $this->setOutputFile('_stdout', $output);
-        $this->setOutputFile('_stderr', $error);
     }
 
     public function getFinishedAt()

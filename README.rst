@@ -43,14 +43,14 @@ Changelog
 **v0.1**
 
 * First release
-* Relaunch whole run
+* Relaunch whole run or just failed
+* Override Behat parameters
 
 Roadmap
 -------
 
 **v0.1**
 
-* Override Behat parameters
 * Popin for output files
 * Configure expected output formats
 
