@@ -42,9 +42,9 @@ Changelog
 
 **v0.1**
 
-* First release
+* Launch Behat tests from your browser
 * Relaunch whole run or just failed
-* Override Behat parameters
+* Change behat.yml configuration values
 
 Roadmap
 -------

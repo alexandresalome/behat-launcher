@@ -4,6 +4,7 @@ namespace Alex\BehatLauncher\Behat;
 
 use Alex\BehatLauncher\Behat\ProjectProperty;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Project object
@@ -74,12 +75,18 @@ class Project
      */
     public function getConfig(array $values = array())
     {
-        foreach ($this->getProperties() as $property) {
-            $value = isset($values[$property->getName()]) ? $values[$property->getName()] : null;
-            $values = $property->mergeConfig($values, $value);
+        if (file_exists($file = $this->path.'/behat.yml')) {
+            $content = Yaml::parse($file);
+        } else {
+            $content = array();
         }
 
-        return $values;
+        foreach ($this->getProperties() as $property) {
+            $value = isset($values[$property->getName()]) ? $values[$property->getName()] : null;
+            $content = $property->mergeConfig($content, $value);
+        }
+
+        return $content;
     }
 
     /**
