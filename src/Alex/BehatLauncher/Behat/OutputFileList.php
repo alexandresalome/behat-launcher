@@ -20,6 +20,15 @@ class OutputFileList implements \IteratorAggregate, \Countable
         $this->files = $files;
     }
 
+    public function toArray()
+    {
+        return array_map(function ($of) {
+            return $of->getId();
+        }, array_filter($this->files, function ($of) {
+            return !$of->isEmpty();
+        }));
+    }
+
     /**
      * Reinitialize the collection, removes all files.
      *

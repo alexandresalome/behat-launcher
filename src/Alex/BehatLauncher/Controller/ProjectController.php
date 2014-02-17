@@ -6,9 +6,22 @@ class ProjectController extends Controller
 {
     public function listAction()
     {
-        return $this->render('Project/list.html.twig', array(
-            'project_list' => $this->getProjectList(),
-            'run_storage'  => $this->getRunStorage(),
-        ));
+        $result = array();
+
+        foreach ($this->getProjectList()->getAll() as $project) {
+            $row = array(
+                'name' => $project->getName(),
+                'runs' => array(),
+            );
+
+            $runs = $this->getRunStorage()->getRuns($project, 0, 5);
+            foreach ($runs as $run) {
+                $row['runs'][] = $run->toArray();
+            }
+
+            $result[] = $row;
+        }
+
+        return json_encode($result);
     }
 }

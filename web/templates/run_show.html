@@ -1,0 +1,41 @@
+<h1>
+    #{{ run.id }}: <input ng-model="run.title" />
+    <small><span class="label" ng-class="'label-' + run.status">&nbsp;{{ run.status }}&nbsp;</span></small>
+</h1>
+<div class="actions">
+    <button>Restart all</button>
+    <button>Restart failed</button>
+</div>
+<hr />
+<div class="run-progress">
+    <div ng-repeat="(status, width) in run.progress" ng-class="'run-progress-'+ status" ng-style="{width: width + '%'}">{{ run.count[status] }}</div>
+</div>
+<div class="block-counters">
+    <div ng-repeat="(status, count) in run.count" class="counter" ng-class="'counter-'+ status + (count ? '' : ' count-empty')">
+        <span class="number">{{ count }}</span>
+        <span class="label">{{ status }}</span>
+    </div>
+</div>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Feature</th>
+            <th>Started at</th>
+            <th>Finished at</th>
+            <th>Output</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr ng-repeat="unit in run.units" ng-class="'row-' + unit.status">
+                <td><span class="label" ng-class="'label-' + unit.status">{{ unit.status }}</span></td>
+                <td>{{ unit.feature }}</td>
+                <td>{{ unit.startedAt }}
+                <td>{{ unit.finishedAt }}
+                <td>
+                    <a ng-repeat="(format, id) in unit.output_files" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
+                </td>
+            </tr>
+    </tbody>
+</table>

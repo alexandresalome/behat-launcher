@@ -39,6 +39,19 @@ class RunUnit
         $this->outputFiles->get('_bl')->setContent('This run unit was stopped.');
     }
 
+    public function toArray()
+    {
+        return array(
+            'feature'      => $this->feature,
+            'status'       => $this->getStatus(),
+            'created_at'   => $this->createdAt ? $this->createdAt->format('Y-m-d H:i:s') : null,
+            'started_at'   => $this->startedAt ? $this->startedAt->format('Y-m-d H:i:s') : null,
+            'finished_at'  => $this->finishedAt ? $this->finishedAt->format('Y-m-d H:i:s') : null,
+            'return_code'  => $this->returnCode,
+            'output_files' => $this->outputFiles->toArray(),
+        );
+    }
+
     public function reset()
     {
         if ($this->process) {
