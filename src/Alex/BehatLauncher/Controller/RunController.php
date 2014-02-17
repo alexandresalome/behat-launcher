@@ -8,9 +8,13 @@ class RunController extends Controller
 {
     public function listAction()
     {
-        return $this->render('Run/list.html.twig', array(
-            'runs' => $this->getRunStorage()->getRuns()
-        ));
+        $result = array();
+
+        foreach ($this->getRunStorage()->getRuns() as $run) {
+            $result[] = $run->toArray();
+        }
+
+        return json_encode($result);
     }
 
     public function createAction(Request $request, $project)
@@ -45,9 +49,7 @@ class RunController extends Controller
             throw $this->createNotFoundException(sprintf('Run #%s not found.', $id));
         }
 
-        return $this->render('Run/show.html.twig', array(
-            'run' => $run
-        ));
+        return json_encode($run->toArray(true));
     }
 
     public function restartAction(Request $request, $id)

@@ -22,7 +22,7 @@ hr {
     border-top: 1px solid #ccc;
 }
 
-a.btn, a.btn, input[type=submit], button[type=submit] {
+a.btn, a.btn, input[type=submit], button {
     border: 1px solid #888;
     background-color: #eee;
     color: black;

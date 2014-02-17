@@ -15,8 +15,6 @@ use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 class Application extends BaseApplication
 {
@@ -75,21 +73,6 @@ class Application extends BaseApplication
             'debug'        => $this['debug'],
             'twig.options' => array('cache' => __DIR__.'/../../../data/cache/twig'),
         ));
-
-        $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
-            $twig->addExtension(new DateExtension($app['translator']));
-
-            return $twig;
-        }));
-
-        $this['translator'] = $this->share($this->extend('translator', function ($translator, $app) {
-            $translator->addLoader('yaml', new YamlFileLoader());
-
-            $translator->addResource('yaml', __DIR__.'/Resources/locales/en.yml', 'en');
-            $translator->addResource('yaml', __DIR__.'/Resources/locales/fr.yml', 'fr');
-
-            return $translator;
-        }));
     }
 
     private function registerServices()
@@ -123,12 +106,19 @@ class Application extends BaseApplication
             $this->mount('/_profiler', $profiler);
         }
 
+        $this->extend('twig', function ($twig, $app) {
+            $twig->addExtension(new DateExtension($app['translator']));
+            $twig->addExtension(new \Twig_Extension_StringLoader());
+
+            return $twig;
+        });
+
         $controllers = array(
             'outputFile' => 'Alex\BehatLauncher\Controller\OutputFileController',
             'project'    => 'Alex\BehatLauncher\Controller\ProjectController',
             'run'        => 'Alex\BehatLauncher\Controller\RunController',
             'angular'    => 'Alex\BehatLauncher\Controller\AngularController',
-            'api'        => 'Alex\BehatLauncher\Controller\ApiController',
+            'frontend'   => 'Alex\BehatLauncher\Controller\FrontendController',
         );
 
         // Controllers as service
@@ -141,28 +131,16 @@ class Application extends BaseApplication
 
     private function registerRouting()
     {
-        $this->before(function (Request $request) {
-            $locale = $request->cookies->get('locale', 'en');
-            if (!in_array($locale, array('en', 'fr'))) {
-                $locale = 'en';
-            }
-            \Locale::setDefault($locale);
-            $this['translator']->setLocale($locale);
-        }, self::EARLY_EVENT);
-
-        // Routes
-        $this->get('/', 'controller.project:listAction')->bind('project_list');
-        $this->get('/project/{project}', 'controller.project:showAction')->bind('project_show');
+        // API
+        $this->get('/project_list.json', 'controller.project:listAction')->bind('project_list');
+        $this->get('/run_list.json', 'controller.run:listAction')->bind('run_list');
         $this->get('/project/{project}/create-run', 'controller.run:createAction')->bind('run_create')->method('GET|POST');
-        $this->get('/runs', 'controller.run:listAction')->bind('run_list');
-        $this->get('/runs/{id}', 'controller.run:showAction')->bind('run_show');
+        $this->get('/runs/{id}.json', 'controller.run:showAction')->bind('run_show');
         $this->get('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
-        $this->get('/runs/{id}/stop', 'controller.run:stopAction')->bind('run_stop');
-        $this->get('/runs/{id}/delete', 'controller.run:deleteAction')->bind('run_delete');
         $this->get('/output/{id}', 'controller.outputFile:showAction')->bind('outputFile_show');
-        $this->get('/templates/{name}.html', 'controller.angular:templateAction')->bind('angular_template');
-        $this->get('/api/projects', 'controller.api:projectListAction')->bind('api_projectList');
-        $this->get('/api/runs', 'controller.api:runListAction')->bind('api_runList');
+
+        // Front page
+        $this->get('/{foo}', 'controller.frontend:showAction')->assert('foo', '.*')->bind('homepage');
 
         $this->extend('form.extensions', function ($extensions, $app) {
             $extensions[] = new BehatLauncherExtension();

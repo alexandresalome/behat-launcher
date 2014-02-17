@@ -23,9 +23,9 @@ class Run
         $this->createdAt = new \DateTime();
     }
 
-    public function toArray()
+    public function toArray($withUnits = false)
     {
-        return array(
+        $result = array(
             'id' => $this->getId(),
             'status' => $this->getStatus(),
             'properties' => $this->getProperties(),
@@ -37,6 +37,15 @@ class Run
             ),
             'progress' => $this->getProgress()
         );
+
+        if ($withUnits) {
+            $result['units'] = array();
+            foreach ($this->getUnits() as $unit) {
+                $result['units'][] = $unit->toArray();
+            }
+        }
+
+        return $result;
     }
 
     public function getTitle()

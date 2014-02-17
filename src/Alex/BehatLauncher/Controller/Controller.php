@@ -4,6 +4,7 @@ namespace Alex\BehatLauncher\Controller;
 
 use Alex\BehatLauncher\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -21,11 +22,6 @@ abstract class Controller
         $this->application = $application;
     }
 
-    public function getTwig()
-    {
-        return $this->application['twig'];
-    }
-
     public function getProjectList()
     {
         return $this->application['project_list'];
@@ -39,6 +35,20 @@ abstract class Controller
     public function render($template, array $parameters = array())
     {
         return $this->application['twig']->render($template, $parameters);
+    }
+
+    public function renderWithAngular(Request $request, $template, array $parameters = array())
+    {
+        if ($request->query->get('_angular')) {
+            $template = $this->application['twig']->loadTemplate($template);
+            if ($template->hasBlock('angular')) {
+                return $template->renderBlock('angular', $parameters);
+            } elseif ($template->hasBlock('content')) {
+                return $template->renderBlock('content', $parameters);
+            }
+        }
+
+        return $this->render($template, $parameters);
     }
 
     public function redirect($url)

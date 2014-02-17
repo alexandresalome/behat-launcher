@@ -1,0 +1,25 @@
+<table class="table">
+    <tr ng-repeat-start="run in runs" ng-class="'row-' + run.status">
+        <td colspan="4">
+            <div class="run-progress">
+                <div ng-repeat="(status, width) in run.progress" ng-class="'run-progress-'+ status" ng-style="{width: width + '%'}">{{ run.count[status] }}</div>
+            </div>
+        </td>
+    </tr>
+    <tr ng-repeat-end ng-class="'row-' +run.status" class="row-with-separator">
+        <td>
+            <a ng-href="/runs/{{ run.id }}">#{{ run.id }}</a>
+        </td>
+        <td><span class="label" ng-class="'label-' + run.status">{{ run.status }}</span></td>
+        <td>{{ run.projectName }}</td>
+        <td>
+            <strong ng-repeat-start="(name, value) in run.properties">{{ name }}</strong>: {{ value }}
+            <br ng-repeat-end ng-show="!$last" />
+        </td>
+    </tr>
+    <tr ng-hide="runs.length">
+        <td colspan="4">
+            No run found.
+        </td>
+    </tr>
+</table>

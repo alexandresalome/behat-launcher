@@ -2,18 +2,15 @@
 <!DOCTYPE html>
 <html ng-app="blApp">
     <head>
-        <title>{% block title 'Welcome!' %} - Behat Launcher</title>
+        <title>{% block title 'Behat Launcher' %}</title>
         <link rel="stylesheet" href="/css/main.css" />
     </head>
     <body class="behat-launcher">
         <div class="container">
             <nav>
-                <a class="brand">Behat Launcher</a>
-                <a{% if menu_active == 'project_list' %} class="active"{% endif %} href="{{ path('project_list') }}">Projects list</a>
-                <a{% if menu_active == 'run_list' %} class="active"{% endif %} href="{{ path('run_list') }}">All runs</a>
-                {% if menu_active is iterable %}
-                    <a class="active" href="{{ menu_active.href }}">{{ menu_active.label }}</a>
-                {% endif %}
+                <a href="/" class="brand">Behat Launcher</a>
+                <a href="/">Projects</a>
+                <a href="/runs">All runs</a>
             </nav>
             <div ng-view>{% block content '' %}</div>
             <footer>
