@@ -8,6 +8,7 @@ class Run
     private $title;
     private $projectName;
     private $properties = array();
+    private $createdAt;
     private $startedAt;
     private $finishedAt;
 
@@ -19,6 +20,7 @@ class Run
     public function __construct()
     {
         $this->units = new RunUnitList();
+        $this->createdAt = new \DateTime();
     }
 
     public function getTitle()
@@ -120,6 +122,24 @@ class Run
     /**
      * @return DateTime|null
      */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return Run
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
     public function getStartedAt()
     {
         return $this->startedAt;
@@ -151,6 +171,18 @@ class Run
         $this->finishedAt = $finishedAt;
 
         return $this;
+    }
+
+    /**
+     * @return DateInterval
+     */
+    public function getDuration()
+    {
+        if (!$this->isFinished()) {
+            throw new \LogicException('Cannot compute duration: run is not finished.');
+        }
+
+        return $this->finishedAt->diff($this->startedAt);
     }
 
     /**

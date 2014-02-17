@@ -28,11 +28,11 @@ class RunType extends AbstractType
 
         $builder
             ->add('title', 'text', array('required' => false))
+            ->add($props)
             ->add('features', 'behat_launcher_features', array(
                 'project' => $options['project'],
                 'mapped' => false
             ))
-            ->add($props)
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $run  = $event->getData();
                 $form = $event->getForm();

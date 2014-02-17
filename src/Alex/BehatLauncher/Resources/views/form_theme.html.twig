@@ -1,5 +1,11 @@
 {% extends "form_div_layout.html.twig" %}
 
+{% block _behat_launcher_run_properties_row %}
+    {% for sub in form %}
+        {{ form_row(sub) }}
+    {% endfor %}
+{% endblock %}
+
 {% block behat_launcher_features_row %}
     <div class="block-features" data-path="{{ path }}">
         <div class="header">
@@ -17,4 +23,14 @@
 
 {% block checkbox_row %}
     <p>{{ form_widget(form) }} {{ form_label(form) }}</p>
+{% endblock %}
+
+{% block form_row %}
+    <div id="form-row-{{ id }}" class="form-row">
+    <div class="label">{{ form_label(form) }}</div>
+    <div class="content">
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+    </div>
 {% endblock %}

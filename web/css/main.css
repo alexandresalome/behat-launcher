@@ -1,11 +1,25 @@
+/** Layout **/
+
 body {
     margin: 0;
     padding: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.hidden {
-    display: none;
+div.container {
+    width: 960px;
+    margin: 0 auto;
+}
+
+/** CSS toolkit **/
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ccc;
 }
 
 a.btn, a.btn, input[type=submit], button[type=submit] {
@@ -18,17 +32,23 @@ a.btn, a.btn, input[type=submit], button[type=submit] {
     text-decoration: none;
 }
 
-footer {
-    margin-top: 2em;
-    font-size: 0.8em;
-    text-align: center;
-    color: #aaa;
+.hidden {
+    display: none;
 }
 
-footer a {
-    color: #555;
-    text-decoration: none;
+/** Form **/
+
+div.form-row {
+    overflow: hidden;
+    padding-bottom: 20px;
 }
+
+div.form-row > div.label {
+    width: 200px;
+    float: left;
+}
+
+/** Header **/
 
 div.container > nav {
     border-bottom: 1px solid #bbb;
@@ -61,18 +81,18 @@ div.container > nav > a.brand {
     color: #555;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
+/** Footer **/
+
+footer {
+    margin-top: 2em;
+    font-size: 0.8em;
+    text-align: center;
+    color: #aaa;
 }
 
-hr {
-    border: 0;
-    border-top: 1px solid #ccc;
-}
-
-div.container {
-    width: 960px;
-    margin: 0 auto;
+footer a {
+    color: #555;
+    text-decoration: none;
 }
 
 /** Counters */

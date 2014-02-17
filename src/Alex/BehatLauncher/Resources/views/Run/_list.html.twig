@@ -2,7 +2,7 @@
     show_project: true
 }|merge(options|default({})) %}
 
-{% set colspan = 4 %}
+{% set colspan = 5 %}
 {% if options.show_project %}
     {% set colspan = colspan + 1 %}
 {% endif %}
@@ -29,6 +29,15 @@
                 {% for name, value in run.properties %}
                     <strong>{{ name }}</strong>: {{ value }}<br />
                 {% endfor %}
+            </td>
+            <td>
+                {% if run.pending %}
+                    Pending since {{ run.createdAt|dateinterval }} ago
+                {% elseif run.running %}
+                    Running since {{ run.startedAt|dateinterval }} ago
+                {% else %}
+                    Finished {{ run.finishedAt|dateinterval }} ago (duration: {{ run.duration|dateinterval }})
+                {% endif %}
         </tr>
     {% else %}
         <tr>

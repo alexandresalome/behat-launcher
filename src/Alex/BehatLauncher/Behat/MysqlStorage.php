@@ -57,7 +57,8 @@ class MysqlStorage
             id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(64),
             project_name VARCHAR(64) NOT NULL,
-            properties TEXT NOT NULL
+            properties TEXT NOT NULL,
+            created_at DATETIME NOT NULL
         )');
         $conn->exec('CREATE TABLE IF NOT EXISTS bl_run_unit (
             id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -92,10 +93,11 @@ class MysqlStorage
         }
 
         // Insert the run
-        $stmt = $this->connection->prepare('INSERT INTO bl_run (title, project_name, properties) VALUES (:title, :project_name, :properties)');
+        $stmt = $this->connection->prepare('INSERT INTO bl_run (title, project_name, properties, created_at) VALUES (:title, :project_name, :properties, :created_at)');
         $stmt->bindValue('title', $run->getTitle());
         $stmt->bindValue('project_name', $run->getProjectName());
         $stmt->bindValue('properties', json_encode($run->getProperties()));
+        $stmt->bindValue('created_at', $run->getCreatedAt(), "datetime");
         $stmt->execute();
 
         $run->setId($this->connection->lastInsertId());
@@ -210,7 +212,8 @@ class MysqlStorage
                 R.id AS run_id,
                 R.title AS run_title,
                 R.project_name AS run_project_name,
-                R.properties AS run_properties
+                R.properties AS run_properties,
+                R.created_at AS run_created_at
             FROM
                 bl_run R
                 INNER JOIN bl_run_unit U ON R.id = U.run_id
@@ -242,6 +245,8 @@ class MysqlStorage
             ->setTitle($row['run_title'])
             ->setProjectName($row['run_project_name'])
             ->setProperties(json_decode($row['run_properties'], true))
+            ->setProjectName($row['run_project_name'])
+            ->setCreatedAt(new \DateTime($row['created_at']))
         ;
 
         $unit = new RunUnit();
@@ -318,6 +323,7 @@ class MysqlStorage
                 R.title AS title,
                 R.project_name AS project_name,
                 R.properties AS properties,
+                R.created_at AS created_at,
                 SUM(IF(U.id IS NOT NULL AND U.started_at IS NULL, 1, 0)) AS count_pending,
                 SUM(IF(U.id IS NOT NULL AND U.started_at IS NOT NULL AND U.finished_at IS NULL, 1, 0)) AS count_running,
                 SUM(IF(U.id IS NOT NULL AND U.finished_at IS NOT NULL AND U.return_code = 0, 1, 0)) AS count_succeeded,
@@ -349,6 +355,7 @@ class MysqlStorage
                 ->setProperties(json_decode($row['properties'], true))
                 ->setStartedAt(null !== $row['started_at'] ? new \DateTime($row['started_at']) : null)
                 ->setFinishedAt(null !== $row['finished_at'] ? new \DateTime($row['finished_at']) : null)
+                ->setCreatedAt(new \DateTime($row['created_at']))
             ;
 
             $list = new LazyRunUnitList($this, $run, $row['count_pending'], $row['count_running'], $row['count_succeeded'], $row['count_failed']);

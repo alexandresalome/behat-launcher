@@ -2,10 +2,11 @@
 
 namespace Alex\BehatLauncher;
 
+use Alex\BehatLauncher\Behat\MysqlStorage;
 use Alex\BehatLauncher\Behat\Project;
 use Alex\BehatLauncher\Behat\ProjectList;
-use Alex\BehatLauncher\Behat\MysqlStorage;
 use Alex\BehatLauncher\Form\BehatLauncherExtension;
+use Alex\BehatLauncher\Twig\DateExtension;
 use Doctrine\DBAL\DriverManager;
 use Silex\Application as BaseApplication;
 use Silex\Provider\FormServiceProvider;
@@ -57,6 +58,12 @@ class Application extends BaseApplication
             ));
             $this->mount('/_profiler', $profiler);
         }
+
+        $this->extend('twig', function ($twig, $app) {
+            $twig->addExtension(new DateExtension($app['translator']));
+
+            return $twig;
+        });
 
         $controllers = array(
             'outputFile' => 'Alex\BehatLauncher\Controller\OutputFileController',

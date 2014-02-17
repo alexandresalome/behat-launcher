@@ -43,7 +43,7 @@ class LazyRunUnitList extends RunUnitList
         $this->cacheCount['failed']    = $failed;
         $this->cacheCount['finished']  = $finished = $succeeded + $failed;
 
-        $this->cacheCount['is_pending'] = $pending == $all;
+        $this->cacheCount['is_pending'] = $pending && !$running;
         $this->cacheCount['is_running'] = $running > 0;
         $this->cacheCount['is_succeeded'] = $all == $succeeded;
         $this->cacheCount['is_failed'] = $all == $finished && $failed > 0;

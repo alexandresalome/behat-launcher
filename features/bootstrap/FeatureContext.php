@@ -1,6 +1,10 @@
 <?php
 
+use Alex\BehatLauncher\Application;
+use Alex\BehatLauncher\Behat\Run;
+use Alex\BehatLauncher\Behat\RunUnit;
 use Behat\Behat\Context\BehatContext;
+use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\Process\ProcessBuilder;
 use WebDriver\Behat\WebDriverContext;
 
@@ -59,6 +63,72 @@ class FeatureContext extends BehatContext
     }
 
     /**
+     * @Given /^following run for "([^"]+)":$/
+     */
+    public function followingRunForTestDefault($name, TableNode $table)
+    {
+        $app = $this->getApplication();
+
+        $project = $app['project_list']->get($name);
+
+        $methods = array(
+            'created_at' => function (RunUnit $unit, $val) {
+                $int = new \DateInterval($val);
+                $now = new \DateTime();
+                $unit->setCreatedAt($now->sub($int));
+            },
+            'started_at' => function (RunUnit $unit, $val) {
+                $int = new \DateInterval($val);
+                $now = new \DateTime();
+                $unit->setStartedAt($now->sub($int));
+            },
+            'finished_at' => function (RunUnit $unit, $val) {
+                $int = new \DateInterval($val);
+                $now = new \DateTime();
+                if (!$unit->getStartedAt()) {
+                    $unit->setStartedAt($now->sub($int));
+                }
+                $unit->setFinishedAt($now->sub($int));
+            },
+            'feature' => function (RunUnit $unit, $val) {
+                $unit->setFeature($val);
+            },
+            'return_code' => function (RunUnit $unit, $val) {
+                $unit->setReturnCode($val);
+            },
+        );
+
+        $headers = $table->getRow(0);
+        foreach ($headers as $col) {
+            if (!isset($methods[$col])) {
+                throw new \RuntimeException(sprintf('No handler for column "%s".', $col));
+            }
+        }
+
+        $run = new Run();
+        $run
+            ->setProjectName($name)
+        ;
+
+        $units = $run->getUnits();
+
+        foreach ($table->getRows() as $i => $row) {
+            if ($i == 0) {
+                continue;
+            }
+
+            $unit = new RunUnit();
+            foreach ($headers as $i => $header) {
+                $methods[$header]($unit, $row[$i]);
+            }
+
+            $units->add($unit);
+        }
+
+        $app['run_storage']->saveRun($run);
+    }
+
+    /**
      * @When /^I run all units$/
      */
     public function iRunAllUnits()
@@ -79,5 +149,13 @@ class FeatureContext extends BehatContext
         if (!$process->isSuccessful()) {
             throw new \RuntimeException(sprintf('Error while executing "%s": %s', $process->getCommandLine(), $process->getOutput().$process->getErrorOutput()));
         }
+    }
+
+    private function getApplication()
+    {
+        $app = new Application();
+        require __DIR__.'/../../config.php';
+
+        return $app;
     }
 }
