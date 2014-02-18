@@ -1,0 +1,82 @@
+<h1>
+    Create a run
+</h1>
+<hr />
+ <form name="run" method="post" action="/project/{{ project.name }}/create-run">
+    <div id="run">
+        <div class="form-row">
+            <div class="label">
+                <label for="run_title">Title</label>
+            </div>
+            <div class="content">
+                <input type="text" id="run_title" name="run[title]" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="label">
+                <label for="run_properties_Browser" class="required">Browser</label>
+            </div>
+            <div class="content">
+                <select id="run_properties_Browser" name="run[properties][Browser]">
+                    <option value="firefox">Mozilla Firefox</option>
+                    <option value="chrome">Google Chrome</option>
+                </select>
+            </div>
+        </div>
+        <div class="block-features" data-path="">
+            <div class="header">
+                <label class="required">Features</label>
+            </div>
+            <div class="rows hidden">
+                <div class="row">
+                    <div class="block-features" data-path="admin">
+                        <div class="header">
+                            <label class="required">admin/</label>
+                        </div>
+                        <div class="rows hidden">
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_admin_language_feature" name="run[features][admin][language_feature]" value="1" /><label for="run_features_admin_language_feature">language.feature</label></p>
+                            </div>
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_admin_mailer_feature" name="run[features][admin][mailer_feature]" value="1" /><label for="run_features_admin_mailer_feature">mailer.feature</label></p>
+                            </div>
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_admin_project_feature" name="run[features][admin][project_feature]" value="1" /><label for="run_features_admin_project_feature">project.feature</label></p>
+                            </div>
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_admin_roles_feature" name="run[features][admin][roles_feature]" value="1" /><label for="run_features_admin_roles_feature">roles.feature</label></p>
+                            </div>
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_admin_user_feature" name="run[features][admin][user_feature]" value="1" /><label for="run_features_admin_user_feature">user.feature</label></p>
+                            </div>
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_admin_users_feature" name="run[features][admin][users_feature]" value="1" /><label for="run_features_admin_users_feature">users.feature</label></p>
+                            </div>
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_admin_version_feature" name="run[features][admin][version_feature]" value="1" /><label for="run_features_admin_version_feature">version.feature</label></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="block-features" data-path="history">
+                        <div class="header">
+                            <label class="required">history/</label>
+                        </div>
+                        <div class="rows hidden">
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_history_diff_feature" name="run[features][history][diff_feature]" value="1" /><label for="run_features_history_diff_feature">diff.feature</label></p>
+                            </div>
+                            <div class="row">
+                                <p><input type="checkbox" id="run_features_history_show_feature" name="run[features][history][show_feature]" value="1" /><label for="run_features_history_show_feature">show.feature</label></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="submit" id="run_submit" name="run[submit]">Create run</button>
+    </div>
+</form>

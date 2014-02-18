@@ -4,7 +4,7 @@
         {{ project.name }}
     </h2>
     <div class="actions">
-        <a class="btn" ng-href="/project/{{ project.name }}/create-run">Create a run</a>
+        <a class="btn" ng-href="/runs/create/{{ project.name }}">Create a run</a>
     </div>
     <br />
     <div ng-repeat="runs in [project.runs]" ng-include="'/templates/_run_list.html'" />

@@ -134,7 +134,6 @@ class Application extends BaseApplication
         // API
         $this->get('/project_list.json', 'controller.project:listAction')->bind('project_list');
         $this->get('/run_list.json', 'controller.run:listAction')->bind('run_list');
-        $this->get('/project/{project}/create-run', 'controller.run:createAction')->bind('run_create')->method('GET|POST');
         $this->get('/runs/{id}.json', 'controller.run:showAction')->bind('run_show');
         $this->get('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
         $this->get('/output/{id}', 'controller.outputFile:showAction')->bind('outputFile_show');
