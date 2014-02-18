@@ -15,7 +15,6 @@ class OutputFileController extends Controller
         }
 
         $content = $of->getContent();
-        $mime = $of->getMimetype();
 
         if (false !== strpos($content, '<html')) {
             $template = 'OutputFile/html.html.twig';

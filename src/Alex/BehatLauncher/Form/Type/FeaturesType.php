@@ -54,7 +54,6 @@ class FeaturesType extends AbstractType
                 } else {
                     $name = $content;
                     $sanitizeName = $this->sanitizeName($name);
-                    $value = $content;
                     if ($data[$sanitizeName]) {
                         $result[] = $name;
                     }

@@ -377,32 +377,17 @@ class Run
                 return 0;
             }
 
-            return round($x*$count/$total);
+            return floor($x*$count/$total);
         }, $counters);
         $extra = $count - array_sum($ratios);
 
         reset($counters);
-        $foolGuard = 0;
-        while ($extra != 0 && $total > 0) {
-            if ($foolGuard++ >= $total) {
-                throw new \RuntimeException('Smells like an infinite loop.');
+        while ($extra > 0) {
+            if ($ratios[key($counters)]) {
+                $ratios[key($counters)]++;
+                $extra--;
             }
-
-            $current = key($counters);
-
-            if ($ratios[$current] > 0) {
-                if ($extra > 0) {
-                    $ratios[$current]++;
-                    $extra--;
-                } else {
-                    $ratios[$current]--;
-                    $extra++;
-                }
-            }
-
-            if (end($counters)) {
-                reset($counters);
-            }
+            next($counters);
         }
 
         return $ratios;

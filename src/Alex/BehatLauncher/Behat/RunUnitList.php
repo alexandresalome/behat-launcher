@@ -94,7 +94,6 @@ class RunUnitList implements \IteratorAggregate, \Countable
      */
     public function isPending()
     {
-        $count = 0;
         foreach ($this->all() as $one) {
             if (!$one->isPending()) {
                 return false;
@@ -124,7 +123,6 @@ class RunUnitList implements \IteratorAggregate, \Countable
      */
     public function isRunning()
     {
-        $count = 0;
         foreach ($this->all() as $one) {
             if ($one->isRunning()) {
                 return true;
@@ -154,7 +152,6 @@ class RunUnitList implements \IteratorAggregate, \Countable
      */
     public function isFailed()
     {
-        $count = 0;
         foreach ($this->all() as $one) {
             if (!$one->isFinished()) {
                 return false;
@@ -188,7 +185,6 @@ class RunUnitList implements \IteratorAggregate, \Countable
      */
     public function isSucceeded()
     {
-        $count = 0;
         foreach ($this->all() as $one) {
             if (!$one->isFinished()) {
                 return false;

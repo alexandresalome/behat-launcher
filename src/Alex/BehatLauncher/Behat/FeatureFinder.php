@@ -8,8 +8,6 @@ class FeatureFinder
 {
     public function findFeatures($path)
     {
-        $result = array();
-
         $finder = Finder::create()
             ->sortByName()
             ->in($path)
@@ -17,7 +15,6 @@ class FeatureFinder
         ;
 
         $result = array();
-
         foreach ($finder as $file) {
             $feature = (string) $file;
             if (0 !== strpos($feature, $path)) {

@@ -47,12 +47,6 @@ class RunUnit
             $configFile = $path.'/'.$tmp;
         } while (file_exists($configFile));
 
-        if (file_exists($file = $project->getPath().'/behat.yml')) {
-            $content = Yaml::parse($file);
-        } else {
-            $content = array();
-        }
-
         $config = $project->getConfig($this->getRun()->getProperties());
         file_put_contents($configFile, Yaml::dump($config));
 

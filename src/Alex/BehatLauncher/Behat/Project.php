@@ -113,7 +113,7 @@ class Project
 
         $finder = new FeatureFinder();
 
-        return $finder->findFeatures($path, $this->path);
+        return $finder->findFeatures($path);
     }
 
     /**

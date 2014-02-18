@@ -37,7 +37,7 @@ class RunController extends Controller
         ));
     }
 
-    public function showAction(Request $request, $id)
+    public function showAction($id)
     {
         try {
             $run = $this->getRunStorage()->getRun($id);

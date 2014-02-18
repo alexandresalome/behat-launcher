@@ -10,11 +10,11 @@ class Command extends BaseCommand
     /**
      * @var Application
      */
-    private $application;
+    private $app;
 
-    public function __construct(Application $application)
+    public function __construct(Application $app)
     {
-        $this->application = $application;
+        $this->app = $app;
 
         parent::__construct();
     }
@@ -24,21 +24,21 @@ class Command extends BaseCommand
      */
     public function getApplication()
     {
-        return $this->application;
+        return $this->app;
     }
 
     protected function getProjectList()
     {
-        return $this->application['project_list'];
+        return $this->app['project_list'];
     }
 
     protected function getRunStorage()
     {
-        return $this->application['run_storage'];
+        return $this->app['run_storage'];
     }
 
     public function getDB()
     {
-        return $this->application['db'];
+        return $this->app['db'];
     }
 }

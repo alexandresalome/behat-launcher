@@ -79,13 +79,9 @@ class MysqlStorage
     {
         // Just UPDATE title
         if ($run->getId()) {
-            $stmt = $this->connection
-                ->prepare('UPDATE bl_run SET title = :title WHERE id = :id')
-                ->setParameters(array(
-                    'title' => $run->getTitle(),
-                    'id' => $run->getId()
-                ))
-            ;
+            $stmt = $this->connection->prepare('UPDATE bl_run SET title = :title WHERE id = :id');
+            $stmt->bindValue('title', $run->getTitle());
+            $stmt->bindValue('id', $run->getId());
 
             $stmt->execute();
 
@@ -284,10 +280,10 @@ class MysqlStorage
     public function getRuns(Project $project = null, $offset = 0, $limit = 100)
     {
         if (null === $project) {
-            return $this->getRunsByWhere('1 = 1');
+            return $this->getRunsByWhere('1 = 1', array(), $offset, $limit);
         }
 
-        return $this->getRunsByWhere('R.project_name = :project_name', array('project_name' => $project->getName()));
+        return $this->getRunsByWhere('R.project_name = :project_name', array('project_name' => $project->getName()), $offset, $limit);
     }
 
     /**
@@ -315,7 +311,7 @@ class MysqlStorage
         return $of;
     }
 
-    private function getRunsByWhere($where, array $params = array())
+    private function getRunsByWhere($where, array $params = array(), $offset = 0, $limit = 100)
     {
         $stmt = $this->connection->prepare('
             SELECT
@@ -337,7 +333,11 @@ class MysqlStorage
                 '.$where.'
             GROUP BY R.id
             ORDER BY U.created_at DESC
+            LIMIT :offset, :limit
         ');
+
+        $stmt->bindValue('offset', $offset, \PDO::PARAM_INT);
+        $stmt->bindValue('limit', $limit, \PDO::PARAM_INT);
 
         foreach ($params as $name => $value) {
             $stmt->bindValue($name, $value);

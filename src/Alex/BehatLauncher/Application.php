@@ -34,7 +34,7 @@ class Application extends BaseApplication
             ));
         });
 
-        $this['project_list'] = $this->share(function ($app) {
+        $this['project_list'] = $this->share(function () {
             return new ProjectList();
         });
 
