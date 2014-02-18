@@ -34,7 +34,7 @@
                 <td>{{ unit.startedAt }}
                 <td>{{ unit.finishedAt }}
                 <td>
-                    <a ng-repeat="(format, id) in unit.output_files" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
+                    <a ng-repeat="(format, id) in unit.output_files" target="_self" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
                 </td>
             </tr>
     </tbody>
