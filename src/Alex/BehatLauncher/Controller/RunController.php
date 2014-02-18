@@ -17,30 +17,6 @@ class RunController extends Controller
         return json_encode($result);
     }
 
-    public function createAction(Request $request, $project)
-    {
-        try {
-            $project = $this->getProjectList()->get($project);
-        } catch (\InvalidArgumentException $e) {
-            throw $this->createNotFoundException(sprintf('Project named "%s" not found.', $project));
-        }
-
-        $run = $project->createRun();
-
-        $form = $this->createForm('behat_launcher_run', $run, array('project' => $project));
-
-        if ($form->handleRequest($request)->isValid()) {
-            $this->getRunStorage()->saveRun($run);
-
-            return $this->redirect($this->generateUrl('run_show', array('id' => $run->getId())));
-        }
-
-        return $this->render('Run/create.html.twig', array(
-            'project' => $project,
-            'form'    => $form->createView(),
-        ));
-    }
-
     public function showAction($id)
     {
         try {
