@@ -18,6 +18,12 @@ blApp.factory('ProjectList', ['$resource', function ($resource){
     });
 }]);
 
+blApp.factory('Project', ['$resource', function ($resource){
+    return $resource('/project/:name.json', {}, {
+        query: {method:'GET', isArray:true}
+    });
+}]);
+
 blApp.factory('RunList', ['$resource', function ($resource){
     return $resource('/run_list.json', {}, {
         query: {method:'GET', isArray:true}
@@ -38,12 +44,13 @@ blApp.controller('RunListCtrl', ['$scope', 'RunList', function ($scope, RunList)
     $scope.runs = RunList.query();
 }]);
 
-blApp.controller('RunShowCtrl', ['$scope', '$routeParams', 'Run', function ($scope, $routeParams, Run) {
-    $scope.run = Run.get({id: $routeParams.id})
+blApp.controller('RunShowCtrl', ['$scope', '$routeParams', 'Run', 'Project', function ($scope, $routeParams, Run) {
+    $scope.run = Run.get({id: $routeParams.id});
 }]);
 
-blApp.controller('RunCreateCtrl', function ($scope) {
-});
+blApp.controller('RunCreateCtrl', ['$scope', '$routeParams', 'Project', function ($scope, $routeParams, Project) {
+    $scope.project = Project.get({name: $routeParams.projectName});
+}]);
 
 blApp.controller('OutputFileShowCtrl', function ($scope) {
 });

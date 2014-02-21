@@ -24,4 +24,22 @@ class ProjectController extends Controller
 
         return json_encode($result);
     }
+
+    public function showAction($name)
+    {
+        $project = $this->getProjectList()->get($name);
+
+        $result = array(
+            'name' => $project->getName(),
+            'runs' => array(),
+            'features' => $project->getFeatures()
+        );
+
+        $runs = $this->getRunStorage()->getRuns($project, 0, 5);
+        foreach ($runs as $run) {
+            $result['runs'][] = $run->toArray();
+        }
+
+        return json_encode($result);
+    }
 }

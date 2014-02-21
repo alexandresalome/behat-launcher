@@ -1,5 +1,5 @@
 <h1>
-    Create a run
+    Create a run for project {{ project.name }}
 </h1>
 <hr />
  <form name="run" method="post" action="/project/{{ project.name }}/create-run">
@@ -23,60 +23,22 @@
                 </select>
             </div>
         </div>
-        <div class="block-features" data-path="">
-            <div class="header">
-                <label class="required">Features</label>
-            </div>
-            <div class="rows hidden">
-                <div class="row">
-                    <div class="block-features" data-path="admin">
-                        <div class="header">
-                            <label class="required">admin/</label>
-                        </div>
-                        <div class="rows hidden">
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_admin_language_feature" name="run[features][admin][language_feature]" value="1" /><label for="run_features_admin_language_feature">language.feature</label></p>
-                            </div>
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_admin_mailer_feature" name="run[features][admin][mailer_feature]" value="1" /><label for="run_features_admin_mailer_feature">mailer.feature</label></p>
-                            </div>
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_admin_project_feature" name="run[features][admin][project_feature]" value="1" /><label for="run_features_admin_project_feature">project.feature</label></p>
-                            </div>
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_admin_roles_feature" name="run[features][admin][roles_feature]" value="1" /><label for="run_features_admin_roles_feature">roles.feature</label></p>
-                            </div>
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_admin_user_feature" name="run[features][admin][user_feature]" value="1" /><label for="run_features_admin_user_feature">user.feature</label></p>
-                            </div>
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_admin_users_feature" name="run[features][admin][users_feature]" value="1" /><label for="run_features_admin_users_feature">users.feature</label></p>
-                            </div>
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_admin_version_feature" name="run[features][admin][version_feature]" value="1" /><label for="run_features_admin_version_feature">version.feature</label></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="block-features" data-path="history">
-                        <div class="header">
-                            <label class="required">history/</label>
-                        </div>
-                        <div class="rows hidden">
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_history_diff_feature" name="run[features][history][diff_feature]" value="1" /><label for="run_features_history_diff_feature">diff.feature</label></p>
-                            </div>
-                            <div class="row">
-                                <p><input type="checkbox" id="run_features_history_show_feature" name="run[features][history][show_feature]" value="1" /><label for="run_features_history_show_feature">show.feature</label></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div ng-repeat="directory in [project.featureDirectory]" ng-include="feature_widget"></div>
     </div>
     <div>
         <button type="submit" id="run_submit" name="run[submit]">Create run</button>
     </div>
 </form>
+<script type="text/ng-template"  id="feature_widget">
+    <div class="block-features" data-path="{{ directory.path }}">
+        <div class="header">
+            <label class="required">{{ directory.name }}/</label>
+        </div>
+        <div class="rows hidden">
+            <div ng-switch on="entry.type" ng-repeat="entry in directory.entries" class="row">
+                <p ng-switch-when="file"><input type="checkbox" name="{{ entry.}}" value="1" /><label for="run_features_history_diff_feature">diff.feature</label></p>
+                <div ng-switch-when="directory" ng-include="'feature_widget'"></div>
+            </div>
+        </div>
+    </div>
+</script>
