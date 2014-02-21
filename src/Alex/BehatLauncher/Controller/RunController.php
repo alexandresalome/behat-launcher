@@ -52,6 +52,8 @@ class RunController extends Controller
 
     public function restartAction(Request $request, $id)
     {
+        $unitQuery = $request->query->get('unit');
+
         try {
             $run = $this->getRunStorage()->getRun($id);
         } catch (\InvalidArgumentException $e) {
@@ -61,6 +63,10 @@ class RunController extends Controller
         $failed = $request->query->get('failed');
 
         foreach ($run->getUnits() as $unit) {
+            if ($unitQuery && $unitQuery != $unit->getId()) {
+                continue;
+            }
+
             if ($failed && !$unit->isFailed()) {
                 continue;
             }
