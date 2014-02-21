@@ -17,6 +17,9 @@ class RunUnit
     private $returnCode;
     private $outputFiles;
 
+    private $process;
+    private $onFinish;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -25,20 +28,55 @@ class RunUnit
 
     public function reset()
     {
+        if ($this->process) {
+            try {
+                $this->process->stop();
+            } catch (\Exception $e) {
+                // ignore, we're trying to reset
+            }
+        }
+
+        if ($this->onFinish) {
+            call_user_func($this->onFinish);
+        }
+
         $this->startedAt   = null;
         $this->finishedAt  = null;
         $this->returnCode  = null;
+        $this->process     = null;
+        $this->onFinish    = null;
         $this->outputFiles->reset();
     }
 
     /**
-     * Returns the process to execute for this unit.
+     * @return boolean a boolean indicating if unit's process is finished.
+     */
+    public function finish()
+    {
+        if (null === $this->process) {
+            throw new \LogicException('Process not started');
+        }
+
+        if ($this->process->isTerminated()) {
+            call_user_func($this->onFinish);
+
+            $this->process = null;
+            $this->onFinish = null;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Starts the unit execution
      *
      * @param Project $project
      *
      * @return Process
      */
-    public function run(Project $project)
+    public function start(Project $project)
     {
         $path = $project->getPath();
 
@@ -81,21 +119,23 @@ class RunUnit
 
         $pb->add('--ansi');
 
-        $process = $pb->getProcess();
-        $process->run();
+        $this->process = $pb->getProcess();
+        $this->process->start();
 
-        unlink($configFile);
+        $this->onFinish = function () use ($configFile, $outputFiles) {
+            unlink($configFile);
 
-        $this->returnCode = $process->getExitCode();
-        file_put_contents($output = tempnam(sys_get_temp_dir(), 'bl_'), $process->getOutput());
-        file_put_contents($error  = tempnam(sys_get_temp_dir(), 'bl_'), $process->getErrorOutput());
-        $this->finishedAt = new \DateTime();
-        $this->setOutputFile('_stdout', $output);
-        $this->setOutputFile('_stderr', $error);
+            $this->returnCode = $this->process->getExitCode();
+            file_put_contents($output = tempnam(sys_get_temp_dir(), 'bl_'), $this->process->getOutput());
+            file_put_contents($error  = tempnam(sys_get_temp_dir(), 'bl_'), $this->process->getErrorOutput());
+            $this->finishedAt = new \DateTime();
+            $this->setOutputFile('_stdout', $output);
+            $this->setOutputFile('_stderr', $error);
 
-        foreach ($outputFiles as $format => $file) {
-            $this->setOutputFile($format, $file);
-        }
+            foreach ($outputFiles as $format => $file) {
+                $this->setOutputFile($format, $file);
+            }
+        };
     }
 
     public function getId()
@@ -230,22 +270,6 @@ class RunUnit
     public function setStartedAt(\DateTime $startedAt = null)
     {
         $this->startedAt = $startedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return RunUnit
-     *
-     * @throws LogicException already started
-     */
-    public function start()
-    {
-        if (null !== $this->startedAt) {
-            throw new \LogicException('Run unit already started.');
-        }
-
-        $this->startedAt = new \DateTime();
 
         return $this;
     }

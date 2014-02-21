@@ -27,6 +27,11 @@ class Command extends BaseCommand
         return $this->app;
     }
 
+    protected function getServer()
+    {
+        return $this->app['server'];
+    }
+
     protected function getProjectList()
     {
         return $this->app['project_list'];

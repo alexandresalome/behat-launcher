@@ -37,6 +37,11 @@ class Project
     private $formats = array();
 
     /**
+     * @var int
+     */
+    private $runnerCount = 1;
+
+    /**
      * Creates a new Behat Launcher project, to execute runs on it.
      *
      * @param string $name project name
@@ -293,5 +298,29 @@ class Project
     public function getFormats()
     {
         return $this->formats;
+    }
+
+    /**
+     * Returns number of parallel processes a project can have.
+     *
+     * @return integer
+     */
+    public function getRunnerCount()
+    {
+        return $this->runnerCount;
+    }
+
+    /**
+     * Changes number of parallel processes a project can have.
+     *
+     * @param integer $runnerCount
+     *
+     * @return Project
+     */
+    public function setRunnerCount($runnerCount)
+    {
+        $this->runnerCount = $runnerCount;
+
+        return $this;
     }
 }

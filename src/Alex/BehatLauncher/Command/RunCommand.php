@@ -33,67 +33,8 @@ HELP
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $storage     = $this->getRunStorage();
-        $projectList = $this->getProjectList();
-
-        if (null !== $input->getArgument('project')) {
-            $project = $projectList->get($input->getArgument('project'));
-        } else {
-            $project = null;
-        }
-
-        if (function_exists('pcntl_signal')) {
-            declare(ticks = 1);
-            $sigHandler = function () use ($storage) {
-                if ($this->currentUnit) {
-                    $this->currentUnit->reset();
-                    $storage->saveRunUnit($this->currentUnit);
-                }
-
-                exit;
-            };
-
-            pcntl_signal(SIGQUIT, $sigHandler);
-            pcntl_signal(SIGTERM, $sigHandler);
-            pcntl_signal(SIGINT,  $sigHandler);
-            pcntl_signal(SIGHUP,  $sigHandler);
-            pcntl_signal(SIGUSR1, $sigHandler);
-        }
-
-        $stopOnFinish = $input->getOption('stop-on-finish');
-
-        $cycle = 0;
-        while (true) {
-            $this->currentUnit = $storage->getRunnableUnit($project);
-
-            if (!$this->currentUnit) {
-                if ($stopOnFinish) {
-                    break;
-                }
-
-                $output->writeln('Found no run to process. Try again in 5 seconds...');
-                sleep(5);
-
-                continue;
-            }
-
-            try {
-                $currentProject = $projectList->get($this->currentUnit->getRun()->getProjectName());
-            } catch (\InvalidArgumentException $e) {
-                $output->writeln(sprintf('<error>Project %s not found.</error>', $this->currentUnit->getRun()->getProjectName()));
-
-                continue;
-            }
-
-            $output->writeln(sprintf("Processing unit#%s", $this->currentUnit->getId()));
-            $this->currentUnit->run($currentProject);
-            $storage->saveRunUnit($this->currentUnit);
-
-            if ($cycle++ > 100) {
-                $output->writeln("GC collect");
-                gc_collect_cycles();
-                $cycle = 0;
-            }
-        }
+        $server = $this->getServer();
+        $server->setOutput($output);
+        $server->run();
     }
 }
