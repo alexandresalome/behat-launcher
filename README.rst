@@ -36,7 +36,9 @@ Go to folder where you want to install Behat-Launcher and clone the sourcecode t
 
 **2. Configuration**
 
-In this folder, create a file **config.php** where you will configure your database and your projects:
+In this folder, create a file **config.php** where you will configure your database and your projects.
+
+You can use the **config.php.dist** file to get an exhaustive list of configuration features.
 
 .. code-block:: bash
 
@@ -71,6 +73,13 @@ To run tests, Behat-Launcher needs to run jobs in background. Start it using:
     cd /var/www/behat-launcher
     php behat-launcher run
 
+This command will execute until you stop it. If you want command to stop after all units are ran, pass the **--stop-on-finish** option:
+
+.. code-block:: bash
+
+    cd /var/www/behat-launcher
+    php behat-launcher run --stop-on-finish
+
 You're done! Access your application through web server. Given you use Apache and only have this application set up, access http://localhost
 
 Changelog
@@ -78,9 +87,8 @@ Changelog
 
 **v0.1**
 
-* Launch Behat tests from your browser
 * Restart one test, all tests or failed only
 * Run multiple tests concurrently
 * Relaunch whole run or just failed
 * Override behat.yml configuration values
-* Collect additional formats
+* Record additional formats (html, failed, progress, ...)
