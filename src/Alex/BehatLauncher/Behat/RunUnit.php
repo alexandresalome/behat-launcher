@@ -228,6 +228,15 @@ class RunUnit
         return $this->isFinished() && $this->returnCode == 0;
     }
 
+    public function getDuration()
+    {
+        if (!$this->isFinished()) {
+            throw new \LogicException('Cannot return duration: unit not finished.');
+        }
+
+        return $this->finishedAt->diff($this->startedAt);
+    }
+
     public function getOutputFiles()
     {
         return $this->outputFiles;

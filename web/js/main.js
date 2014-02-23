@@ -15,6 +15,14 @@ $(function () {
         setInterval(refreshPage, 2000);
     }
 
+    $(document).on('click', 'a[data-locale]', function (event) {
+        event.preventDefault();
+
+        var locale = $(event.currentTarget).attr('data-locale');
+        document.cookie = 'locale=' + locale + ';max-age=31104000;path=/';
+        document.location.reload();
+    });
+
     $("div.block-features").each(function (i, e) {
         var $cb = $('<input type="checkbox" />');
         var $exp = $('<a class="expand">&nbsp; +</a>');

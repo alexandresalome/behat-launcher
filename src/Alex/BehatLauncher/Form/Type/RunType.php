@@ -27,7 +27,7 @@ class RunType extends AbstractType
         }
 
         $builder
-            ->add('title', 'text', array('required' => false))
+            ->add('title', 'text', array('required' => false, 'label' => 'form.run.title'))
             ->add($props)
             ->add('features', 'behat_launcher_features', array(
                 'project' => $options['project'],
@@ -56,7 +56,7 @@ class RunType extends AbstractType
             })
         ;
 
-        $builder->add('submit', 'submit', array('label' => 'Create run'));
+        $builder->add('submit', 'submit', array('label' => 'form.run.submit'));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

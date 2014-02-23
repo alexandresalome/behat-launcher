@@ -1,0 +1,54 @@
+# Layout
+menu.project_list: 'Liste des projets'
+menu.all_runs: 'Tous les tests'
+footer: '<p>Dévelopé <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspiré par <a href="http://blablacar.com">BlaBlaCar</a>. Disponible sur <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>'
+
+# Titles
+title.project_list: "Liste des projets"
+title.project_create: "%project% - nouveau run"
+
+# Buttons
+button.create_run: "Créer un run"
+button.restart: "Redémarrer"
+button.restart_failed: "Redémarrer les échoués"
+button.restart_all: "Tout redémarrer"
+
+# Run
+run.no_title: 'aucun titre'
+run_status.pending_since: 'en attente depuis %since%'
+run_status.running_since: 'en cours depuis %since%'
+run_status.finished: 'fini il y a %ago% (durée: %duration%)'
+
+# Run list
+run_list.no_run: "Aucun run trouvé."
+run_list.count_title: "Derniers %count% runs"
+
+# Units list
+units_list.status: "Statut"
+units_list.feature: "Feature"
+units_list.started_at: "Démarré à"
+units_list.duration: "Durée"
+units_list.output: "Sortie"
+
+# Form
+form.run.title: "Titre"
+form.run.submit: "Créer un run"
+
+# Status labels
+pending: 'en attente'
+running: 'en cours'
+succeeded: 'réussi'
+failed: 'échoué'
+
+# Locale
+locale.en: "anglais"
+locale.fr: "français"
+
+# Date interval
+'one:one year|many:%year% years': 'one:un an|many:%year% ans'
+'one:one month|many:%month% months': 'one:un mois|many:%month% mois'
+'one:one day|many:%day% days': 'one:un jour|many:%day% jours'
+'one:one hour|many:%hour% hours': 'one:une heure|many:%hour% heures'
+'one:one minute|many:%minute% minutes': 'one:une minute|many:%minute% minutes'
+'one:one second|many:%second% seconds': 'one:une seconde|many:%second% secondes'
+'no time': 'aucune durée'

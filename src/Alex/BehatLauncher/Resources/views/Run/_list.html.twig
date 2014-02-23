@@ -10,7 +10,7 @@
 <table class="table">
     </thead>
     {% for run in runs %}
-        <tr class="row-{{ run.status }}" data-refresh="run-{{ run.id }}">
+        <tr class="row-{{ run.status }}" data-refresh="run-progress-{{ run.id }}">
             <td colspan="{{ colspan }}">
                 <div class="run-progress">
                     {% for status, width in run.progress(100) %}
@@ -19,11 +19,11 @@
                 </div>
             </td>
         </tr>
-        <tr class="row-{{ run.status }} row-with-separator">
+        <tr class="row-{{ run.status }} row-with-separator" data-refresh="run-details-{{ run.id }}">
             <td>
                 <a href="{{ path('run_show', {id: run.id}) }}">#{{ run.id ~ (run.title ? ': ' ~ run.title : '') }}</a>
             </td>
-            <td><span class="label label-{{ run.status }}">{{ run.status }}</span></td>
+            <td><span class="label label-{{ run.status }}">{{ run.status|trans }}</span></td>
             <td>{{ run.projectName }}</td>
             <td>
                 {% for name, value in run.properties %}
@@ -32,17 +32,17 @@
             </td>
             <td>
                 {% if run.pending %}
-                    Pending since {{ run.createdAt|dateinterval }} ago
+                    {{ 'run_status.pending_since'|trans({'%since%': run.createdAt|dateinterval}) }}
                 {% elseif run.running %}
-                    Running since {{ run.startedAt|dateinterval }} ago
+                    {{ 'run_status.running_since'|trans({'%since%': run.createdAt|dateinterval}) }}
                 {% else %}
-                    Finished {{ run.finishedAt|dateinterval }} ago (duration: {{ run.duration|dateinterval }})
+                    {{ 'run_status.finished'|trans({'%ago%': run.finishedAt|dateinterval, '%duration%': run.duration|dateinterval}) }}
                 {% endif %}
         </tr>
     {% else %}
         <tr>
             <td colspan="{{ colspan }}">
-                No run found.
+                {{ 'run_list.no_run'|trans }}
             </td>
         </tr>
     {% endfor %}

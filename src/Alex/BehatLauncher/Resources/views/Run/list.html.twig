@@ -6,6 +6,6 @@
 {% set refresh = true %}
 
 {% block content %}
-    <h1>Last {{ runs|length }} runs</h1>
+    <h1>{{ 'run_list.count_title'|trans({'%count%': runs|length}) }}</h1>
     {{ include('Run/_list.html.twig') }}
 {% endblock %}

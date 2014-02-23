@@ -11,12 +11,12 @@
 {% block content %}
     <div data-refresh="run-{{ run.id }}">
         <h1>
-            #{{ run.id }}: {% if run.title %}{{ run.title }}{% else %}<em>no title</em>{% endif %}
-            <small><span class="label label-{{ run.status }}">{{ run.status }}</span></small>
+            #{{ run.id }}: {% if run.title %}{{ run.title }}{% else %}<em>{{ 'run.no_title'|trans }}</em>{% endif %}
+            <small data-refresh="run-status-{{ run.id }}"><span class="label label-{{ run.status }}">{{ run.status|trans }}</span></small>
         </h1>
         <div class="actions">
-            <a class="btn" href="{{ path('run_restart', {id: run.id}) }}">Restart all</a>
-            <a class="btn" href="{{ path('run_restart', {id: run.id, failed: 1}) }}">Restart failed</a>
+            <a class="btn" href="{{ path('run_restart', {id: run.id}) }}">{{ 'button.restart_all'|trans }}</a>
+            <a class="btn" href="{{ path('run_restart', {id: run.id, failed: 1}) }}">{{ 'button.restart_failed'|trans }}</a>
         </div>
         <hr />
         <div class="run-progress">
@@ -27,19 +27,19 @@
         <div class="block-counters">
             <div class="counter counter-pending{{ run.countPending == 0 ? ' counter-empty' : '' }}">
                 <span class="number">{{ run.countPending }}</span>
-                <span class="label">pending</span>
+                <span class="label">{{ 'pending'|trans }}</span>
             </div>
             <div class="counter counter-running{{ run.countRunning == 0 ? ' counter-empty' : '' }}">
                 <span class="number">{{ run.countRunning }}</span>
-                <span class="label">running</span>
+                <span class="label">{{ 'running'|trans }}</span>
             </div>
             <div class="counter counter-succeeded{{ run.countSucceeded == 0 ? ' counter-empty' : '' }}">
                 <span class="number">{{ run.countSucceeded }}</span>
-                <span class="label">succeeded</span>
+                <span class="label">{{ 'succeeded'|trans }}</span>
             </div>
             <div class="counter counter-failed{{ run.countFailed == 0 ? ' counter-empty' : '' }}">
                 <span class="number">{{ run.countFailed }}</span>
-                <span class="label">failed</span>
+                <span class="label">{{ 'failed'|trans }}</span>
             </div>
         </div>
     </div>
@@ -47,21 +47,21 @@
     <table class="table units-table">
         <thead>
             <tr>
-                <th>Status</th>
-                <th>Feature</th>
-                <th>Started at</th>
-                <th>Finished at</th>
-                <th>Output</th>
+                <th>{{ 'units_list.status'|trans }}</th>
+                <th>{{ 'units_list.feature'|trans }}</th>
+                <th>{{ 'units_list.started_at'|trans }}</th>
+                <th>{{ 'units_list.duration'|trans }}</th>
+                <th>{{ 'units_list.output'|trans }}</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
             {% for unit in run.units %}
                 <tr class="unit-row row-{{ unit.status }}" data-refresh="run-unit-{{ unit.id }}">
-                    <td><span class="label label-{{ unit.status }}">{{ unit.status }}</span></td>
+                    <td><span class="label label-{{ unit.status }}">{{ unit.status|trans }}</span></td>
                     <td>{{ unit.feature }}</td>
                     <td>{{ unit.startedAt ? unit.startedAt.format('Y-m-d H:i:s') : '-' }}
-                    <td>{{ unit.finishedAt ? unit.finishedAt.format('Y-m-d H:i:s') : '-' }}
+                    <td>{{ unit.finished ? unit.duration|dateinterval : '-' }}
                     <td>
                         {% for name, of in unit.outputFiles %}
                             <a class="output-file{% if of.empty %} output-file-empty{% endif %}" href="{{ path('outputFile_show', {id: of.id}) }}">{{ name }}</a>
@@ -69,7 +69,7 @@
                     </td>
                     <td>
                         {% if unit.finished %}
-                        <a class="btn" href="{{ path('run_restart', {id: run.id, unit: unit.id}) }}">Restart</a>
+                        <a class="btn" href="{{ path('run_restart', {id: run.id, unit: unit.id}) }}">{{ 'button.restart'|trans }}</a>
                         {% endif %}
                     </td>
                 </tr>

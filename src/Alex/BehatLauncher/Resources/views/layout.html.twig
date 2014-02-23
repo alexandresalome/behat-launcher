@@ -9,16 +9,19 @@
         <div class="container">
             <nav>
                 <a class="brand">Behat Launcher</a>
-                <a{% if menu_active == 'project_list' %} class="active"{% endif %} href="{{ path('project_list') }}">Projects list</a>
-                <a{% if menu_active == 'run_list' %} class="active"{% endif %} href="{{ path('run_list') }}">All runs</a>
+                <a{% if menu_active == 'project_list' %} class="active"{% endif %} href="{{ path('project_list') }}">{{ 'menu.project_list'|trans }}</a>
+                <a{% if menu_active == 'run_list' %} class="active"{% endif %} href="{{ path('run_list') }}">{{ 'menu.all_runs'|trans }}</a>
                 {% if menu_active is iterable %}
-                    <a class="active" href="{{ menu_active.href }}">{{ menu_active.label }}</a>
+                    <a class="active" href="{{ menu_active.href }}">{{ menu_active.label|trans(menu_active.label_keys|default({})) }}</a>
                 {% endif %}
+                {% for locale in ['en', 'fr'] %}
+                    <a href="#" style="float: right" data-locale="{{ locale }}">{{ ('locale.' ~ locale)|trans }}</a>
+                {% endfor %}
             </nav>
             <div id="content"{% if refresh|default(false) %} class="refresh"{% endif %}>{% block content '' %}</div>
             <footer>
                 <hr />
-                <p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspired by <a href="http://blablacar.com">BlaBlaCar</a>. Available on <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>
+                {{ 'footer'|trans|raw }}
             </footer>
         </div>
         <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>

@@ -15,6 +15,8 @@ use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 class Application extends BaseApplication
 {
@@ -68,11 +70,29 @@ class Application extends BaseApplication
         $this->register(new TranslationServiceProvider(), array('locale_fallback' => 'en'));
         $this->register(new FormServiceProvider());
         $this->register(new ServiceControllerServiceProvider());
+        $this->register(new TranslationServiceProvider(), array(
+            'locale_fallbacks' => array('en')
+        ));
         $this->register(new TwigServiceProvider(), array(
             'twig.path'    => __DIR__.'/Resources/views',
             'debug'        => $this['debug'],
             'twig.options' => array('cache' => __DIR__.'/../../../data/cache/twig'),
         ));
+
+        $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
+            $twig->addExtension(new DateExtension($app['translator']));
+
+            return $twig;
+        }));
+
+        $this['translator'] = $this->share($this->extend('translator', function ($translator, $app) {
+            $translator->addLoader('yaml', new YamlFileLoader());
+
+            $translator->addResource('yaml', __DIR__.'/Resources/locales/en.yml', 'en');
+            $translator->addResource('yaml', __DIR__.'/Resources/locales/fr.yml', 'fr');
+
+            return $translator;
+        }));
     }
 
     private function registerServices()
@@ -106,12 +126,6 @@ class Application extends BaseApplication
             $this->mount('/_profiler', $profiler);
         }
 
-        $this->extend('twig', function ($twig, $app) {
-            $twig->addExtension(new DateExtension($app['translator']));
-
-            return $twig;
-        });
-
         $controllers = array(
             'outputFile' => 'Alex\BehatLauncher\Controller\OutputFileController',
             'project'    => 'Alex\BehatLauncher\Controller\ProjectController',
@@ -128,6 +142,15 @@ class Application extends BaseApplication
 
     private function registerRouting()
     {
+        $this->before(function (Request $request) {
+            $locale = $request->cookies->get('locale', 'en');
+            if (!in_array($locale, array('en', 'fr'))) {
+                $locale = 'en';
+            }
+            \Locale::setDefault($locale);
+            $this['translator']->setLocale($locale);
+        }, self::EARLY_EVENT);
+
         // Routes
         $this->get('/', 'controller.project:listAction')->bind('project_list');
         $this->get('/project/{project}', 'controller.project:showAction')->bind('project_show');

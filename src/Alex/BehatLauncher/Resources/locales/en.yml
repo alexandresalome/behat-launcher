@@ -1,0 +1,45 @@
+# Layout
+menu.project_list: 'Project list'
+menu.all_runs: 'All runs'
+footer: '<p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspired by <a href="http://blablacar.com">BlaBlaCar</a>. Available on <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>'
+
+# Titles
+title.project_list: "Project list"
+title.project_create: "%project% - new run"
+
+# Buttons
+button.create_run: "Create a run"
+button.restart: "Restart"
+button.restart_failed: "Restart failed"
+button.restart_all: "Restart all"
+
+# Run
+run.no_title: 'no title'
+run_status.pending_since: 'pending since %since% ago'
+run_status.running_since: 'running since %since% ago'
+run_status.finished: 'finished %ago% ago (duration: %duration%)'
+
+# Run list
+run_list.no_run: "No run found."
+run_list.count_title: "Last %count% runs"
+
+# Units list
+units_list.status: "Status"
+units_list.feature: "Feature"
+units_list.started_at: "Started at"
+units_list.duration: "Duration"
+units_list.output: "Output"
+
+# Form
+form.run.title: "Title"
+form.run.submit: "Create run"
+
+# Status labels
+pending: 'pending'
+running: 'running'
+succeeded: 'succeeded'
+failed: 'failed'
+
+# Locale
+locale.en: "english"
+locale.fr: "french"
