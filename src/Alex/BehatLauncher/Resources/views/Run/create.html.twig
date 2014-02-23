@@ -10,7 +10,7 @@
 } %}
 
 {% block content %}
-    <h1>{{ ''}}</h1>
+    <h1>{{ title }}</h1>
     {% form_theme form "form_theme.html.twig" %}
     {{ form(form, {action: path('run_create', {project: project.name})}) }}
 {% endblock %}

@@ -34,7 +34,7 @@
                 {% if run.pending %}
                     {{ 'run_status.pending_since'|trans({'%since%': run.createdAt|dateinterval}) }}
                 {% elseif run.running %}
-                    {{ 'run_status.running_since'|trans({'%since%': run.createdAt|dateinterval}) }}
+                    {{ 'run_status.running_since'|trans({'%since%': run.startedAt|dateinterval}) }}
                 {% else %}
                     {{ 'run_status.finished'|trans({'%ago%': run.finishedAt|dateinterval, '%duration%': run.duration|dateinterval}) }}
                 {% endif %}

@@ -46,6 +46,7 @@ class RunCommand extends Command
         $countRunning = 0;
 
         $currTime = $timeToQuery;
+        $gcCycles = 100;
         do {
             $countRunning = $workspace->tick(true);
             $hasRunning = $countRunning;
@@ -55,14 +56,12 @@ class RunCommand extends Command
                 $hasRunning = $workspace->tick();
             }
             $currTime = $timeToQuery;
-        } while (!$stopOnFinish || $countRunning);
 
-        if ($input->getOption('stop-on-finish')) {
-            while ($workspace->tick()) {
-                // continue execution until all units are finished
+            $gcCycles--;
+            if ($gcCycles === 0) {
+                gc_collect_cycles();
+                $gcCycles = 100;
             }
-        } else {
-            $workspace->run();
-        }
+        } while (!$stopOnFinish || $countRunning);
     }
 }
