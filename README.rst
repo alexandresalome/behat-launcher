@@ -60,6 +60,8 @@ Now, configure your web server to make the application accessible through your w
 
     DocumentRoot /var/www/behat-launcher/web
 
+Make sure web server has write access to *data/* folder.
+
 **5. Background job**
 
 To run tests, Behat-Launcher needs to run jobs in background. Start it using:
