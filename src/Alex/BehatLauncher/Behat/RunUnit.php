@@ -51,7 +51,7 @@ class RunUnit
     /**
      * @return boolean a boolean indicating if unit's process is finished.
      */
-    public function finish()
+    public function isProcessFinished()
     {
         if (null === $this->process) {
             throw new \LogicException('Process not started');
@@ -76,7 +76,7 @@ class RunUnit
      *
      * @return Process
      */
-    public function start(Project $project)
+    public function start(Project $project, \Closure $output)
     {
         $path = $project->getPath();
 
@@ -120,7 +120,9 @@ class RunUnit
         $pb->add('--ansi');
 
         $this->process = $pb->getProcess();
-        $this->process->start();
+        $this->process->start(function ($type, $text) use ($output) {
+            $output($text, $type != 'out');
+        });
 
         $this->onFinish = function () use ($configFile, $outputFiles) {
             unlink($configFile);

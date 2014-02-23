@@ -52,6 +52,16 @@ class Application extends BaseApplication
         return $project;
     }
 
+    /**
+     * Returns the workspace.
+     *
+     * @return Workspace
+     */
+    public function getWorkspace()
+    {
+        return $this['workspace'];
+    }
+
     private function registerProviders()
     {
         $this->register(new UrlGeneratorServiceProvider());
@@ -85,8 +95,8 @@ class Application extends BaseApplication
             return new MysqlStorage($app['db'], __DIR__.'/../../../data/output_files');
         });
 
-        $this['server'] = $this->share(function ($app) {
-            return new Server($app['project_list'], $app['run_storage']);
+        $this['workspace'] = $this->share(function ($app) {
+            return new Workspace($app['project_list'], $app['run_storage']);
         });
 
         if ($this['debug']) {

@@ -15,26 +15,54 @@ class RunCommand extends Command
     {
         $this
             ->setName('run')
-            ->setDescription('Runs Behat tests')
-            ->addOption('stop-on-finish', null, InputOption::VALUE_NONE, 'Don\'t wait for new runs to come')
-            ->addArgument('project', InputArgument::OPTIONAL, 'Project to run')
-            ->setHelp(<<<HELP
-Runs a test registered in Behat-Launcher.
-
-If you pass no argument, runs will be executed by planning order.
-
-You can pass an argument <info>project</info> to execute specifically a run of a project:
-
-    %command.full_name% project-name
-
-HELP
-        );
+            ->setDescription('Runs Behat-Launcher')
+            ->addOption('stop-on-finish', null, InputOption::VALUE_NONE, 'Stop execution when all units are run')
+            ->addOption('time-to-query', null, InputOption::VALUE_OPTIONAL, 'Time to wait for SQL queries', 2)
+        ;
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $server = $this->getServer();
-        $server->setOutput($output);
-        $server->run();
+        $workspace = $this->getApplication()->getWorkspace();
+        $workspace->setOutput($output);
+
+
+        if (function_exists('pcntl_signal')) {
+            declare(ticks = 1);
+            $sigHandler = function () use ($workspace) {
+                $workspace->finish();
+                exit;
+            };
+
+            pcntl_signal(SIGQUIT, $sigHandler);
+            pcntl_signal(SIGTERM, $sigHandler);
+            pcntl_signal(SIGINT,  $sigHandler);
+            pcntl_signal(SIGHUP,  $sigHandler);
+            pcntl_signal(SIGUSR1, $sigHandler);
+        }
+
+        $stopOnFinish = $input->getOption('stop-on-finish');
+        $timeToQuery = $input->getOption('time-to-query');
+        $countRunning = 0;
+
+        $currTime = $timeToQuery;
+        do {
+            $countRunning = $workspace->tick(true);
+            $hasRunning = $countRunning;
+            while (($hasRunning || !$stopOnFinish) && $currTime > 0) {
+                usleep(100000);
+                $currTime -= 0.1;
+                $hasRunning = $workspace->tick();
+            }
+            $currTime = $timeToQuery;
+        } while (!$stopOnFinish || $countRunning);
+
+        if ($input->getOption('stop-on-finish')) {
+            while ($workspace->tick()) {
+                // continue execution until all units are finished
+            }
+        } else {
+            $workspace->run();
+        }
     }
 }
