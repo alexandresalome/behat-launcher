@@ -12,7 +12,7 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
     {
         $this->name    = $name;
         $this->parent  = $parent;
-        $this->entries = $entries;
+        $this->entries = array();
     }
 
     /**
@@ -29,6 +29,40 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
     public function count()
     {
         return count($this->entries);
+    }
+
+    public function getOrCreateDirectory($name)
+    {
+        if (!$this->hasDirectory($name)) {
+            $sub = new FeatureDirectory($name, $this);
+            $this->addEntry($sub);
+        } else {
+            $sub = $this->getDirectory($name);
+        }
+
+        return $sub;
+    }
+
+    public function getDirectory($name)
+    {
+        foreach ($this->entries as $entry) {
+            if ($entry instanceof FeatureDirectory && $entry->getName() === $name) {
+                return $entry;
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf('No directory named "%s" in "%s".', $name, $this->getPath()));
+    }
+
+    public function hasDirectory($name)
+    {
+        foreach ($this->entries as $entry) {
+            if ($entry->getName() == $name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function addEntry($entry)

@@ -14,7 +14,8 @@ class FeatureFinder
             ->name('*.feature')
         ;
 
-        $result = array();
+        $result = new FeatureDirectory('');
+
         foreach ($finder as $file) {
             $feature = (string) $file;
             if (0 !== strpos($feature, $path)) {
@@ -23,24 +24,21 @@ class FeatureFinder
             $feature = substr($feature, strlen($path) + 1);
             $feature = str_replace('\\', '/', $feature);
 
-            $this->addToResult($feature, $result);
+            $this->addToDirectory($result, $feature);
         }
 
         return $result;
     }
 
-    private function addToResult($feature, &$result)
+    private function addToDirectory(FeatureDirectory $directory, $feature)
     {
         if (false === strpos($feature, '/')) {
-            $result[] = $feature;
+            $directory->addEntry(new FeatureFile($directory, $feature));
 
             return;
         }
 
         list($name, $rest) = explode('/', $feature, 2);
-        if (!isset($result[$name])) {
-            $result[$name] = array();
-        }
-        $this->addToResult($rest, $result[$name]);
+        $this->addToDirectory($directory->getOrCreateDirectory($name), $rest);
     }
 }

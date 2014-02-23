@@ -32,7 +32,7 @@ class ProjectController extends Controller
         $result = array(
             'name' => $project->getName(),
             'runs' => array(),
-            'features' => $project->getFeatures()
+            'features' => $project->getFeatures()->toArray()
         );
 
         $runs = $this->getRunStorage()->getRuns($project, 0, 5);

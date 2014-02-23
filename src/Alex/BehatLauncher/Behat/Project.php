@@ -95,15 +95,7 @@ class Project
     }
 
     /**
-     * Example return value:
-     *
-     *     array(
-     *         'admin' => array('foo.feature', 'bar.feature')
-     *         'user' => array('account.feature')
-     *         'homepage.feature'
-     *     )
-     *
-     * @return array an array structured with files and folders, as above.
+     * @return FeatureDirectory
      */
     public function getFeatures()
     {
