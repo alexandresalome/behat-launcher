@@ -18,8 +18,8 @@ class InitDbCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $storage     = $this->getRunStorage();
-        $storage->initDb();
+        $this->getRunStorage()->initDb();
+
         $output->writeln('Database initialized');
     }
 }

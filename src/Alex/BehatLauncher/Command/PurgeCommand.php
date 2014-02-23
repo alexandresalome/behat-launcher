@@ -18,8 +18,8 @@ class PurgeCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $storage     = $this->getRunStorage();
-        $storage->purge();
+        $this->getRunStorage()->purge();
+
         $output->writeln('Database purged');
     }
 }
