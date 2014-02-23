@@ -15,41 +15,22 @@ class RunCommand extends Command
     {
         $this
             ->setName('run')
-            ->setDescription('Runs Behat tests')
-            ->addOption('stop-on-finish', null, InputOption::VALUE_NONE, 'Don\'t wait for new runs to come')
-            ->addArgument('project', InputArgument::OPTIONAL, 'Project to run')
-            ->setHelp(<<<HELP
-Runs a test registered in Behat-Launcher.
-
-If you pass no argument, runs will be executed by planning order.
-
-You can pass an argument <info>project</info> to execute specifically a run of a project:
-
-    %command.full_name% project-name
-
-HELP
-        );
+            ->setDescription('Runs Behat-Launcher')
+            ->addOption('stop-on-finish', null, InputOption::VALUE_NONE, 'Stop execution when all units are run')
+            ->addOption('time-to-query', null, InputOption::VALUE_OPTIONAL, 'Time to wait for SQL queries', 2)
+        ;
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $storage     = $this->getRunStorage();
-        $projectList = $this->getProjectList();
+        $workspace = $this->getApplication()->getWorkspace();
+        $workspace->setOutput($output);
 
-        if (null !== $input->getArgument('project')) {
-            $project = $projectList->get($input->getArgument('project'));
-        } else {
-            $project = null;
-        }
 
         if (function_exists('pcntl_signal')) {
             declare(ticks = 1);
-            $sigHandler = function () use ($storage) {
-                if ($this->currentUnit) {
-                    $this->currentUnit->reset();
-                    $storage->saveRunUnit($this->currentUnit);
-                }
-
+            $sigHandler = function () use ($workspace) {
+                $workspace->finish();
                 exit;
             };
 
@@ -61,39 +42,27 @@ HELP
         }
 
         $stopOnFinish = $input->getOption('stop-on-finish');
+        $timeToQuery = $input->getOption('time-to-query');
+        $countRunning = 0;
 
-        $cycle = 0;
-        while (true) {
-            $this->currentUnit = $storage->getRunnableUnit($project);
-
-            if (!$this->currentUnit) {
-                if ($stopOnFinish) {
-                    break;
-                }
-
-                $output->writeln('Found no run to process. Try again in 5 seconds...');
-                sleep(5);
-
-                continue;
+        $currTime = $timeToQuery;
+        do {
+            $countRunning = $workspace->tick(true);
+            $hasRunning = $countRunning;
+            while (($hasRunning || !$stopOnFinish) && $currTime > 0) {
+                usleep(100000);
+                $currTime -= 0.1;
+                $hasRunning = $workspace->tick();
             }
+            $currTime = $timeToQuery;
+        } while (!$stopOnFinish || $countRunning);
 
-            try {
-                $currentProject = $projectList->get($this->currentUnit->getRun()->getProjectName());
-            } catch (\InvalidArgumentException $e) {
-                $output->writeln(sprintf('<error>Project %s not found.</error>', $this->currentUnit->getRun()->getProjectName()));
-
-                continue;
+        if ($input->getOption('stop-on-finish')) {
+            while ($workspace->tick()) {
+                // continue execution until all units are finished
             }
-
-            $output->writeln(sprintf("Processing unit#%s", $this->currentUnit->getId()));
-            $this->currentUnit->run($currentProject);
-            $storage->saveRunUnit($this->currentUnit);
-
-            if ($cycle++ > 100) {
-                $output->writeln("GC collect");
-                gc_collect_cycles();
-                $cycle = 0;
-            }
+        } else {
+            $workspace->run();
         }
     }
 }
