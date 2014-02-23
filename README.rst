@@ -18,24 +18,58 @@ An application to **launch your Behat tests from your browser**:
 Installation
 ------------
 
-Clone or download code, install dependencies and create a **config.php** file.
+To install Behat-Launcher, you will need:
 
-Initialize database:
+* PHP 5.5 (yeah, it's a project from the future)
+* Apache2 or Nginx or anything that can run a PHP application
+* A MySQL database
+
+**1. Get the code**
+
+Go to folder where you want to install Behat-Launcher and clone the sourcecode through git command:
+
+.. code-block:: bash
+
+    cd /var/www
+    git clone git@github.com:alexandresalome/behat-launcher.git
+    cd behat-launcher
+
+**2. Configuration**
+
+In this folder, create a file **config.php** where you will configure your database and your projects:
+
+.. code-block:: bash
+
+    cd /var/www/behat-launcher
+    cp config.php.dist config.php
+    vi config.php # (or notepad, or whatever you use to edit this file)
+
+**3. Database**
+
+When you're done, initialize your database:
 
 .. code-block:: bash
 
     php behat-launcher init-db
 
-Usage
------
+**4. WebServer**
 
-Launch background jobs:
+Now, configure your web server to make the application accessible through your webserver. Make it serve the **web** folder:
 
 .. code-block:: bash
 
+    DocumentRoot /var/www/behat-launcher/web
+
+**5. Background job**
+
+To run tests, Behat-Launcher needs to run jobs in background. Start it using:
+
+.. code-block:: bash
+
+    cd /var/www/behat-launcher
     php behat-launcher run
 
-Access ``http://localhost/`` and make tests.
+You're done! Access your application through web server. Given you use Apache and only have this application set up, access http://localhost
 
 Changelog
 ---------
@@ -43,20 +77,15 @@ Changelog
 **v0.1**
 
 * Launch Behat tests from your browser
+* Restart one test, all tests or failed only
+* Run multiple tests concurrently
 * Relaunch whole run or just failed
-* Change behat.yml configuration values
+* Override behat.yml configuration values
 * Collect additional formats
 
 Roadmap
 -------
 
-**v0.1**
-
-* Usage manual
-
-**Unplanned**
-
-* Relaunch one unit
 * Duplicate a run
 * Automatic refresh of the page
-
+* Verify command (tests behat binaries and database setup)

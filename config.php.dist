@@ -1,17 +1,23 @@
 <?php
 
-// Configure database
+/**
+ * This file is called with a $app variable and you must configure the application.
+ */
+
+// MANDATORY: Configure database
 $app->configureMysql('localhost', 'behat_launcher', 'root', '');
 
-// Simple project creation
+// RECOMMENDED: Simple project creation
 // $app->createProject('Bros', '/var/www/bros');
 
-// Advanced project configuration
+// OPTIONAL: Advanced project configuration
 // $app->createProject('Gitonomy', '/var/www/gitonomy')
-//     ->setBehatBin('bin/behat')
+//     ->setRunnerCount(3)              // Changes number of processes to run concurrently.
+//     ->setBehatBin('bin/behat')       // Path where behat is located
+
+// Override behat.yml
 //     ->createProperty('Browser')
 //         ->setConfig('default.extensions.WebDriver\Behat\WebDriverExtension\Extension.browser')
 //         ->setFormType('choice')
 //         ->setFormOptions(array('choices' => array('firefox' => 'Mozilla Firefox', 'chrome' => 'Google Chrome')))
 //     ->endProperty()
-;
