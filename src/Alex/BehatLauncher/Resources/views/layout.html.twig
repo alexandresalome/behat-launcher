@@ -15,7 +15,7 @@
                     <a class="active" href="{{ menu_active.href }}">{{ menu_active.label }}</a>
                 {% endif %}
             </nav>
-            {% block content '' %}
+            <div id="content"{% if refresh|default(false) %} class="refresh"{% endif %}>{% block content '' %}</div>
             <footer>
                 <hr />
                 <p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspired by <a href="http://blablacar.com">BlaBlaCar</a>. Available on <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>

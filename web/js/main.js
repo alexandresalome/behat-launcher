@@ -1,4 +1,20 @@
+refreshPage = function () {
+    $.ajax({
+        url: document.location,
+        success: function (text) {
+            var $content = $(text).find('*[data-refresh]').each(function (i, e) {
+                var $e = $(e);
+                $("*[data-refresh='" + $e.attr('data-refresh') + "']").replaceWith($e);
+            });
+        }
+    })
+};
+
 $(function () {
+    if ($("#content").hasClass('refresh')) {
+        setInterval(refreshPage, 2000);
+    }
+
     $("div.block-features").each(function (i, e) {
         var $cb = $('<input type="checkbox" />');
         var $exp = $('<a class="expand">&nbsp; +</a>');

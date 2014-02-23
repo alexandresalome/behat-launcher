@@ -19,7 +19,6 @@ Feature: Create a run
           And I should see "0 RUNNING"
           And I should see "css=h1 .label-pending"
          When I run all units
-          And I refresh
          Then I should see "css=h1 .label-succeeded"
           And I should see "0 PENDING"
           And I should see "3 SUCCEEDED"
@@ -36,7 +35,6 @@ Feature: Create a run
           And I should see "0 RUNNING"
           And I should see "css=h1 .label-pending"
          When I run all units
-          And I refresh
          Then I should see "css=h1 .label-succeeded"
           And I should see "0 PENDING"
           And I should see "2 SUCCEEDED"
@@ -51,7 +49,6 @@ Feature: Create a run
           And I click on "Create run"
          Then I should see "1 PENDING"
          When I run all units
-          And I refresh
          Then I should see "1 SUCCEEDED"
 
           And I am on "/"
@@ -62,5 +59,4 @@ Feature: Create a run
           And I click on "Create run"
          Then I should see "1 PENDING"
          When I run all units
-          And I refresh
          Then I should see "1 FAILED"

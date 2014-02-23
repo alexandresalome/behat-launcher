@@ -10,7 +10,7 @@
 <table class="table">
     </thead>
     {% for run in runs %}
-        <tr class="row-{{ run.status }}">
+        <tr class="row-{{ run.status }}" data-refresh="run-{{ run.id }}">
             <td colspan="{{ colspan }}">
                 <div class="run-progress">
                     {% for status, width in run.progress(100) %}
