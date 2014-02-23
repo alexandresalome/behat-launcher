@@ -84,10 +84,3 @@ Changelog
 * Relaunch whole run or just failed
 * Override behat.yml configuration values
 * Collect additional formats
-
-Roadmap
--------
-
-* Duplicate a run
-* Automatic refresh of the page
-* Verify command (tests behat binaries and database setup)
