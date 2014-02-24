@@ -2,19 +2,15 @@
 
 namespace Alex\BehatLauncher\Controller;
 
+use Alex\BehatLauncher\Behat\OutputFile;
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 
 class OutputFileController extends Controller
 {
     public function showAction($id)
     {
-        $of = $this->getRunStorage()->getOutputFile($id);
-
-        if ($of->isEmpty()) {
-            throw new \RuntimeException('Output file does not exist or is empty.');
-        }
-
-        $content = $of->getContent();
+        $path = $this->getRunStorage()->getOutputFilePath($id);
+        $content = file_get_contents($path);
 
         if (false !== strpos($content, '<html')) {
             $template = 'OutputFile/html.html.twig';

@@ -1,11 +1,12 @@
 {% extends "layout.html.twig" %}
 
-{% block title 'Last 100 runs' %}
+{% set title = 'title.run_list'|transchoice(runs|length, {'%count%': runs|length}) %}
+{% block title title %}
 
 {% set menu_active = "run_list" %}
 {% set refresh = true %}
 
 {% block content %}
-    <h1>{{ 'run_list.count_title'|trans({'%count%': runs|length}) }}</h1>
+    <h1>{{ title }}</h1>
     {{ include('Run/_list.html.twig') }}
 {% endblock %}

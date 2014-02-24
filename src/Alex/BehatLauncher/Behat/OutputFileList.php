@@ -2,9 +2,17 @@
 
 namespace Alex\BehatLauncher\Behat;
 
+/**
+ * Holds a collection of output files and provide methods around it.
+ *
+ * Files are stored in temporary folder until they're saved to a dedicated
+ * folder.
+ */
 class OutputFileList implements \IteratorAggregate, \Countable
 {
-    private $pendingFiles = array();
+    /**
+     * @var array Collection of files
+     */
     private $files;
 
     public function __construct(array $files = array())
@@ -12,9 +20,30 @@ class OutputFileList implements \IteratorAggregate, \Countable
         $this->files = $files;
     }
 
+    /**
+     * Reinitialize the collection, removes all files.
+     *
+     * @return OutputFileList
+     */
     public function reset()
     {
+        foreach ($this->files as $file) {
+            $file->delete();
+        }
+
         $this->files = array();
+
+        return $this;
+    }
+
+    /**
+     * Appends a content to given format.
+     *
+     * @return OutputFile
+     */
+    public function append($format, $content)
+    {
+        return $this->get($format)->append($content);
     }
 
     /**
@@ -42,58 +71,19 @@ class OutputFileList implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return OutputFileList
-     */
-    public function set($name, $path)
-    {
-        $this->pendingFiles[$name] = $path;
-
-        return $this;
-    }
-
-    /**
      * Returns an output file, given his name.
      *
      * @param string $name
      *
      * @throws InvalidArgumentException no file with given name
      */
-    public function get($name)
+    public function get($format)
     {
-        if (!isset($this->files[$name])) {
-            throw new \InvalidArgumentException(sprintf('No output file named "%s". Available are: %s.', $name, implode(', ', array_keys($this->files))));
+        if (!isset($this->files[$format])) {
+            return $this->files[$format] = new OutputFile();
         }
 
-        return $this->files[$name];
-    }
-
-    /**
-     * Persits the list to a storage
-     */
-    public function save(MysqlStorage $storage)
-    {
-        foreach ($this->pendingFiles as $name => $file) {
-            $outputFile = $storage->createOutputFile();
-            $outputFile->moveFrom($file);
-
-            $this->files[$name] = $outputFile;
-        }
-
-        $this->pendingFiles = array();
-    }
-
-    /**
-     * Add files to the list from an array of ID.
-     *
-     * @return OutputFileList
-     */
-    public function fromArrayOfID(MysqlStorage $storage, array $array)
-    {
-        foreach ($array as $name => $id) {
-            $this->files[$name] = $storage->getOutputFile($id);
-        }
-
-        return $this;
+        return $this->files[$format];
     }
 
     /**

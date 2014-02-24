@@ -132,7 +132,7 @@ class MysqlStorage
             throw new \RuntimeException('Cannot save run unit: no ID set in instance.');
         }
 
-        $unit->getOutputFiles()->save($this);
+        $this->saveOutputFiles($unit->getOutputFiles());
 
         $stmt = $this->connection->prepare('UPDATE bl_run_unit SET started_at = :started_at, finished_at = :finished_at, return_code = :return_code, output_files = :output_files WHERE id = :id');
         $stmt->bindValue('started_at', $unit->getStartedAt(), "datetime");
@@ -176,8 +176,9 @@ class MysqlStorage
                 ->setStartedAt($row['started_at'] !== null ? new \DateTime($row['started_at']) : null)
                 ->setFinishedAt($row['finished_at'] !== null ? new \DateTime($row['finished_at']) : null)
                 ->setReturnCode($row['return_code'])
-                ->getOutputFiles()->fromArrayOfID($this, json_decode($row['output_files'], true))
             ;
+
+            $this->loadOutputFiles($unit->getOutputFiles(), json_decode($row['output_files'], true));
 
             $units[] = $unit;
         }
@@ -254,8 +255,9 @@ class MysqlStorage
             ->setStartedAt(new \DateTime()) // UPDATEd above
             ->setFinishedAt($row['finished_at'] !== null ? new \DateTime($row['finished_at']) : null)
             ->setReturnCode($row['return_code'])
-            ->getOutputFiles()->fromArrayOfID($this, json_decode($row['output_files'], true))
         ;
+
+        $this->loadOutputFiles($unit->getOutputFiles(), json_decode($row['output_files'], true));
 
         return $unit;
     }
@@ -286,29 +288,34 @@ class MysqlStorage
         return $this->getRunsByWhere('R.project_name = :project_name', array('project_name' => $project->getName()), $offset, $limit);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createOutputFile()
+    private function loadOutputFiles(OutputFileList $list, array $ids)
     {
-        do {
-            $id = md5(uniqid().microtime(true));
-            $file = $this->getOutputFile($id);
-        } while ($file->exists());
-
-        return $file;
+        foreach ($ids as $format => $id) {
+            $path = $this->getOutputFilePath($id);
+            $list->get($format)->setPath($path)->setId($id);
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getOutputFile($id)
+    private function saveOutputFiles(OutputFileList $list)
+    {
+        foreach ($list as $outputFile) {
+            if ($outputFile->getId() || !$outputFile->exists()) {
+                continue;
+            }
+
+            do {
+                $id = md5(uniqid().microtime(true));
+            } while (file_exists($path = $this->getOutputFilePath($id)));
+
+            $outputFile->moveTo($path)->setId($id);
+        }
+    }
+
+    public function getOutputFilePath($id)
     {
         $path = $this->filesDir.'/'.substr($id, 0, 2).'/'.substr($id, 2, 2).'/'.substr($id, 4);
 
-        return new OutputFile($path, $id);
-
-        return $of;
+        return $path;
     }
 
     private function getRunsByWhere($where, array $params = array(), $offset = 0, $limit = 100)

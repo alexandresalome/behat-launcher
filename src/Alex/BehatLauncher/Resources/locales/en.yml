@@ -3,9 +3,10 @@ menu.project_list: 'Project list'
 menu.all_runs: 'All runs'
 footer: '<p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspired by <a href="http://blablacar.com">BlaBlaCar</a>. Available on <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>'
 
-# Titles
+# Page titles
 title.project_list: "Project list"
 title.project_create: "%project% - new run"
+title.run_list: "one:Last run|many:Last %count% runs"
 
 # Buttons
 button.create_run: "Create a run"

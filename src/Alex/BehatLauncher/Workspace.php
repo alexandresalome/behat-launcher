@@ -142,6 +142,8 @@ class Workspace
                 $this->runningUnits[$project->getName()] = array();
             }
 
+            $runnable->prepareOutput($project);
+            $this->runStorage->saveRunUnit($runnable);
             $runnable->start($project, function ($text, $error) use ($runnable) {
                 $this->output($text, $runnable, $error);
             });

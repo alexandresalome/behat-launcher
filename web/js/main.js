@@ -1,6 +1,7 @@
 refreshPage = function () {
     $.ajax({
         url: document.location,
+        dataType: "html",
         success: function (text) {
             var $content = $(text).find('*[data-refresh]').each(function (i, e) {
                 var $e = $(e);

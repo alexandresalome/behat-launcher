@@ -6,6 +6,7 @@ footer: '<p>Dévelopé <a href="http://alexandre-salome.fr">Alexandre Salomé</a
 # Titles
 title.project_list: "Liste des projets"
 title.project_create: "%project% - nouveau run"
+title.run_list: "{0}Aucun dernier run trouvé|{1}Dernier run|[1,+Inf]Derniers %count% runs"
 
 # Buttons
 button.create_run: "Créer un run"
@@ -21,7 +22,6 @@ run_status.finished: 'fini il y a %ago% (durée: %duration%)'
 
 # Run list
 run_list.no_run: "Aucun run trouvé."
-run_list.count_title: "Derniers %count% runs"
 
 # Units list
 units_list.status: "Statut"

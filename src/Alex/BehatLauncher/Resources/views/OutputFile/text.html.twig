@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
     <body style="background-color: black">
-        <pre>{{ content|raw }}</pre>
+        <div>
+            <pre data-refresh="content">{{ content|raw }}</pre>
+        </div>
+        <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
+        <script type="text/javascript">
+            setInterval(function() {
+                refreshPage();
+            }, 2000);
+        </script>
     </body>
 </html>

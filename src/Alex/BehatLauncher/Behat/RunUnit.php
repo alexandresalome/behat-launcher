@@ -76,6 +76,19 @@ class RunUnit
      *
      * @return Process
      */
+    public function prepareOutput(Project $project)
+    {
+        $formats = $project->getFormats();
+
+        foreach ($formats as $format) {
+            $this->outputFiles->get($format)->setContent('');
+        }
+
+        $this->outputFiles->get('_stdout')->setContent('');
+        $this->outputFiles->get('_stderr')->setContent('');
+
+    }
+
     public function start(Project $project, \Closure $output)
     {
         $path = $project->getPath();
@@ -97,47 +110,31 @@ class RunUnit
         $pb->add($feature);
         $pb->setTimeout(null);
 
-        $formats = $project->getFormats();
-
-        $outputFiles = array();
-        if (count($formats)) {
-            $argFormats  = array();
-            $argOutputs  = array();
-
-            foreach ($formats as $format) {
-                $argFormats[] = $format;
-                $outputFiles[$format] = tempnam(sys_get_temp_dir(), 'bl_');
-                $argOutputs[] = $outputFiles[$format];
-            }
-
-            $argFormats[] = 'pretty';
-            $argOutputs[] = 'null';
-
-            $pb->add('-f')->add(implode(',', $argFormats));
-            $pb->add('--out')->add(implode(',', $argOutputs));
+        $argFormats = array();
+        $argOutputs = array();
+        foreach ($project->getFormats() as $format) {
+            $argFormats[] = $format;
+            $argOutputs[] = $this->outputFiles->get($format)->getPath();
         }
+
+        $pb->add('-f')->add(implode(',', $argFormats));
+        $pb->add('--out')->add(implode(',', $argOutputs));
 
         $pb->add('--ansi');
 
         $this->process = $pb->getProcess();
-        $this->process->start(function ($type, $text) use ($output) {
-            $output($text, $type != 'out');
-        });
 
-        $this->onFinish = function () use ($configFile, $outputFiles) {
+        $this->onFinish = function () use ($configFile) {
             unlink($configFile);
 
             $this->returnCode = $this->process->getExitCode();
-            file_put_contents($output = tempnam(sys_get_temp_dir(), 'bl_'), $this->process->getOutput());
-            file_put_contents($error  = tempnam(sys_get_temp_dir(), 'bl_'), $this->process->getErrorOutput());
             $this->finishedAt = new \DateTime();
-            $this->setOutputFile('_stdout', $output);
-            $this->setOutputFile('_stderr', $error);
-
-            foreach ($outputFiles as $format => $file) {
-                $this->setOutputFile($format, $file);
-            }
         };
+
+        $this->process->start(function ($type, $text) use ($output) {
+            $output($text, $type != 'out');
+            $this->outputFiles->append($type == 'out' ? '_stdout' : '_stderr', $text);
+        });
     }
 
     public function getId()
@@ -256,7 +253,7 @@ class RunUnit
 
     public function setOutputFile($name, $file)
     {
-        $this->outputFiles->set($name, $file);
+        $this->outputFiles->setContent($name, $file);
 
         return $this;
     }

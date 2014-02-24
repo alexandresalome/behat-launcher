@@ -34,7 +34,7 @@ class Project
     /**
      * @var array
      */
-    private $formats = array();
+    private $formats = array('pretty');
 
     /**
      * @var int
