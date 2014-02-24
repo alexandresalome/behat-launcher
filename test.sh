@@ -10,7 +10,7 @@ if [ ! -d vendor ]; then
     php composer.phar install
 fi
 
-php behat-launcher init
+php behat-launcher init-db
 
 php bin/behat
 php bin/phpunit

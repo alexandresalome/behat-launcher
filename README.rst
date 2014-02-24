@@ -33,9 +33,22 @@ Go to folder where you want to install Behat-Launcher and clone the sourcecode t
     cd /var/www
     git clone git@github.com:alexandresalome/behat-launcher.git
     cd behat-launcher
-    composer install
 
-**2. Configuration**
+**2. Install dependencies**
+
+Behat-Launcher works with `composer <http://getcomposer.org>`_, a tool to manage dependencies.
+
+Download it in behat-launcher folder:
+
+.. code-block:: bash
+
+    cd /var/www/behat-launcher
+    curl http://getcomposer.org/installer | php
+    php composer.phar install
+
+This command will download dependencies in **vendor/** folder to make them available to the application.
+
+**3. Configuration**
 
 In this folder, create a file **config.php** where you will configure your database and your projects.
 
@@ -47,7 +60,7 @@ You can use the **config.php.dist** file to get an exhaustive list of configurat
     cp config.php.dist config.php
     vi config.php # (or notepad, or whatever you use to edit this file)
 
-**3. Database**
+**4. Database**
 
 When you're done, initialize your database:
 
@@ -55,7 +68,7 @@ When you're done, initialize your database:
 
     php behat-launcher init-db
 
-**4. WebServer**
+**5. WebServer**
 
 Now, configure your web server to make the application accessible through your webserver. Make it serve the **web** folder:
 
@@ -65,7 +78,7 @@ Now, configure your web server to make the application accessible through your w
 
 Make sure web server has write access to *data/* folder.
 
-**5. Background job**
+**6. Background job**
 
 To run tests, Behat-Launcher needs to run jobs in background. Start it using:
 
