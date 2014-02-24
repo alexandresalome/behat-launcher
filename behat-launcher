@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+umask(0000);
+
 if (!file_exists(__DIR__.'/vendor/autoload.php')) {
     echo "Looks like dependencies are not installed. Please download composer (http://getcomposer.org) and install:\n";
     echo "$ curl http://getcomposer.org/installer | php\n";
