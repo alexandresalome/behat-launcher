@@ -33,6 +33,7 @@ Go to folder where you want to install Behat-Launcher and clone the sourcecode t
     cd /var/www
     git clone git@github.com:alexandresalome/behat-launcher.git
     cd behat-launcher
+    composer install
 
 **2. Configuration**
 
