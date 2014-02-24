@@ -106,3 +106,5 @@ Changelog
 * Relaunch whole run or just failed
 * Override behat.yml configuration values
 * Record additional formats (html, failed, progress, ...)
+* View output while process is running
+
