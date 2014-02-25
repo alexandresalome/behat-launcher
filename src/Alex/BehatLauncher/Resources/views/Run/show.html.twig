@@ -14,10 +14,13 @@
             #{{ run.id }}: {% if run.title %}{{ run.title }}{% else %}<em>{{ 'run.no_title'|trans }}</em>{% endif %}
             <small data-refresh="run-status-{{ run.id }}"><span class="label label-{{ run.status }}">{{ run.status|trans }}</span></small>
         </h1>
-        <div class="actions">
+        <div class="actions" data-refresh="run-actions-{{ run.id }}">
             <a class="btn" href="{{ path('run_restart', {id: run.id}) }}">{{ 'button.restart_all'|trans }}</a>
             <a class="btn" href="{{ path('run_restart', {id: run.id, failed: 1}) }}">{{ 'button.restart_failed'|trans }}</a>
             <a class="btn" href="{{ path('run_stop', {id: run.id}) }}">{{ 'button.stop'|trans }}</a>
+            {% if not run.running %}
+            <a class="btn" href="{{ path('run_delete', {id: run.id}) }}">{{ 'button.delete'|trans }}</a>
+            {% endif %}
         </div>
         <hr />
         <div class="run-progress">

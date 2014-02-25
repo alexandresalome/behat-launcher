@@ -14,6 +14,7 @@ button.restart: "Redémarrer"
 button.restart_failed: "Redémarrer les échoués"
 button.restart_all: "Tout redémarrer"
 button.stop: "Arrêter"
+button.delete: "Supprimer"
 
 # Run
 run.no_title: 'aucun titre'

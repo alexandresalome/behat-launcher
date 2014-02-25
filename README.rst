@@ -107,8 +107,3 @@ Changelog
 * Override behat.yml configuration values
 * Record additional formats (html, failed, progress, ...)
 * View output while process is running
-
-Roadmap
--------
-
-* Cancel a run

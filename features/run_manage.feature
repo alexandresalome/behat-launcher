@@ -14,9 +14,9 @@ Feature: I can manage my runs
     Scenario: I can restart all units
         Given test project "default"
           And following run for "TEST-default":
-              | feature     | created_at | finished_at | return_code |
-              | foo.feature | PT5M       | PT0M        | 0           |
-              | bar.feature | PT5M       | PT0M        | 1           |
+              | feature     | created_at | started_at  | finished_at | return_code |
+              | foo.feature | PT5M       | PT5M        | PT0M        | 0           |
+              | bar.feature | PT5M       | PT5M        | PT0M        | 1           |
          When I am on "/"
           And I click on "#"
          Then I should see "1 FAILED"
@@ -27,9 +27,9 @@ Feature: I can manage my runs
     Scenario: I can restart failed units
         Given test project "default"
           And following run for "TEST-default":
-              | feature     | created_at | finished_at | return_code |
-              | foo.feature | PT5M       | PT0M        | 0           |
-              | bar.feature | PT5M       | PT0M        | 1           |
+              | feature     | created_at | started_at  | finished_at | return_code |
+              | foo.feature | PT5M       | PT5M        | PT0M        | 0           |
+              | bar.feature | PT5M       | PT5M        | PT0M        | 1           |
          When I am on "/"
           And I click on "#"
          Then I should see "1 FAILED"
@@ -38,3 +38,23 @@ Feature: I can manage my runs
          Then I should see "1 PENDING"
          Then I should see "1 SUCCEEDED"
 
+    Scenario: I can delete a run
+        Given test project "default"
+          And following run for "TEST-default":
+              | feature     | created_at | started_at  | finished_at | return_code |
+              | foo.feature | PT5M       | PT5M        | PT0M        | 0           |
+              | bar.feature | PT5M       | PT5M        | PT0M        | 1           |
+         When I am on "/"
+          And I click on "#"
+          And I click on "Delete"
+         Then I should see "No run found"
+
+    Scenario: I cannot delete a running run
+        Given test project "default"
+          And following run for "TEST-default":
+              | feature     | created_at | started_at | finished_at | return_code |
+              | foo.feature | PT5M       | PT0M       | PT0M        | 0           |
+              | bar.feature | PT5M       | PT0M       | @null       | @null       |
+         When I am on "/"
+          And I click on "#"
+         Then I should not see "Delete"

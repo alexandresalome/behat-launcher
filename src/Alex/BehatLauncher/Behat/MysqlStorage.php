@@ -72,6 +72,18 @@ class MysqlStorage
         )');
     }
 
+    public function deleteRun(Run $run)
+    {
+        foreach ($run->getUnits() as $unit) {
+            $unit->reset(); // delete all files
+        }
+        $stmt = $this->connection->prepare('DELETE FROM bl_run WHERE id = :id');
+        $stmt->bindValue('id', $run->getId());
+        $stmt->execute();
+
+        $run->setId(null);
+    }
+
     /**
      * {@inheritdoc}
      */

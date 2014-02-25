@@ -6,7 +6,7 @@ footer: '<p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé<
 # Page titles
 title.project_list: "Project list"
 title.project_create: "%project% - new run"
-title.run_list: "one:Last run|many:Last %count% runs"
+title.run_list: "{0}No run found|{1}Last run|[1,+Inf]Last %count% runs"
 
 # Buttons
 button.create_run: "Create a run"
@@ -14,6 +14,7 @@ button.restart: "Restart"
 button.restart_failed: "Restart failed"
 button.restart_all: "Restart all"
 button.stop: "Stop"
+button.delete: "Delete"
 
 # Run
 run.no_title: 'no title'

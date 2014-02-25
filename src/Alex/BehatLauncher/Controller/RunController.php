@@ -97,4 +97,17 @@ class RunController extends Controller
 
         return $this->redirect($this->generateUrl('run_show', array('id' => $id)));
     }
+
+    public function deleteAction(Request $request, $id)
+    {
+        try {
+            $run = $this->getRunStorage()->getRun($id);
+        } catch (\InvalidArgumentException $e) {
+            throw $this->createNotFoundException(sprintf('Run #%s not found.', $id));
+        }
+
+        $this->getRunStorage()->deleteRun($run);
+
+        return $this->redirect($this->generateUrl('run_list'));
+    }
 }
