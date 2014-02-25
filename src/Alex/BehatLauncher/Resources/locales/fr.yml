@@ -1,7 +1,7 @@
 # Layout
 menu.project_list: 'Liste des projets'
 menu.all_runs: 'Tous les runs'
-footer: '<p>Développé <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspiré par <a href="http://blablacar.com">BlaBlaCar</a>. Disponible sur <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>'
+footer: '<p>Développé par <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspiré par <a href="http://blablacar.com">BlaBlaCar</a>. Disponible sur <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>'
 
 # Titles
 title.project_list: "Liste des projets"
