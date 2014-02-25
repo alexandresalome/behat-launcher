@@ -70,9 +70,6 @@ class Application extends BaseApplication
         $this->register(new TranslationServiceProvider(), array('locale_fallback' => 'en'));
         $this->register(new FormServiceProvider());
         $this->register(new ServiceControllerServiceProvider());
-        $this->register(new TranslationServiceProvider(), array(
-            'locale_fallbacks' => array('en')
-        ));
         $this->register(new TwigServiceProvider(), array(
             'twig.path'    => __DIR__.'/Resources/views',
             'debug'        => $this['debug'],
