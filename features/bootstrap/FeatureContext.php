@@ -65,7 +65,7 @@ class FeatureContext extends AbstractWebDriverContext
     /**
      * @Given /^following run for "([^"]+)":$/
      */
-    public function followingRunForTestDefault($name, TableNode $table)
+    public function followingRunFor($name, TableNode $table)
     {
         $app = $this->getApplication();
 
@@ -119,6 +119,11 @@ class FeatureContext extends AbstractWebDriverContext
 
             $unit = new RunUnit();
             foreach ($headers as $i => $header) {
+                $value = $row[$i];
+                if ($value === '@null') {
+                    continue;
+                }
+
                 $methods[$header]($unit, $row[$i]);
             }
 

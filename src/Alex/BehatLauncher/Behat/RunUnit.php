@@ -26,6 +26,19 @@ class RunUnit
         $this->outputFiles = new OutputFileList();
     }
 
+    public function stop()
+    {
+        if (!$this->isPending()) {
+            throw new \LogicException(sprintf('Cannot stop run unit #%s: not pending', $this->id ?: '*none*'));
+        }
+
+        $this->startedAt = new \DateTime();
+        $this->finishedAt = new \DateTime();
+        $this->returnCode = -1;
+        $this->outputFiles->reset();
+        $this->outputFiles->get('_bl')->setContent('This run unit was stopped.');
+    }
+
     public function reset()
     {
         if ($this->process) {

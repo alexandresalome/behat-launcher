@@ -158,6 +158,7 @@ class Application extends BaseApplication
         $this->get('/runs', 'controller.run:listAction')->bind('run_list');
         $this->get('/runs/{id}', 'controller.run:showAction')->bind('run_show');
         $this->get('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
+        $this->get('/runs/{id}/stop', 'controller.run:stopAction')->bind('run_stop');
         $this->get('/output/{id}', 'controller.outputFile:showAction')->bind('outputFile_show');
 
         $this->extend('form.extensions', function ($extensions, $app) {

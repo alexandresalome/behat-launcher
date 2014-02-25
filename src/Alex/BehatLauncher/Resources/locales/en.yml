@@ -13,6 +13,7 @@ button.create_run: "Create a run"
 button.restart: "Restart"
 button.restart_failed: "Restart failed"
 button.restart_all: "Restart all"
+button.stop: "Stop"
 
 # Run
 run.no_title: 'no title'

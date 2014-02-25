@@ -79,4 +79,22 @@ class RunController extends Controller
 
         return $this->redirect($this->generateUrl('run_show', array('id' => $id)));
     }
+
+    public function stopAction(Request $request, $id)
+    {
+        try {
+            $run = $this->getRunStorage()->getRun($id);
+        } catch (\InvalidArgumentException $e) {
+            throw $this->createNotFoundException(sprintf('Run #%s not found.', $id));
+        }
+
+        foreach ($run->getUnits() as $unit) {
+            if ($unit->isPending()) {
+                $unit->stop();
+                $this->getRunStorage()->saveRunUnit($unit);
+            }
+        }
+
+        return $this->redirect($this->generateUrl('run_show', array('id' => $id)));
+    }
 }

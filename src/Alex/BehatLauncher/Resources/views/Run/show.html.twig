@@ -17,6 +17,7 @@
         <div class="actions">
             <a class="btn" href="{{ path('run_restart', {id: run.id}) }}">{{ 'button.restart_all'|trans }}</a>
             <a class="btn" href="{{ path('run_restart', {id: run.id, failed: 1}) }}">{{ 'button.restart_failed'|trans }}</a>
+            <a class="btn" href="{{ path('run_stop', {id: run.id}) }}">{{ 'button.stop'|trans }}</a>
         </div>
         <hr />
         <div class="run-progress">
