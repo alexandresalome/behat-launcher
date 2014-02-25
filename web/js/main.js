@@ -1,4 +1,4 @@
-refreshPage = function () {
+var refreshPage = function (timeout) {
     $.ajax({
         url: document.location,
         dataType: "html",
@@ -7,13 +7,17 @@ refreshPage = function () {
                 var $e = $(e);
                 $("*[data-refresh='" + $e.attr('data-refresh') + "']").replaceWith($e);
             });
+
+            setTimeout(function() {
+                refreshPage(timeout);
+            }, 2000);
         }
     })
 };
 
 $(function () {
     if ($("#content").hasClass('refresh')) {
-        setInterval(refreshPage, 2000);
+        refreshPage(2000);
     }
 
     $(document).on('click', 'a[data-locale]', function (event) {
