@@ -93,9 +93,7 @@ $(function () {
         var href = $target.attr('href');
         var $row = $target.closest('tr');
 
-        if ($row.next().is('.output-file')) {
-            $row.next().remove();
-        }
+        $("tr.output-file").remove();
 
         if ($target.hasClass('current')) {
             $target.removeClass('current');
@@ -107,7 +105,7 @@ $(function () {
         $target.addClass('current');
 
         var colspan = $row.find('> td').length;
-        var $iframe = $('<tr class="output-file"><td colspan="' + colspan + '"><iframe src="' + href + '"></iframe></td></tr>');
+        var $iframe = $('<tr class="output-file"><td colspan="' + colspan + '"><iframe id="output-file" src="' + href + '"></iframe></td></tr>');
         $row.after($iframe);
     });
 });

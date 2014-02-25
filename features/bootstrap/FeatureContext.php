@@ -3,12 +3,12 @@
 use Alex\BehatLauncher\Application;
 use Alex\BehatLauncher\Behat\Run;
 use Alex\BehatLauncher\Behat\RunUnit;
-use Behat\Behat\Context\BehatContext;
 use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\Process\ProcessBuilder;
+use WebDriver\Behat\AbstractWebDriverContext;
 use WebDriver\Behat\WebDriverContext;
 
-class FeatureContext extends BehatContext
+class FeatureContext extends AbstractWebDriverContext
 {
     const CONFIG_HEADER = "\n// projects for testing are added below this line. Any project you add might be deleted.\n";
 
@@ -136,7 +136,31 @@ class FeatureContext extends BehatContext
         $this->runConsole(array('run', '--stop-on-finish'));
     }
 
-    private function runConsole(array $args)
+    /**
+     * @When /^I start all units$/
+     */
+    public function iStartAllUnits()
+    {
+        $this->runConsole(array('run', '--stop-on-finish'), false);
+    }
+
+    /**
+     * @Given /^I look into output frame$/
+     */
+    public function iLookIntoOutputFrame()
+    {
+        $this->getBrowser()->request('POST', 'frame', json_encode(array('id' => 'output-file')));
+    }
+
+    /**
+     * @Given /^I look into main frame$/
+     */
+    public function iLookIntoMainFrame()
+    {
+        $this->getBrowser()->request('POST', 'frame', json_encode(array('id' => null)));
+    }
+
+    private function runConsole(array $args, $block = true)
     {
         $process = ProcessBuilder::create(array_merge(array('php', 'behat-launcher'), $args))
             ->setWorkingDirectory(__DIR__.'/../..')
@@ -144,10 +168,14 @@ class FeatureContext extends BehatContext
             ->getProcess()
         ;
 
-        $process->run();
+        if ($block) {
+            $process->run();
 
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException(sprintf('Error while executing "%s": %s', $process->getCommandLine(), $process->getOutput().$process->getErrorOutput()));
+            if (!$process->isSuccessful()) {
+                throw new \RuntimeException(sprintf('Error while executing "%s": %s', $process->getCommandLine(), $process->getOutput().$process->getErrorOutput()));
+            }
+        } else {
+            $process->start();
         }
     }
 
