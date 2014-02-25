@@ -23,7 +23,6 @@ run_status.finished: 'finished %ago% ago (duration: %duration%)'
 
 # Run list
 run_list.no_run: "No run found."
-run_list.count_title: "Last %count% runs"
 
 # Units list
 units_list.status: "Status"
