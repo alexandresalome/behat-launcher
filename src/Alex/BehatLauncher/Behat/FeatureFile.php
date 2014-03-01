@@ -33,6 +33,7 @@ class FeatureFile
     {
         return array(
             'type' => 'file',
+            'path' => $this->getPath(),
             'name' => $this->name
         );
     }

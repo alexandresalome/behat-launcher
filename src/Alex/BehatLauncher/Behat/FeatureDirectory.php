@@ -84,7 +84,7 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
 
     public function getPath()
     {
-        if (null === $parent) {
+        if (null === $this->parent) {
             return '';
         }
 
@@ -100,6 +100,7 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
     {
         return array(
             'type' => 'directory',
+            'path' => $this->getPath(),
             'name' => $this->name,
             'entries' => array_map(function ($entry) {
                 return $entry->toArray();

@@ -13,25 +13,25 @@ blApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
 }]);
 
 blApp.factory('ProjectList', ['$resource', function ($resource){
-    return $resource('/project_list.json', {}, {
+    return $resource('/projects', {}, {
         query: {method:'GET', isArray:true}
     });
 }]);
 
 blApp.factory('Project', ['$resource', function ($resource){
-    return $resource('/project/:name.json', {}, {
+    return $resource('/projects/:name', {}, {
         query: {method:'GET', isArray:true}
     });
 }]);
 
 blApp.factory('RunList', ['$resource', function ($resource){
-    return $resource('/run_list.json', {}, {
+    return $resource('/runs', {}, {
         query: {method:'GET', isArray:true}
     });
 }]);
 
 blApp.factory('Run', ['$resource', function ($resource){
-    return $resource('/runs/:id.json', {}, {
+    return $resource('/runs/:id', {}, {
         query: {method:'GET', isArray:true}
     });
 }]);
@@ -44,12 +44,31 @@ blApp.controller('RunListCtrl', ['$scope', 'RunList', function ($scope, RunList)
     $scope.runs = RunList.query();
 }]);
 
-blApp.controller('RunShowCtrl', ['$scope', '$routeParams', 'Run', 'Project', function ($scope, $routeParams, Run) {
+blApp.controller('RunShowCtrl', ['$scope', '$routeParams', 'Run', 'Project', function ($scope, $routeParams, Run, Project) {
     $scope.run = Run.get({id: $routeParams.id});
 }]);
 
-blApp.controller('RunCreateCtrl', ['$scope', '$routeParams', 'Project', function ($scope, $routeParams, Project) {
+blApp.controller('RunCreateCtrl', ['$scope', '$routeParams', '$location', 'Run', 'Project', function ($scope, $routeParams, $location, Run, Project) {
     $scope.project = Project.get({name: $routeParams.projectName});
+
+    $scope.run = {};
+
+    $scope.debug = function () {
+        console.log($scope.run);
+    };
+
+    $scope.create = function () {
+        Run.create($scope.run);
+        $location.path('/runs/' + $scope.run.id);
+    };
+}]);
+
+blApp.directive('decorateFeatureDirectory', ['$timeout', function ($timeout) {
+    return {
+        link : function(scope, element, attrs) {
+            decorateFeatureDirectory(element);
+        }
+    };
 }]);
 
 blApp.controller('OutputFileShowCtrl', function ($scope) {

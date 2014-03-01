@@ -4,11 +4,9 @@ namespace Alex\BehatLauncher\Behat;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
-use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class RunUnit implements NormalizableInterface
+class RunUnit
 {
     private $id;
     private $run;
@@ -28,6 +26,7 @@ class RunUnit implements NormalizableInterface
         $this->outputFiles = new OutputFileList();
     }
 
+<<<<<<< HEAD
     public function stop()
     {
         if (!$this->isPending()) {
@@ -39,9 +38,8 @@ class RunUnit implements NormalizableInterface
         $this->returnCode = -1;
         $this->outputFiles->reset();
         $this->outputFiles->get('_bl')->setContent('This run unit was stopped.');
-    }
-
-    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+=======
+    public function toArray()
     {
         return array(
             'feature'      => $this->feature,
@@ -50,8 +48,9 @@ class RunUnit implements NormalizableInterface
             'started_at'   => $this->startedAt ? $this->startedAt->format('Y-m-d H:i:s') : null,
             'finished_at'  => $this->finishedAt ? $this->finishedAt->format('Y-m-d H:i:s') : null,
             'return_code'  => $this->returnCode,
-            'output_files' => $normalizer->normalize($this->outputFiles),
+            'output_files' => $this->outputFiles->toArray(),
         );
+>>>>>>> move templates and controllers
     }
 
     public function reset()

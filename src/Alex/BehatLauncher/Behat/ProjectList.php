@@ -73,6 +73,8 @@ class ProjectList implements \IteratorAggregate
             }
         }
 
-        throw new \InvalidArgumentException(sprintf('Project named "%s" not found. Available are: %s', $name, implode(', ', array_keys($this->projects))));
+        throw new \InvalidArgumentException(sprintf('Project named "%s" not found. Available are: %s', $name, implode(', ', array_map(function ($p) {
+            return $p->getNAme();
+        }, $this->projects))));
     }
 }
