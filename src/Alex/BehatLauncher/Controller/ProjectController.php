@@ -2,9 +2,18 @@
 
 namespace Alex\BehatLauncher\Controller;
 
+use Alex\BehatLauncher\Application;
+use Symfony\Component\HttpFoundation\Request;
+
 class ProjectController extends Controller
 {
-    public function listAction()
+    public static function route(Application $app)
+    {
+        $app->get('/projects', 'controller.project:listAction')->bind('project_list');
+        $app->get('/projects/{name}', 'controller.project:showAction')->bind('project_show');
+    }
+
+    public function listAction(Request $request)
     {
         $result = array();
 
@@ -16,13 +25,13 @@ class ProjectController extends Controller
 
             $runs = $this->getRunStorage()->getRuns($project, 0, 5);
             foreach ($runs as $run) {
-                $row['runs'][] = $run->toArray();
+                $row['runs'][] = $run;
             }
 
             $result[] = $row;
         }
 
-        return json_encode($result);
+        return $this->serialize($request, $result);
     }
 
     public function showAction($name)
@@ -40,6 +49,6 @@ class ProjectController extends Controller
             $result['runs'][] = $run->toArray();
         }
 
-        return json_encode($result);
+        return $this->serialize($request, $result);
     }
 }

@@ -2,14 +2,14 @@
     Create a run for project {{ project.name }}
 </h1>
 <hr />
- <form name="run" method="post" action="/project/{{ project.name }}/create-run">
+ <form name="run" method="post">
     <div id="run">
         <div class="form-row">
             <div class="label">
                 <label for="run_title">Title</label>
             </div>
             <div class="content">
-                <input type="text" id="run_title" name="run[title]" />
+                <input type="text" id="run_title" name="run[title]" ng-model="run.title" />
             </div>
         </div>
         <div class="form-row">
@@ -23,22 +23,9 @@
                 </select>
             </div>
         </div>
-        <div ng-repeat="directory in [project.featureDirectory]" ng-include="feature_widget"></div>
+        <div ng-repeat="directory in [project.features]" ng-include="'/templates/_feature_directory.html'"></div>
     </div>
     <div>
-        <button type="submit" id="run_submit" name="run[submit]">Create run</button>
+        <button ng-click="debug()" type="submit" id="run_submit" name="run[submit]">Create run</button>
     </div>
 </form>
-<script type="text/ng-template"  id="feature_widget">
-    <div class="block-features" data-path="{{ directory.path }}">
-        <div class="header">
-            <label class="required">{{ directory.name }}/</label>
-        </div>
-        <div class="rows hidden">
-            <div ng-switch on="entry.type" ng-repeat="entry in directory.entries" class="row">
-                <p ng-switch-when="file"><input type="checkbox" name="{{ entry.}}" value="1" /><label for="run_features_history_diff_feature">diff.feature</label></p>
-                <div ng-switch-when="directory" ng-include="'feature_widget'"></div>
-            </div>
-        </div>
-    </div>
-</script>

@@ -5,6 +5,8 @@ namespace Alex\BehatLauncher\Controller;
 use Alex\BehatLauncher\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -30,6 +32,44 @@ abstract class Controller
     public function getRunStorage()
     {
         return $this->application['run_storage'];
+    }
+
+    public function serialize(Request $request, $data, array $context = array())
+    {
+        $accepted = explode(',', $request->headers->get('Accept'));
+        foreach ($accepted as $accept) {
+            if ($format = $request->getFormat(trim($accept))) {
+                break;
+            }
+        }
+
+        if ($format === 'html') {
+            return $this->render('layout.html.twig');
+        }
+
+        if (!in_array($format, $expected = array('json', 'xml'))) {
+            throw new BadRequestHttpException(sprintf('Cannot serialize to format "%s". Expected %s', $format, implode(' or ', $expected)));
+        }
+
+        return new Response($this->application['serializer']->serialize($data, $format, $context), 200, array(
+            "Content-Type" => $request->getMimeType($format)
+        ));
+    }
+
+    public function unserialize(Request $request, $class)
+    {
+        $accepted = explode(',', $request->headers->get('Content-Type'));
+        foreach ($accepted as $accept) {
+            if ($format = $request->getFormat(trim($accept))) {
+                break;
+            }
+        }
+
+        if (!in_array($format, $expected = array('json', 'xml'))) {
+            throw new BadRequestHttpException(sprintf('Cannot deserialize from format "%s". Expected %s', $format, implode(' or ', $expected)));
+        }
+
+        return $this->application['serializer']->deserialize($request->getContent(), 'Alex\BehatLauncher\Behat\Run', $format);
     }
 
     public function render($template, array $parameters = array())

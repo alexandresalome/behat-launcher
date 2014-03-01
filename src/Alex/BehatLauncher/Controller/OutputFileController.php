@@ -2,11 +2,17 @@
 
 namespace Alex\BehatLauncher\Controller;
 
+use Alex\BehatLauncher\Application;
 use Alex\BehatLauncher\Behat\OutputFile;
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 
 class OutputFileController extends Controller
 {
+    public static function route(Application $app)
+    {
+        $app->get('/output/{id}', 'controller.outputFile:showAction')->bind('outputFile_show');
+    }
+
     public function showAction($id)
     {
         $path = $this->getRunStorage()->getOutputFilePath($id);

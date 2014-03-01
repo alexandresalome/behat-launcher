@@ -2,22 +2,38 @@
 
 namespace Alex\BehatLauncher\Controller;
 
+use Alex\BehatLauncher\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 class RunController extends Controller
 {
-    public function listAction()
+    public static function route(Application $app)
     {
-        $result = array();
-
-        foreach ($this->getRunStorage()->getRuns() as $run) {
-            $result[] = $run->toArray();
-        }
-
-        return json_encode($result);
+        $app->get('/runs', 'controller.run:listAction')->bind('run_list');
+        $app->post('/runs', 'controller.run:createAction')->bind('run_create');
+        $app->get('/runs/{id}', 'controller.run:showAction')->bind('run_show');
+        $app->get('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
     }
 
-    public function showAction($id)
+    public function createAction(Request $request)
+    {
+        $run = $this->unserialize($request, 'Alex\BehatLauncher\Behat\Run');
+
+        if (!$this->getProjectList()->get($run->getProjectName())) {
+            throw $this->createNotFoundException(sprintf('Project named "%s" not found.', $project));
+        }
+
+        $this->getRunStorage()->saveRun($run);
+
+        return $this->redirect($this->generateUrl('run_show', array('id' => $run->getId())));
+    }
+
+    public function listAction(Request $request)
+    {
+        return $this->serialize($request, $this->getRunStorage()->getRuns());
+    }
+
+    public function showAction(Request $request, $id)
     {
         try {
             $run = $this->getRunStorage()->getRun($id);
@@ -25,7 +41,7 @@ class RunController extends Controller
             throw $this->createNotFoundException(sprintf('Run #%s not found.', $id));
         }
 
-        return json_encode($run->toArray(true));
+        return $this->serialize($request, $run, array('run_details' => true));
     }
 
     public function restartAction(Request $request, $id)

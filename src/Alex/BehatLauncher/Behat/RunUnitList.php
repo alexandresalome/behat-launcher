@@ -2,16 +2,24 @@
 
 namespace Alex\BehatLauncher\Behat;
 
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
 /**
  * A collection of run units.
  */
-class RunUnitList implements \IteratorAggregate, \Countable
+class RunUnitList implements \IteratorAggregate, \Countable, NormalizableInterface
 {
     private $units;
 
     public function __construct(array $units = array())
     {
         $this->units = $units;
+    }
+
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+    {
+        return $normalizer->normalize($this->all());
     }
 
     /**
