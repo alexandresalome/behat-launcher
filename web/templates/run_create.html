@@ -2,30 +2,29 @@
     Create a run for project {{ project.name }}
 </h1>
 <hr />
- <form name="run" method="post">
-    <div id="run">
-        <div class="form-row">
-            <div class="label">
-                <label for="run_title">Title</label>
-            </div>
-            <div class="content">
-                <input type="text" id="run_title" name="run[title]" ng-model="run.title" />
-            </div>
+ <form>
+    <div class="form-row">
+        <div class="label">
+            <label for="run_title">Title</label>
         </div>
+        <div class="content">
+            <input type="text" id="run_title" ng-model="run.title" />
+        </div>
+    </div>
+    <div ng-repeat="property in project.properties" class="form-row">
         <div class="form-row">
             <div class="label">
-                <label for="run_properties_Browser" class="required">Browser</label>
+                <label for="run_properties_{{ property.name }}" class="required">{{ property.name }}</label>
             </div>
             <div class="content">
-                <select id="run_properties_Browser" name="run[properties][Browser]">
-                    <option value="firefox">Mozilla Firefox</option>
-                    <option value="chrome">Google Chrome</option>
+                <select id="run_properties_{{ property.name }}" ng-show="property.formType == 'choice'" ng-model="run.properties[property.name]">
+                    <option ng-repeat="(value, label) in property.formOptions.choices" value="{{ value }}">{{ label }}</option>
                 </select>
             </div>
         </div>
         <div ng-repeat="directory in [project.features]" ng-include="'/templates/_feature_directory.html'"></div>
     </div>
     <div>
-        <button ng-click="debug()" type="submit" id="run_submit" name="run[submit]">Create run</button>
+        <button ng-click="submit()" type="submit" id="run_submit" name="run[submit]">Create run</button>
     </div>
 </form>

@@ -44,6 +44,7 @@ class RunUnit implements NormalizableInterface
     public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
     {
         return array(
+            'id'           => $this->id,
             'feature'      => $this->feature,
             'status'       => $this->getStatus(),
             'created_at'   => $this->createdAt ? $this->createdAt->format('Y-m-d H:i:s') : null,

@@ -12,12 +12,14 @@ class RunController extends Controller
         $app->get('/runs', 'controller.run:listAction')->bind('run_list');
         $app->post('/runs', 'controller.run:createAction')->bind('run_create');
         $app->get('/runs/{id}', 'controller.run:showAction')->bind('run_show');
-        $app->get('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
+        $app->post('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
+        $app->post('/runs/{id}/stop', 'controller.run:stopAction')->bind('run_stop');
+        $app->post('/runs/{id}/delete', 'controller.run:deleteAction')->bind('run_delete');
     }
 
     public function createAction(Request $request)
     {
-        $run = $this->unserialize($request, 'Alex\BehatLauncher\Behat\Run');
+        $run = $this->unserialize('Alex\BehatLauncher\Behat\Run');
 
         if (!$this->getProjectList()->get($run->getProjectName())) {
             throw $this->createNotFoundException(sprintf('Project named "%s" not found.', $project));
@@ -30,7 +32,7 @@ class RunController extends Controller
 
     public function listAction(Request $request)
     {
-        return $this->serialize($request, $this->getRunStorage()->getRuns());
+        return $this->serialize($this->getRunStorage()->getRuns());
     }
 
     public function showAction(Request $request, $id)
@@ -41,7 +43,7 @@ class RunController extends Controller
             throw $this->createNotFoundException(sprintf('Run #%s not found.', $id));
         }
 
-        return $this->serialize($request, $run, array('run_details' => true));
+        return $this->serialize($run, array('run_details' => true));
     }
 
     public function restartAction(Request $request, $id)

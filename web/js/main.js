@@ -81,7 +81,12 @@ function decorateFeatureDirectory(e)
 
     // select/unselect
     $cb.click(function () {
-        $(e).find('> div.rows input[type="checkbox"]').prop('checked', $cb.prop('checked'));
+        $(e).find('> div.rows input[type="checkbox"]').each(function(i, e) {
+            var $e = $(e);
+            if ($e.prop('checked') != $cb.prop('checked')) {
+                $e.click();
+            }
+        });
     });
 
     var collapse = function () {
