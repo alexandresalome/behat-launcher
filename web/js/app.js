@@ -183,6 +183,3 @@ blApp.directive('blMenu', ['Menu', function (Menu) {
         }
     }
 }]);
-
-blApp.controller('OutputFileShowCtrl', function ($scope) {
-});

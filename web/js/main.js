@@ -38,22 +38,22 @@ $(function () {
         }
 
         var href = $target.attr('href');
-        var $row = $target.closest('tr');
+        var width = $(document).width() - 100;
+        var height = $(window).height() - 160;
 
-        $("tr.output-file").remove();
+        console.log(width, height);
 
-        if ($target.hasClass('current')) {
-            $target.removeClass('current');
-
-            return;
-        }
-
-        $row.find('a.output-file').removeClass('current');
-        $target.addClass('current');
-
-        var colspan = $row.find('> td').length;
-        var $iframe = $('<tr class="output-file"><td colspan="' + colspan + '"><iframe id="output-file" src="' + href + '"></iframe></td></tr>');
-        $row.after($iframe);
+        var $iframe = $('<div class="modal">'
+            + '<div style="width:'+ width +'px; height: '+ height +'px" class="modal-dialog">'
+                + '<div class="modal-content">'
+                    + '<iframe style="border: 0; width:'+ width +'px; height: '+ height +'px" id="output-file" src="' + href + '"></iframe>'
+                    + '<div class="modal-footer">'
+                        + '<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-arrow-left"></span> Close output</button>'
+                    + '</div>'
+                + '</div>'
+            + '</div>'
+        + '</div>');
+        $iframe.modal();
     });
 
 
