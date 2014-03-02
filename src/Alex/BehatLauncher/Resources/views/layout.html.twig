@@ -7,11 +7,7 @@
     </head>
     <body class="behat-launcher">
         <div class="container">
-            <nav>
-                <a href="/" class="brand">Behat Launcher</a>
-                <a href="/">Projects</a>
-                <a href="/runs">All runs</a>
-            </nav>
+            <nav bl-menu="menu" ng-include="'/templates/_menu.html'"></nav>
             <div ng-view></div>
             <footer>
                 <hr />
