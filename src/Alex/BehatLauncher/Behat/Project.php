@@ -2,14 +2,17 @@
 
 namespace Alex\BehatLauncher\Behat;
 
+use Alex\BehatLauncher\Behat\MysqlStorage;
 use Alex\BehatLauncher\Behat\ProjectProperty;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Project object
  */
-class Project
+class Project implements NormalizableInterface
 {
     /**
      * @var string
@@ -56,6 +59,26 @@ class Project
         foreach ($properties as $property) {
             $this->addProperty($property);
         }
+    }
+
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+    {
+        $result = array(
+            'name'        => $this->name,
+            'path'        => $this->path,
+            'properties'  => $normalizer->normalize($this->properties, $format, $context),
+            'features'    => $normalizer->normalize($this->getFeatures(), $format, $context),
+            'formats'     => $this->formats,
+            'runnerCount' => $this->runnerCount
+        );
+
+        if (isset($context['run_storage']) && $context['run_storage'] instanceof MysqlStorage) {
+            $runs = $context['run_storage']->getRuns($this, 0, isset($context['max_runs']) ? $context['max_runs'] : 5);
+
+            $result['runs'] = $normalizer->normalize($runs, $format, $context);
+        }
+
+        return $result;
     }
 
     /**

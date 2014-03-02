@@ -34,8 +34,12 @@ abstract class Controller
         return $this->application['run_storage'];
     }
 
-    public function serialize(Request $request, $data, array $context = array())
+    public function serialize($data, array $context = array())
     {
+        $context['run_storage'] = $this->getRunStorage();
+        $context['project_list'] = $this->getProjectList();
+
+        $request = $this->application['request'];
         $accepted = explode(',', $request->headers->get('Accept'));
         foreach ($accepted as $accept) {
             if ($format = $request->getFormat(trim($accept))) {
@@ -56,8 +60,9 @@ abstract class Controller
         ));
     }
 
-    public function unserialize(Request $request, $class)
+    public function unserialize($class)
     {
+        $request = $this->application['request'];
         $accepted = explode(',', $request->headers->get('Content-Type'));
         foreach ($accepted as $accept) {
             if ($format = $request->getFormat(trim($accept))) {

@@ -3,8 +3,10 @@
     <small><span class="label" ng-class="'label-' + run.status">&nbsp;{{ run.status }}&nbsp;</span></small>
 </h1>
 <div class="actions">
-    <button>Restart all</button>
-    <button>Restart failed</button>
+    <button ng-click="restartAll()">Restart all</button>
+    <button ng-click="restartFailed()">Restart failed</button>
+    <button ng-click="stop()">Stop</button>
+    <button ng-click="delete()">Delete</button>
 </div>
 <hr />
 <div class="run-progress">
@@ -25,6 +27,7 @@
             <th>Started at</th>
             <th>Finished at</th>
             <th>Output</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -35,6 +38,9 @@
                 <td>{{ unit.finishedAt }}
                 <td>
                     <a ng-repeat="(format, id) in unit.output_files" target="_self" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
+                </td>
+                <td>
+                    <button ng-click="restartUnit(unit.id)">Restart</button>
                 </td>
             </tr>
     </tbody>

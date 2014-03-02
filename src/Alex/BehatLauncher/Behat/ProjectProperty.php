@@ -2,7 +2,10 @@
 
 namespace Alex\BehatLauncher\Behat;
 
-class ProjectProperty
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
+class ProjectProperty implements NormalizableInterface
 {
     private $project;
     private $name;
@@ -15,6 +18,17 @@ class ProjectProperty
     {
         $this->project = $project;
         $this->name = $name;
+    }
+
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+    {
+        return array(
+            'name'        => $this->name,
+            'config'      => $this->config,
+            'env'         => $this->env,
+            'formType'    => $this->formType,
+            'formOptions' => $this->formOptions
+        );
     }
 
     public function mergeConfig(array $config, $value)

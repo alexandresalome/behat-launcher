@@ -2,7 +2,10 @@
 
 namespace Alex\BehatLauncher\Behat;
 
-class FeatureFile
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
+class FeatureFile implements NormalizableInterface
 {
     private $directory;
     private $name;
@@ -13,11 +16,29 @@ class FeatureFile
         $this->name = $name;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+   public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+    {
+        return array(
+            'type' => 'file',
+            'path' => $this->getPath(),
+            'name' => $this->name
+        );
+    }
+
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getPath()
     {
         $parent = $this->directory->getPath();
@@ -27,19 +48,5 @@ class FeatureFile
         }
 
         return $parent.'/'.$this->name;
-    }
-
-    public function toArray()
-    {
-        return array(
-            'type' => 'file',
-            'path' => $this->getPath(),
-            'name' => $this->name
-        );
-    }
-
-    public function getType()
-    {
-        return 'directory';
     }
 }
