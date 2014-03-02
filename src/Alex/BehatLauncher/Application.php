@@ -101,13 +101,6 @@ class Application extends BaseApplication
             return new Workspace($app['project_list'], $app['run_storage']);
         });
 
-        if ($this['debug']) {
-            $this->register($profiler = new WebProfilerServiceProvider(), array(
-                'profiler.cache_dir' => __DIR__.'/../../../data/cache/profiler',
-            ));
-            $this->mount('/_profiler', $profiler);
-        }
-
         $this->extend('twig', function ($twig, $app) {
             $twig->addExtension(new DateExtension($app['translator']));
             $twig->addExtension(new \Twig_Extension_StringLoader());

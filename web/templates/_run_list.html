@@ -8,7 +8,7 @@
     </tr>
     <tr ng-repeat-end ng-class="'row-' +run.status" class="row-with-separator">
         <td>
-            <a ng-href="/runs/{{ run.id }}">#{{ run.id }}</a>
+            <a class="btn btn-sm btn-default" ng-href="/runs/{{ run.id }}">#{{ run.id }}</a>
         </td>
         <td><span class="label" ng-class="'label-' + run.status">{{ run.status }}</span></td>
         <td>{{ run.projectName }}</td>

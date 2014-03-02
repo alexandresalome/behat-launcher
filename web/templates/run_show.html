@@ -2,11 +2,13 @@
     #{{ run.id }}: <input ng-model="run.title" />
     <small><span class="label" ng-class="'label-' + run.status">&nbsp;{{ run.status }}&nbsp;</span></small>
 </h1>
-<div class="actions">
-    <button ng-click="restartAll()">Restart all</button>
-    <button ng-click="restartFailed()">Restart failed</button>
-    <button ng-click="stop()">Stop</button>
-    <button ng-click="delete()">Delete</button>
+<div>
+    <div class="btn-group">
+        <button class="btn btn-warning" ng-click="restartAll()"><span class="glyphicon glyphicon-repeat"></span> Restart all</button>
+        <button class="btn btn-warning" ng-click="restartFailed()"><span class="glyphicon glyphicon-refresh"></span> Restart failed</button>
+        <button class="btn btn-danger" ng-click="stop()"><span class="glyphicon glyphicon-stop"></span> Stop</button>
+        <button class="btn btn-danger" ng-click="delete()"><span class="glyphicon glyphicon-fire"></span> Delete</button>
+    </div>
 </div>
 <hr />
 <div class="run-progress">
@@ -40,7 +42,7 @@
                     <a ng-repeat="(format, id) in unit.output_files" target="_self" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
                 </td>
                 <td>
-                    <button ng-click="restartUnit(unit.id)">Restart</button>
+                    <button ng-show="unit.status == 'succeeded' || unit.status == 'failed'" class="btn btn-xs btn-danger" ng-click="restartUnit(unit.id)">Restart</button>
                 </td>
             </tr>
     </tbody>
