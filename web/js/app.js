@@ -12,6 +12,40 @@ blApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
     ;
 }]);
 
+blApp.factory('Menu', [function () {
+    var nameActive = null;
+    var customActive = null;
+    var subscribers = [];
+
+    var update = function () {
+        for (i in subscribers) {
+            subscribers[i]();
+        }
+    };
+
+    return {
+        setNameActive: function (name) {
+            nameActive = name;
+            customActive = null;
+            update();
+        },
+        getNameActive: function () {
+            return nameActive;
+        },
+        setCustomActive: function (name) {
+            customActive = name;
+            nameActive = null;
+            update();
+        },
+        getCustomActive: function () {
+            return customActive;
+        },
+        register: function (callback) {
+            subscribers.push(callback);
+        }
+    };
+}]);
+
 blApp.factory('ProjectList', ['$resource', function ($resource){
     return $resource('/projects', {}, {
         query: {method:'GET', isArray:true}
@@ -36,7 +70,8 @@ blApp.factory('Run', ['$resource', function ($resource){
     });
 }]);
 
-blApp.controller('ProjectListCtrl', ['$scope', '$interval', 'ProjectList', function ($scope, $interval, ProjectList) {
+blApp.controller('ProjectListCtrl', ['$scope', '$interval', 'Menu', 'ProjectList', function ($scope, $interval, Menu, ProjectList) {
+    Menu.setNameActive('projects');
     $scope.projects = ProjectList.query();
 
     var refresh = $interval(function() {
@@ -50,7 +85,8 @@ blApp.controller('ProjectListCtrl', ['$scope', '$interval', 'ProjectList', funct
     });
 }]);
 
-blApp.controller('RunListCtrl', ['$scope', '$interval', 'RunList', function ($scope, $interval, RunList) {
+blApp.controller('RunListCtrl', ['$scope', '$interval', 'Menu', 'RunList', function ($scope, $interval, Menu, RunList) {
+    Menu.setNameActive('runs');
     $scope.runs = RunList.query();
 
     var refresh = $interval(function() {
@@ -64,7 +100,8 @@ blApp.controller('RunListCtrl', ['$scope', '$interval', 'RunList', function ($sc
     });
 }]);
 
-blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location', '$interval', 'Run', 'Project', function ($scope, $routeParams, $http, $location, $interval, Run, Project) {
+blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location', '$interval', 'Menu', 'Run', 'Project', function ($scope, $routeParams, $http, $location, $interval, Menu, Run, Project) {
+    Menu.setCustomActive({path: '/runs/' + $routeParams.id, label: 'Run #' + $routeParams.id});
     $scope.run = Run.get({id: $routeParams.id});
 
     var refresh = $interval(function() {
@@ -102,7 +139,8 @@ blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location',
     };
 }]);
 
-blApp.controller('RunCreateCtrl', ['$scope', '$routeParams', '$location', 'Run', 'Project', function ($scope, $routeParams, $location, Run, Project) {
+blApp.controller('RunCreateCtrl', ['$scope', '$routeParams', '$location', 'Menu', 'Run', 'Project', function ($scope, $routeParams, $location, Menu, Run, Project) {
+    Menu.setCustomActive({path: '/runs/create/' + $routeParams.projectName, label: $routeParams.projectName + ' - new run'});
     $scope.project = Project.get({name: $routeParams.projectName});
 
     $scope.run = {
@@ -134,6 +172,17 @@ blApp.directive('decorateFeatureDirectory', function () {
         }
     };
 });
+
+blApp.directive('blMenu', ['Menu', function (Menu) {
+    return {
+        link: function (scope, element, attrs) {
+            Menu.register(function() {
+                scope.nameActive = Menu.getNameActive();
+                scope.customActive = Menu.getCustomActive();
+            })
+        }
+    }
+}]);
 
 blApp.controller('OutputFileShowCtrl', function ($scope) {
 });
