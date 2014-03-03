@@ -3,8 +3,8 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         watch: {
-            recess: { files: ['assets/**/*.less'], tasks: ['recess'], options: { spawn: false } },
-            uglify: { files: ['assets/**/*.js'],     tasks: ['uglify'], options: { spawn: false } }
+            recess: { files: ['assets/less/*.less'], tasks: ['recess'], options: { spawn: false } },
+            uglify: { files: ['assets/js/*.js'],     tasks: ['uglify'], options: { spawn: false } }
         },
 
         copy: {
@@ -30,6 +30,7 @@ module.exports = function(grunt) {
                     'bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js',
                     'bower_components/angular-route/angular-route.js',
                     'bower_components/angular-resource/angular-resource.js',
+                    'bower_components/angular-local-storage/angular-local-storage.js',
                     'bower_components/messageformat/messageformat.js',
                     'bower_components/messageformat/locale/fr.js',
                     'bower_components/messageformat/locale/en.js',
