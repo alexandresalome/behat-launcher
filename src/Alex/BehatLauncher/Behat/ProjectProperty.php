@@ -9,21 +9,24 @@ class ProjectProperty implements NormalizableInterface
 {
     private $project;
     private $name;
+    private $default;
     private $config;
     private $env;
-    private $formType;
-    private $formOptions;
+    private $formType = 'text';
+    private $formOptions = array();
 
-    public function __construct(Project $project = null, $name = null)
+    public function __construct(Project $project = null, $name = null, $default = null)
     {
         $this->project = $project;
-        $this->name = $name;
+        $this->name    = $name;
+        $this->default = null;
     }
 
     public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
     {
         return array(
             'name'        => $this->name,
+            'default'     => $this->default,
             'config'      => $this->config,
             'env'         => $this->env,
             'formType'    => $this->formType,
@@ -60,6 +63,26 @@ class ProjectProperty implements NormalizableInterface
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function setChoices(array $choices)
+    {
+        $this->formType = 'choice';
+        $this->formOptions = array('choices' => $choices);
+
+        return $this;
+    }
+
+    public function getDefault()
+    {
+        return $this->default;
+    }
+
+    public function setDefault($default)
+    {
+        $this->default = $default;
 
         return $this;
     }

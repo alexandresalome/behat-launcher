@@ -1,7 +1,3 @@
-h2 a {
-    font-size: 0.6em;
-}
-
 pre.output {
     background: none;
     border: 0;
@@ -9,20 +5,24 @@ pre.output {
     margin: 0;
 }
 
-.hidden {
-    display: none;
+#features .panel {
+    margin-bottom: 5px;
 }
 
-/** Form **/
-
-div.form-row {
-    overflow: hidden;
-    padding-bottom: 20px;
+#features .panel-heading {
+    padding: 3px 10px 0 10px;
 }
 
-div.form-row > div.padding {
-    width: 200px;
-    float: left;
+#features .panel-body {
+    padding: 5px;
+}
+
+#features p {
+    margin: 0;
+}
+
+#features p label {
+    font-weight: normal;
 }
 
 /** Header **/
@@ -119,31 +119,31 @@ span.label-failed {
     color: white;
 }
 
-table.table tr.row-pending {
+table.bl-table tr.row-pending {
     background-color: #ccf;
 }
 
-table.table tr.row-running {
+table.bl-table tr.row-running {
     background-color: #fc8;
 }
 
-table.table tr.row-succeeded {
+table.bl-table tr.row-succeeded {
     background-color: #cfc;
 }
 
-table.table tr.row-failed {
+table.bl-table tr.row-failed {
     background-color: #f88;
 }
 
-table.table tr.row-with-separator {
-    border-bottom: 3px solid white;
+table.bl-table tr.row-with-separator {
+    border-bottom: 1px solid white;
 }
 
-table.table td {
+table.bl-table td {
     padding: 6px;
 }
 
-table.table {
+table.bl-table {
     border-collapse: collapse;
     border: 0;
 }
@@ -202,44 +202,12 @@ div.block-counters > div.counter-empty {
 
 /** Table units */
 
-table.table {
+table.bl-table {
     width: 100%;
 }
 
-table.table > thead > tr > th {
+table.bl-table > thead > tr > th {
     text-align: left;
-}
-
-/** Features block */
-
-div.block-features p {
-    margin: 4px 0;
-}
-
-div.block-features {
-    margin: 10px 0;
-    border: 1px solid #aaa;
-}
-
-div.block-features div.block-features {
-    border-right: 0px;
-}
-
-div.block-features > div.header {
-    background-color: #eee;
-    padding: 2px 6px;
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-div.block-features > div.header > a.expand,
-div.block-features > div.header > a.collapse,
-div.block-features > div.header > label {
-    cursor: pointer;
-}
-
-div.block-features > div.rows {
-    padding-left: 10px;
 }
 
 /** Run progress bar **/

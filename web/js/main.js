@@ -61,19 +61,15 @@ $(function () {
 
 function decorateFeatureDirectory(e)
 {
-    var $cb = $('<input type="checkbox" />');
-    var $exp = $('<a class="expand">&nbsp; +</a>');
-    var $col = $('<a class="collapse">&nbsp; -</a>')
     var $row = $(e);
-    var path = $row.attr('data-path');
-    $cb.attr('data-path', path);
-    $exp.attr('data-path', path);
-    $col.attr('data-path', path);
+    var $cb = $row.find("> .panel-heading > input");
+    var $exp = $('<a class="expand"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+    var $col = $('<a class="collapse"><span class="glyphicon glyphicon-chevron-up"></span></a>')
 
     $col.hide();
 
-    var $header = $row.find('> div.header');
-    var $rows = $row.find('> div.rows');
+    var $header = $row.find('> div.panel-heading');
+    var $rows = $row.find('> div.panel-body');
 
     $header.prepend($cb);
     $header.append($exp);
@@ -81,7 +77,7 @@ function decorateFeatureDirectory(e)
 
     // select/unselect
     $cb.click(function () {
-        $(e).find('> div.rows input[type="checkbox"]').each(function(i, e) {
+        $row.find('> div.panel-body input[type="checkbox"]').each(function(i, e) {
             var $e = $(e);
             if ($e.prop('checked') != $cb.prop('checked')) {
                 $e.click();
@@ -90,13 +86,13 @@ function decorateFeatureDirectory(e)
     });
 
     var collapse = function () {
-        $rows.slideUp();
+        $rows.addClass('hide');
         $col.hide();
         $exp.show();
     };
 
     var expand = function () {
-        $rows.slideDown();
+        $rows.removeClass('hide');
         $col.show();
         $exp.hide();
     };
