@@ -1,49 +1,52 @@
-<h1>
-    #{{ run.id }}
-    <small><span class="status" ng-class="'status-' + run.status">&nbsp;{{ run.status|translate }}&nbsp;</span></small>
-</h1>
-<div>
-    <div class="btn-group">
-        <button class="btn btn-warning" ng-click="restartAll()"><span class="glyphicon glyphicon-repeat"></span> {{ 'button.restart_all'|translate }}</button>
-        <button class="btn btn-warning" ng-click="restartFailed()"><span class="glyphicon glyphicon-refresh"></span> {{ 'button.restart_failed'|translate }}</button>
-        <button class="btn btn-danger" ng-click="stop()"><span class="glyphicon glyphicon-stop"></span> {{ 'button.stop'|translate }}</button>
-        <button class="btn btn-danger" ng-hide="run.running" ng-click="delete()"><span class="glyphicon glyphicon-fire"></span> {{ 'button.delete'|translate }}</button>
+<div ng-show="loading" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
+<div ng-hide="loading">
+    <h1>
+        #{{ run.id }}
+        <small><span class="status" ng-class="'status-' + run.status">&nbsp;{{ run.status|translate }}&nbsp;</span></small>
+    </h1>
+    <div>
+        <div class="btn-group">
+            <button class="btn btn-warning" ng-click="restartAll()"><span class="glyphicon glyphicon-repeat"></span> {{ 'button.restart_all'|translate }}</button>
+            <button class="btn btn-warning" ng-click="restartFailed()"><span class="glyphicon glyphicon-refresh"></span> {{ 'button.restart_failed'|translate }}</button>
+            <button class="btn btn-danger" ng-click="stop()"><span class="glyphicon glyphicon-stop"></span> {{ 'button.stop'|translate }}</button>
+            <button class="btn btn-danger" ng-hide="run.running" ng-click="delete()"><span class="glyphicon glyphicon-fire"></span> {{ 'button.delete'|translate }}</button>
+        </div>
     </div>
-</div>
-<hr />
-<div class="run-progress">
-    <div ng-repeat="(status, width) in run.progress" ng-class="'run-progress-'+ status" ng-style="{width: width + '%'}">{{ run.count[status] }}</div>
-</div>
-<div class="block-counters row">
-    <div ng-repeat="(status, count) in run.count" class="col-xs-3 counter" ng-class="'counter-'+ status + (count == 0 ? ' counter-empty' : '')">
-        <span class="number">{{ count }}</span>
-        <span class="status">{{ status|translate }}</span>
+    <hr />
+    <div class="run-progress">
+        <div ng-repeat="(status, width) in run.progress" ng-class="'run-progress-'+ status" ng-style="{width: width + '%'}">{{ run.count[status] }}</div>
     </div>
-</div>
-<hr />
-<table class="bl-table">
-    <thead>
-        <tr>
-            <th>{{ 'units_list.status'|translate }}</th>
-            <th>{{ 'units_list.feature'|translate }}</th>
-            <th>{{ 'units_list.started_at'|translate }}</th>
-            <th>{{ 'units_list.duration'|translate }}</th>
-            <th>{{ 'units_list.output'|translate }}</th>
-            <th>{{ 'units_list.actions'|translate }}</th>
-        </tr>
-    </thead>
-    <tbody>
-            <tr ng-repeat="unit in run.units" ng-class="'row-' + unit.status">
-                <td><span class="status" ng-class="'status-' + unit.status">{{ unit.status|translate }}</span></td>
-                <td>{{ unit.feature }}</td>
-                <td>{{ unit.started_at }}</td>
-                <td>{{ unit.duration|duration }}</td>
-                <td>
-                    <a ng-repeat="(format, id) in unit.output_files" target="_self" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
-                </td>
-                <td>
-                    <button ng-show="unit.status == 'succeeded' || unit.status == 'failed'" class="btn btn-xs btn-danger" ng-click="restartUnit(unit.id)">Restart</button>
-                </td>
+    <div class="block-counters row">
+        <div ng-repeat="(status, count) in run.count" class="col-xs-3 counter" ng-class="'counter-'+ status + (count == 0 ? ' counter-empty' : '')">
+            <span class="number">{{ count }}</span>
+            <span class="status">{{ status|translate }}</span>
+        </div>
+    </div>
+    <hr />
+    <table class="bl-table">
+        <thead>
+            <tr>
+                <th>{{ 'units_list.status'|translate }}</th>
+                <th>{{ 'units_list.feature'|translate }}</th>
+                <th>{{ 'units_list.started_at'|translate }}</th>
+                <th>{{ 'units_list.duration'|translate }}</th>
+                <th>{{ 'units_list.output'|translate }}</th>
+                <th>{{ 'units_list.actions'|translate }}</th>
             </tr>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+                <tr ng-repeat="unit in run.units" ng-class="'row-' + unit.status">
+                    <td><span class="status" ng-class="'status-' + unit.status">{{ unit.status|translate }}</span></td>
+                    <td>{{ unit.feature }}</td>
+                    <td>{{ unit.started_at }}</td>
+                    <td>{{ unit.duration|duration }}</td>
+                    <td>
+                        <a ng-repeat="(format, id) in unit.output_files" target="_self" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
+                    </td>
+                    <td>
+                        <button ng-show="unit.status == 'succeeded' || unit.status == 'failed'" class="btn btn-xs btn-danger" ng-click="restartUnit(unit.id)">Restart</button>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+</div>

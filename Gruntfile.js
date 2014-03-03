@@ -35,7 +35,9 @@ module.exports = function(grunt) {
                     'bower_components/messageformat/locale/fr.js',
                     'bower_components/messageformat/locale/en.js',
                     'assets/js/main.js',
-                    'assets/js/app.js'
+                    'assets/js/app.js',
+                    'assets/js/controller/*.js',
+                    'assets/js/model.*.js'
                 ]
             }
         },
