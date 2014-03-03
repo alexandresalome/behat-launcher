@@ -1,10 +1,10 @@
-<div decorate-feature-directory class="block-features" data-path="{{ directory.path }}">
-    <div class="header">
-        <label class="required">{{ directory.name }}/</label>
+<div decorate-feature-directory class="panel panel-default" data-path="{{ directory.path }}">
+    <div class="panel-heading">
+        <input type="checkbox" data-path="{{ directory.path }}" /> <label class="required">{{ directory.name }}/</label>
     </div>
-    <div class="rows hidden">
-        <div ng-switch on="entry.type" ng-repeat="entry in directory.entries" class="row">
-            <p ng-switch-when="file"><label><input type="checkbox" ng-model="run.features[entry.path]" /> {{ entry.name }}</label></p>
+    <div class="panel-body hide">
+        <div ng-switch on="entry.type" ng-repeat="entry in directory.entries">
+            <p ng-switch-when="file"><label><input type="checkbox" data-path="{{ entry.path }}" ng-model="run.features[entry.path]" /> {{ entry.name }}</label></p>
             <div ng-switch-when="directory">
                 <div ng-repeat="directory in [entry]" ng-include="'/templates/_feature_directory.html'"></div>
             </div>
