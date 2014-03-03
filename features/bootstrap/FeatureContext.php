@@ -3,6 +3,7 @@
 use Alex\BehatLauncher\Application;
 use Alex\BehatLauncher\Behat\Run;
 use Alex\BehatLauncher\Behat\RunUnit;
+use Behat\Behat\Context\Step\When;
 use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\Process\ProcessBuilder;
 use WebDriver\Behat\AbstractWebDriverContext;
@@ -163,6 +164,9 @@ class FeatureContext extends AbstractWebDriverContext
     public function iLookIntoMainFrame()
     {
         $this->getBrowser()->request('POST', 'frame', json_encode(array('id' => null)));
+        return array(
+            new When('I click on "Close output"')
+        );
     }
 
     private function runConsole(array $args, $block = true)

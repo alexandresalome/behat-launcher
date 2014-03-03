@@ -50,6 +50,7 @@ class RunUnit implements NormalizableInterface
             'created_at'   => $this->createdAt ? $this->createdAt->format('Y-m-d H:i:s') : null,
             'started_at'   => $this->startedAt ? $this->startedAt->format('Y-m-d H:i:s') : null,
             'finished_at'  => $this->finishedAt ? $this->finishedAt->format('Y-m-d H:i:s') : null,
+            'duration'     => $this->isFinished() ? $this->getDurationInSeconds() : null,
             'return_code'  => $this->returnCode,
             'output_files' => $normalizer->normalize($this->outputFiles),
         );
@@ -261,6 +262,15 @@ class RunUnit implements NormalizableInterface
         }
 
         return $this->finishedAt->diff($this->startedAt);
+    }
+
+    public function getDurationInSeconds()
+    {
+        if (!$this->isFinished()) {
+            throw new \LogicException('Cannot return duration: unit not finished.');
+        }
+
+        return $this->finishedAt->getTimestamp() - $this->startedAt->getTimestamp();
     }
 
     public function getOutputFiles()

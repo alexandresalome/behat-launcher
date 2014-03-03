@@ -7,7 +7,7 @@
         <button class="btn btn-warning" ng-click="restartAll()"><span class="glyphicon glyphicon-repeat"></span> {{ 'button.restart_all'|translate }}</button>
         <button class="btn btn-warning" ng-click="restartFailed()"><span class="glyphicon glyphicon-refresh"></span> {{ 'button.restart_failed'|translate }}</button>
         <button class="btn btn-danger" ng-click="stop()"><span class="glyphicon glyphicon-stop"></span> {{ 'button.stop'|translate }}</button>
-        <button class="btn btn-danger" ng-click="delete()"><span class="glyphicon glyphicon-fire"></span> {{ 'button.delete'|translate }}</button>
+        <button class="btn btn-danger" ng-hide="run.running" ng-click="delete()"><span class="glyphicon glyphicon-fire"></span> {{ 'button.delete'|translate }}</button>
     </div>
 </div>
 <hr />
@@ -36,8 +36,8 @@
             <tr ng-repeat="unit in run.units" ng-class="'row-' + unit.status">
                 <td><span class="status" ng-class="'status-' + unit.status">{{ unit.status|translate }}</span></td>
                 <td>{{ unit.feature }}</td>
-                <td>{{ unit.startedAt }}</td>
-                <td>{{ unit.duration }}</td>
+                <td>{{ unit.started_at }}</td>
+                <td>{{ unit.duration|duration }}</td>
                 <td>
                     <a ng-repeat="(format, id) in unit.output_files" target="_self" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
                 </td>

@@ -37,6 +37,7 @@ units_list.actions: "Actions"
 form.run.title: "Title"
 form.run.features: "Features"
 form.run.submit: "Create run"
+form.run.error.no_feature: "You must select at least one feature"
 
 # Status labels
 pending: 'pending'
@@ -47,3 +48,8 @@ failed: 'failed'
 # Locale
 locale.en: "english"
 locale.fr: "french"
+
+# Date intervals
+"interval.second": "{count, select, 0{} 1{1 second} other{{count} seconds}}"
+"interval.minute": "{count, select, 0{} 1{1 minute} other{{count} minutes}}"
+"interval.hour": "{count, select, 0{} 1{1 hour} other{{count} hours}}"
