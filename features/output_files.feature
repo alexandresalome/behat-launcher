@@ -7,7 +7,7 @@ Feature: Get all sort of output files
          When I click on "xpath=//input[@type='checkbox' and @data-path='']"
           And I click on "Create run"
          When I run all units
-         Then I should see "css=h1 .label-succeeded"
+         Then I should see "css=h1 .status-succeeded"
           And I should see "html"
           And I should see "failed"
           And I should not see "invalidformat"
