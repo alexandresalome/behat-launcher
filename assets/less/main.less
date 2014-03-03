@@ -1,0 +1,244 @@
+pre.output {
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+#features .panel {
+    margin-bottom: 5px;
+}
+
+#features .panel-heading {
+    padding: 3px 10px 0 10px;
+}
+
+#features .panel-body {
+    padding: 5px;
+}
+
+#features p {
+    margin: 0;
+}
+
+#features p label {
+    font-weight: normal;
+}
+
+/** Header **/
+
+div.container > nav {
+    border-bottom: 1px solid #bbb;
+    padding: 3px 0;
+}
+
+div.container > nav > a {
+    display: inline-block;
+    color: #888;
+    text-decoration: none;
+    padding: 8px 12px;
+    font-size: 0.9em;
+}
+
+div.container > nav > a:hover {
+    text-decoration: underline;
+}
+
+div.container > nav > a.active {
+    color: black;
+    text-decoration: underline;
+}
+
+div.container > nav > a.brand:hover {
+    text-decoration: none;
+}
+div.container > nav > a.brand {
+    cursor: default;
+    font-size: 1.2em;
+    padding: 4px 32px 4px 12px;
+    color: #555;
+}
+
+/** Footer **/
+
+footer {
+    margin-top: 2em;
+    font-size: 0.8em;
+    text-align: center;
+    color: #aaa;
+}
+
+footer a {
+    color: #555;
+    text-decoration: none;
+}
+
+/** Counters */
+
+div.block-counters {
+    overflow: hidden;
+    margin-bottom: 1em;
+}
+
+div.block-counters > div.counter {
+    float: left;
+    width: 240px;
+    text-align: center;
+}
+
+div.block-counters > div.counter > span.number {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+span.label {
+    font-size: 0.7em;
+    display: inline-block;
+    padding: 3px 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+span.label-pending {
+    background-color: #08f;
+    color: white;
+}
+
+span.label-running {
+    background-color: #f80;
+    color: white;
+}
+
+span.label-succeeded {
+    background-color: #0a0;
+    color: white;
+}
+
+span.label-failed {
+    background-color: #a00;
+    color: white;
+}
+
+table.bl-table tr.row-pending {
+    background-color: #ccf;
+}
+
+table.bl-table tr.row-running {
+    background-color: #fc8;
+}
+
+table.bl-table tr.row-succeeded {
+    background-color: #cfc;
+}
+
+table.bl-table tr.row-failed {
+    background-color: #f88;
+}
+
+table.bl-table tr.row-with-separator {
+    border-bottom: 1px solid white;
+}
+
+table.bl-table td {
+    padding: 6px;
+}
+
+table.bl-table {
+    border-collapse: collapse;
+    border: 0;
+}
+
+a.output-file {
+    color: #333;
+    border: 1px solid #aeaeae;
+    text-decoration: none;
+    background-color: #fefefe;
+    border-radius: 2px;
+    font-size: 0.8em;
+    display: block;
+    padding: 2px 6px;
+}
+
+a.output-file.current {
+    font-weight: bold;
+    color: black;
+    border: 1px solid #333;
+}
+
+a.output-file-empty {
+    opacity: 0.2;
+}
+
+tr.output-file > td {
+    margin: 0;
+    padding: 0;
+}
+
+tr.output-file > td > iframe {
+    height: 500px;
+    width: 100%;
+    border: 0;
+}
+
+div.block-counters > div.counter-pending {
+    color: #08f;
+}
+
+div.block-counters > div.counter-running {
+    color: #f80;
+}
+
+div.block-counters > div.counter-succeeded {
+    color: #0a0;
+}
+
+div.block-counters > div.counter-failed {
+    color: #a00;
+}
+
+div.block-counters > div.counter-empty {
+    color: #bbb;
+}
+
+/** Table units */
+
+table.bl-table {
+    width: 100%;
+}
+
+table.bl-table > thead > tr > th {
+    text-align: left;
+}
+
+/** Run progress bar **/
+.run-progress {
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.run-progress > div {
+    line-height: 20px;
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+    overflow: hidden;
+    float: left;
+}
+
+.run-progress > div.run-progress-pending {
+    background-color: #08f;
+}
+
+.run-progress > div.run-progress-running {
+    background-color: #f80;
+}
+
+.run-progress > div.run-progress-succeeded {
+    background-color: #0a0;
+}
+
+.run-progress > div.run-progress-failed {
+    background-color: #a00;
+}

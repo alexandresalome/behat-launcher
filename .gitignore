@@ -1,5 +1,7 @@
 /bin/
+/bower_components/
 /data/
+/node_modules
 /vendor/
 /config.php
 /behat.yml
