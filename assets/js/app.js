@@ -1,9 +1,9 @@
 var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'pascalprecht.translate']);
 
-blApp.config(function ($translateProvider) {
+blApp.config(['$translateProvider', function ($translateProvider) {
   $translateProvider.useUrlLoader('/translations');
   $translateProvider.preferredLanguage('en');
-});
+}]);
 
 blApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);

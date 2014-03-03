@@ -1,0 +1,14 @@
+{
+  "name": "behat-launcher",
+  "dependencies": {
+    "jquery": "2.1.0",
+    "bootstrap": "3.1.1",
+
+    "angular": "1.2.14",
+    "angular-resource": "1.2.14",
+    "angular-route": "1.2.14",
+    "angular-translate": "2.0.1",
+    "angular-translate-loader-url": "2.0.0",
+    "angular-translate-interpolation-messageformat": "2.0.0"
+  }
+}
