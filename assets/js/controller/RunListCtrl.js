@@ -1,6 +1,8 @@
-blApp.controller('RunListCtrl', ['$scope', '$interval', 'Menu', 'RunList', function ($scope, $interval, Menu, RunList) {
+blApp.controller('RunListCtrl', ['$scope', '$timeout', 'Menu', 'RunList', function ($scope, $timeout, Menu, RunList) {
     Menu.setNameActive('runs');
 
+    $scope.runs    = [];
+    $scope.count   = 0;
     $scope.loading = true;
 
     $scope.refresh = function(callback) {
@@ -14,7 +16,7 @@ blApp.controller('RunListCtrl', ['$scope', '$interval', 'Menu', 'RunList', funct
 
     $scope.refreshAndTimeout = function () {
         $scope.refresh(function () {
-            $timeout($scope.refreshAndTimeout, 2000);
+            $scope.timeout = $timeout($scope.refreshAndTimeout, 2000);
         });
     };
 
@@ -22,21 +24,5 @@ blApp.controller('RunListCtrl', ['$scope', '$interval', 'Menu', 'RunList', funct
         $scope.timeout && $timeout.cancel($scope.timeout);
     });
 
-
-    RunList.query().$promise.then(function (runs) {
-        $scope.runs    = runs;
-        $scope.count   = runs.length;
-        $scope.loading = false;
-    });
-
-    $scope.timeout = refresh = $interval(function() {
-        RunList.query().$promise.then(function (runs) {
-            $scope.runs = runs;
-            $scope.count = runs.length;
-        });
-    }, 2000);
-
-    $scope.$on('$destroy', function() {
-        $interval.cancel(refresh);
-    });
+    $scope.refreshAndTimeout();
 }]);

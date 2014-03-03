@@ -13,7 +13,7 @@ blApp.controller('ProjectListCtrl', ['$scope', '$timeout', 'Menu', 'ProjectList'
 
     $scope.refreshAndTimeout = function () {
         $scope.refresh(function () {
-            $timeout($scope.refreshAndTimeout, 2000);
+            $scope.timeout = $timeout($scope.refreshAndTimeout, 2000);
         });
     };
 

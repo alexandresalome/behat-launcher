@@ -1,4 +1,4 @@
-blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location', '$interval', 'Menu', 'Run', 'Project', function ($scope, $routeParams, $http, $location, $interval, Menu, Run, Project) {
+blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location', '$timeout', '$window', 'Menu', 'Run', 'Project', function ($scope, $routeParams, $http, $location, $timeout, $window, Menu, Run, Project) {
     Menu.setCustomActive({
         path: '/runs/' + $routeParams.id,
         label: 'Run #' + $routeParams.id
@@ -16,7 +16,7 @@ blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location',
 
     $scope.refreshAndTimeout = function () {
         $scope.refresh(function () {
-            $timeout($scope.refreshAndTimeout, 2000);
+            $scope.timeout = $timeout($scope.refreshAndTimeout, 2000);
         });
     };
 
@@ -25,6 +25,10 @@ blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location',
     });
 
     $scope.refreshAndTimeout();
+
+    $scope.goBack = function () {
+         $window.history.back();
+    }
 
     $scope.restartAll = function () {
         $http({method: 'POST', url: '/runs/' + $scope.run.id + '/restart'});
