@@ -31,9 +31,11 @@ units_list.feature: "Feature"
 units_list.started_at: "Démarré à"
 units_list.duration: "Durée"
 units_list.output: "Sortie"
+units_list.actions: "Actions"
 
 # Form
 form.run.title: "Titre"
+form.run.features: "Features"
 form.run.submit: "Créer un run"
 
 # Status labels

@@ -31,9 +31,11 @@ units_list.feature: "Feature"
 units_list.started_at: "Started at"
 units_list.duration: "Duration"
 units_list.output: "Output"
+units_list.actions: "Actions"
 
 # Form
 form.run.title: "Title"
+form.run.features: "Features"
 form.run.submit: "Create run"
 
 # Status labels

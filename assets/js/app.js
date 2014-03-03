@@ -1,4 +1,4 @@
-var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'pascalprecht.translate']);
+var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'ngSanitize', 'pascalprecht.translate']);
 
 blApp.config(['$translateProvider', function ($translateProvider) {
   $translateProvider.useMessageFormatInterpolation();

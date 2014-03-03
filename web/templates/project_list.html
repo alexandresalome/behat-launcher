@@ -2,7 +2,7 @@
     <hr ng-show="!$first" />
     <h2>
         {{ project.name }}
-        <a class="btn btn-sm btn-default" ng-href="/runs/create/{{ project.name }}"><span class="glyphicon glyphicon-plus-sign"></span> Create a run</a>
+        <a class="btn btn-sm btn-default" ng-href="/runs/create/{{ project.name }}"><span class="glyphicon glyphicon-plus-sign"></span> {{ 'button.create_run'|translate }}</a>
     </h2>
     <div ng-repeat="runs in [project.runs]" ng-include="'/templates/_run_list.html'" />
 </div>
