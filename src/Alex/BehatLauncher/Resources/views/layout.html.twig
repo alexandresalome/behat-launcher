@@ -9,9 +9,7 @@
         <div class="container">
             <nav bl-menu="menu" ng-include="'/templates/_menu.html'"></nav>
             <div ng-view></div>
-            <footer>
-                <hr />
-                <p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspired by <a href="http://blablacar.com">BlaBlaCar</a>. Available on <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>
+            <footer ng-bind-html="'<hr />' + ('footer'|translate)">
             </footer>
         </div>
         <script type="text/javascript" src="/js/all.min.js"></script>

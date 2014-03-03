@@ -24,6 +24,7 @@ module.exports = function(grunt) {
                     'bower_components/jquery/dist/jquery.js',
                     'bower_components/bootstrap/dist/js/bootstrap.js',
                     'bower_components/angular/angular.js',
+                    'bower_components/angular-sanitize/angular-sanitize.js',
                     'bower_components/angular-translate/angular-translate.js',
                     'bower_components/angular-translate-loader-url/angular-translate-loader-url.js',
                     'bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js',

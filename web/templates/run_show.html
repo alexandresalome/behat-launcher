@@ -1,13 +1,13 @@
 <h1>
     #{{ run.id }}
-    <small><span class="label" ng-class="'label-' + run.status">&nbsp;{{ run.status }}&nbsp;</span></small>
+    <small><span class="status" ng-class="'status-' + run.status">&nbsp;{{ run.status }}&nbsp;</span></small>
 </h1>
 <div>
     <div class="btn-group">
-        <button class="btn btn-warning" ng-click="restartAll()"><span class="glyphicon glyphicon-repeat"></span> Restart all</button>
-        <button class="btn btn-warning" ng-click="restartFailed()"><span class="glyphicon glyphicon-refresh"></span> Restart failed</button>
-        <button class="btn btn-danger" ng-click="stop()"><span class="glyphicon glyphicon-stop"></span> Stop</button>
-        <button class="btn btn-danger" ng-click="delete()"><span class="glyphicon glyphicon-fire"></span> Delete</button>
+        <button class="btn btn-warning" ng-click="restartAll()"><span class="glyphicon glyphicon-repeat"></span> {{ 'button.restart_all'|translate }}</button>
+        <button class="btn btn-warning" ng-click="restartFailed()"><span class="glyphicon glyphicon-refresh"></span> {{ 'button.restart_failed'|translate }}</button>
+        <button class="btn btn-danger" ng-click="stop()"><span class="glyphicon glyphicon-stop"></span> {{ 'button.stop'|translate }}</button>
+        <button class="btn btn-danger" ng-click="delete()"><span class="glyphicon glyphicon-fire"></span> {{ 'button.delete'|translate }}</button>
     </div>
 </div>
 <hr />
@@ -17,27 +17,27 @@
 <div class="block-counters">
     <div ng-repeat="(status, count) in run.count" class="counter" ng-class="'counter-'+ status + (count == 0 ? ' counter-empty' : '')">
         <span class="number">{{ count }}</span>
-        <span class="label">{{ status }}</span>
+        <span class="status">{{ status|translate }}</span>
     </div>
 </div>
 <hr />
 <table class="bl-table">
     <thead>
         <tr>
-            <th>Status</th>
-            <th>Feature</th>
-            <th>Started at</th>
-            <th>Finished at</th>
-            <th>Output</th>
-            <th>Actions</th>
+            <th>{{ 'units_list.status'|translate }}</th>
+            <th>{{ 'units_list.feature'|translate }}</th>
+            <th>{{ 'units_list.started_at'|translate }}</th>
+            <th>{{ 'units_list.duration'|translate }}</th>
+            <th>{{ 'units_list.output'|translate }}</th>
+            <th>{{ 'units_list.actions'|translate }}</th>
         </tr>
     </thead>
     <tbody>
             <tr ng-repeat="unit in run.units" ng-class="'row-' + unit.status">
-                <td><span class="label" ng-class="'label-' + unit.status">{{ unit.status }}</span></td>
+                <td><span class="status" ng-class="'status-' + unit.status">{{ unit.status|translate }}</span></td>
                 <td>{{ unit.feature }}</td>
-                <td>{{ unit.startedAt }}
-                <td>{{ unit.finishedAt }}
+                <td>{{ unit.startedAt }}</td>
+                <td>{{ unit.duration }}</td>
                 <td>
                     <a ng-repeat="(format, id) in unit.output_files" target="_self" class="output-file" ng-href="/output/{{ id }}">{{ format }}</a>
                 </td>
