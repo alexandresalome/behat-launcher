@@ -2,13 +2,24 @@
 
 namespace Alex\BehatLauncher\Controller;
 
+use Alex\BehatLauncher\Application;
+use Symfony\Component\HttpFoundation\Request;
+
 class ProjectController extends Controller
 {
-    public function listAction()
+    public static function route(Application $app)
     {
-        return $this->render('Project/list.html.twig', array(
-            'project_list' => $this->getProjectList(),
-            'run_storage'  => $this->getRunStorage(),
-        ));
+        $app->get('/projects', 'controller.project:listAction')->bind('project_list');
+        $app->get('/projects/{name}', 'controller.project:showAction')->bind('project_show');
+    }
+
+    public function listAction(Request $request)
+    {
+        return $this->serialize($this->getProjectList()->getAll());
+    }
+
+    public function showAction(Request $request, $name)
+    {
+        return $this->serialize($this->getProjectList()->get($name));
     }
 }

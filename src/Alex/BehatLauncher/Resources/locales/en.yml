@@ -5,8 +5,8 @@ footer: '<p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé<
 
 # Page titles
 title.project_list: "Project list"
-title.project_create: "%project% - new run"
-title.run_list: "{0}No run found|{1}Last run|[1,+Inf]Last %count% runs"
+title.project_create: "{project_name} - new run"
+title.run_list: "{count, select, 0{No run found} 1{Last run} other{Last {count} runs}}"
 
 # Buttons
 button.create_run: "Create a run"
@@ -31,10 +31,13 @@ units_list.feature: "Feature"
 units_list.started_at: "Started at"
 units_list.duration: "Duration"
 units_list.output: "Output"
+units_list.actions: "Actions"
 
 # Form
 form.run.title: "Title"
+form.run.features: "Features"
 form.run.submit: "Create run"
+form.run.error.no_feature: "You must select at least one feature"
 
 # Status labels
 pending: 'pending'
@@ -45,3 +48,8 @@ failed: 'failed'
 # Locale
 locale.en: "english"
 locale.fr: "french"
+
+# Date intervals
+"interval.second": "{count, select, 0{} 1{1 second} other{{count} seconds}}"
+"interval.minute": "{count, select, 0{} 1{1 minute} other{{count} minutes}}"
+"interval.hour": "{count, select, 0{} 1{1 hour} other{{count} hours}}"

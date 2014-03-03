@@ -10,13 +10,12 @@ use Alex\BehatLauncher\Twig\DateExtension;
 use Doctrine\DBAL\DriverManager;
 use Silex\Application as BaseApplication;
 use Silex\Provider\FormServiceProvider;
+use Silex\Provider\SerializerServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 class Application extends BaseApplication
 {
@@ -28,7 +27,7 @@ class Application extends BaseApplication
 
         $this->registerProviders();
         $this->registerServices();
-        $this->registerRouting();
+        $this->registerControllers();
     }
 
     public function configureMysql($host, $database, $user, $password)
@@ -75,21 +74,7 @@ class Application extends BaseApplication
             'debug'        => $this['debug'],
             'twig.options' => array('cache' => __DIR__.'/../../../data/cache/twig'),
         ));
-
-        $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
-            $twig->addExtension(new DateExtension($app['translator']));
-
-            return $twig;
-        }));
-
-        $this['translator'] = $this->share($this->extend('translator', function ($translator, $app) {
-            $translator->addLoader('yaml', new YamlFileLoader());
-
-            $translator->addResource('yaml', __DIR__.'/Resources/locales/en.yml', 'en');
-            $translator->addResource('yaml', __DIR__.'/Resources/locales/fr.yml', 'fr');
-
-            return $translator;
-        }));
+        $this->register(new SerializerServiceProvider());
     }
 
     private function registerServices()
@@ -116,17 +101,27 @@ class Application extends BaseApplication
             return new Workspace($app['project_list'], $app['run_storage']);
         });
 
-        if ($this['debug']) {
-            $this->register($profiler = new WebProfilerServiceProvider(), array(
-                'profiler.cache_dir' => __DIR__.'/../../../data/cache/profiler',
-            ));
-            $this->mount('/_profiler', $profiler);
-        }
+        $this->extend('twig', function ($twig, $app) {
+            $twig->addExtension(new DateExtension($app['translator']));
+            $twig->addExtension(new \Twig_Extension_StringLoader());
 
+            return $twig;
+        });
+
+        $this->extend('form.extensions', function ($extensions, $app) {
+            $extensions[] = new BehatLauncherExtension();
+
+            return $extensions;
+        });
+    }
+
+    private function registerControllers()
+    {
         $controllers = array(
             'outputFile' => 'Alex\BehatLauncher\Controller\OutputFileController',
             'project'    => 'Alex\BehatLauncher\Controller\ProjectController',
             'run'        => 'Alex\BehatLauncher\Controller\RunController',
+            'frontend'   => 'Alex\BehatLauncher\Controller\FrontendController',
         );
 
         // Controllers as service
@@ -134,35 +129,9 @@ class Application extends BaseApplication
             $this['controller.'.$id] = $this->share(function($app) use ($class) {
                 return new $class($app);
             });
+
+            call_user_func($class.'::route', $this);
         }
-    }
 
-    private function registerRouting()
-    {
-        $this->before(function (Request $request) {
-            $locale = $request->cookies->get('locale', 'en');
-            if (!in_array($locale, array('en', 'fr'))) {
-                $locale = 'en';
-            }
-            \Locale::setDefault($locale);
-            $this['translator']->setLocale($locale);
-        }, self::EARLY_EVENT);
-
-        // Routes
-        $this->get('/', 'controller.project:listAction')->bind('project_list');
-        $this->get('/project/{project}', 'controller.project:showAction')->bind('project_show');
-        $this->get('/project/{project}/create-run', 'controller.run:createAction')->bind('run_create')->method('GET|POST');
-        $this->get('/runs', 'controller.run:listAction')->bind('run_list');
-        $this->get('/runs/{id}', 'controller.run:showAction')->bind('run_show');
-        $this->get('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
-        $this->get('/runs/{id}/stop', 'controller.run:stopAction')->bind('run_stop');
-        $this->get('/runs/{id}/delete', 'controller.run:deleteAction')->bind('run_delete');
-        $this->get('/output/{id}', 'controller.outputFile:showAction')->bind('outputFile_show');
-
-        $this->extend('form.extensions', function ($extensions, $app) {
-            $extensions[] = new BehatLauncherExtension();
-
-            return $extensions;
-        });
     }
 }

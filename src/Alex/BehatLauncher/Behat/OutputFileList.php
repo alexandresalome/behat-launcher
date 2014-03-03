@@ -2,13 +2,17 @@
 
 namespace Alex\BehatLauncher\Behat;
 
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
 /**
  * Holds a collection of output files and provide methods around it.
  *
  * Files are stored in temporary folder until they're saved to a dedicated
  * folder.
  */
-class OutputFileList implements \IteratorAggregate, \Countable
+class OutputFileList implements \IteratorAggregate, \Countable, NormalizableInterface
 {
     /**
      * @var array Collection of files
@@ -18,6 +22,15 @@ class OutputFileList implements \IteratorAggregate, \Countable
     public function __construct(array $files = array())
     {
         $this->files = $files;
+    }
+
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+    {
+        return array_map(function ($of) {
+            return $of->getId();
+        }, array_filter($this->files, function ($of) {
+            return !$of->isEmpty();
+        }));
     }
 
     /**

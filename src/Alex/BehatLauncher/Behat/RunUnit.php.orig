@@ -4,11 +4,9 @@ namespace Alex\BehatLauncher\Behat;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
-use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class RunUnit implements NormalizableInterface
+class RunUnit
 {
     private $id;
     private $run;
@@ -28,6 +26,7 @@ class RunUnit implements NormalizableInterface
         $this->outputFiles = new OutputFileList();
     }
 
+<<<<<<< HEAD
     public function stop()
     {
         if (!$this->isPending()) {
@@ -39,21 +38,19 @@ class RunUnit implements NormalizableInterface
         $this->returnCode = -1;
         $this->outputFiles->reset();
         $this->outputFiles->get('_bl')->setContent('This run unit was stopped.');
-    }
-
-    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+=======
+    public function toArray()
     {
         return array(
-            'id'           => $this->id,
             'feature'      => $this->feature,
             'status'       => $this->getStatus(),
             'created_at'   => $this->createdAt ? $this->createdAt->format('Y-m-d H:i:s') : null,
             'started_at'   => $this->startedAt ? $this->startedAt->format('Y-m-d H:i:s') : null,
             'finished_at'  => $this->finishedAt ? $this->finishedAt->format('Y-m-d H:i:s') : null,
-            'duration'     => $this->isFinished() ? $this->getDurationInSeconds() : null,
             'return_code'  => $this->returnCode,
-            'output_files' => $normalizer->normalize($this->outputFiles),
+            'output_files' => $this->outputFiles->toArray(),
         );
+>>>>>>> move templates and controllers
     }
 
     public function reset()
@@ -262,15 +259,6 @@ class RunUnit implements NormalizableInterface
         }
 
         return $this->finishedAt->diff($this->startedAt);
-    }
-
-    public function getDurationInSeconds()
-    {
-        if (!$this->isFinished()) {
-            throw new \LogicException('Cannot return duration: unit not finished.');
-        }
-
-        return $this->finishedAt->getTimestamp() - $this->startedAt->getTimestamp();
     }
 
     public function getOutputFiles()

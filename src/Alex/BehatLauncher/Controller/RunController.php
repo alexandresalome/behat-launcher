@@ -2,42 +2,40 @@
 
 namespace Alex\BehatLauncher\Controller;
 
+use Alex\BehatLauncher\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 class RunController extends Controller
 {
-    public function listAction()
+    public static function route(Application $app)
     {
-        return $this->render('Run/list.html.twig', array(
-            'runs' => $this->getRunStorage()->getRuns()
-        ));
+        $app->get('/runs', 'controller.run:listAction')->bind('run_list');
+        $app->post('/runs', 'controller.run:createAction')->bind('run_create');
+        $app->get('/runs/{id}', 'controller.run:showAction')->bind('run_show');
+        $app->post('/runs/{id}/restart', 'controller.run:restartAction')->bind('run_restart');
+        $app->post('/runs/{id}/stop', 'controller.run:stopAction')->bind('run_stop');
+        $app->post('/runs/{id}/delete', 'controller.run:deleteAction')->bind('run_delete');
     }
 
-    public function createAction(Request $request, $project)
+    public function createAction(Request $request)
     {
-        try {
-            $project = $this->getProjectList()->get($project);
-        } catch (\InvalidArgumentException $e) {
+        $run = $this->unserialize('Alex\BehatLauncher\Behat\Run');
+
+        if (!$this->getProjectList()->get($run->getProjectName())) {
             throw $this->createNotFoundException(sprintf('Project named "%s" not found.', $project));
         }
 
-        $run = $project->createRun();
+        $this->getRunStorage()->saveRun($run);
 
-        $form = $this->createForm('behat_launcher_run', $run, array('project' => $project));
-
-        if ($form->handleRequest($request)->isValid()) {
-            $this->getRunStorage()->saveRun($run);
-
-            return $this->redirect($this->generateUrl('run_show', array('id' => $run->getId())));
-        }
-
-        return $this->render('Run/create.html.twig', array(
-            'project' => $project,
-            'form'    => $form->createView(),
-        ));
+        return $this->redirect($this->generateUrl('run_show', array('id' => $run->getId())));
     }
 
-    public function showAction($id)
+    public function listAction(Request $request)
+    {
+        return $this->serialize($this->getRunStorage()->getRuns());
+    }
+
+    public function showAction(Request $request, $id)
     {
         try {
             $run = $this->getRunStorage()->getRun($id);
@@ -45,9 +43,7 @@ class RunController extends Controller
             throw $this->createNotFoundException(sprintf('Run #%s not found.', $id));
         }
 
-        return $this->render('Run/show.html.twig', array(
-            'run' => $run
-        ));
+        return $this->serialize($run, array('run_details' => true));
     }
 
     public function restartAction(Request $request, $id)

@@ -2,7 +2,12 @@
 
 namespace Alex\BehatLauncher\Behat;
 
-class Run
+use Symfony\Component\Serializer\Normalizer\DenormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
+class Run implements NormalizableInterface, DenormalizableInterface
 {
     private $id;
     private $title;
@@ -21,6 +26,51 @@ class Run
     {
         $this->units = new RunUnitList();
         $this->createdAt = new \DateTime();
+    }
+
+    public function denormalize(DenormalizerInterface $denormalizer, $data, $format = null, array $context = array())
+    {
+        if (isset($data['title'])) {
+            $this->setTitle($data['title']);
+        }
+
+        if (isset($data['projectName'])) {
+            $this->setProjectName($data['projectName']);
+        }
+
+        if (isset($data['properties'])) {
+            $this->setProperties($data['properties']);
+        }
+
+        if (isset($data['features'])) {
+            $this->createUnits($data['features']);
+        }
+
+        return $this;
+    }
+
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+    {
+        $result = array(
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'status' => $this->getStatus(),
+            'running' => $this->isRunning(),
+            'properties' => $this->getProperties(),
+            'count' => array(
+                'pending'   => $this->countStatus('pending'),
+                'running'   => $this->countStatus('running'),
+                'succeeded' => $this->countStatus('succeeded'),
+                'failed'    => $this->countStatus('failed'),
+            ),
+            'progress' => $this->getProgress()
+        );
+
+        if (isset($context['run_details']) && $context['run_details']) {
+            $result['units'] = $normalizer->normalize($this->getUnits());
+        }
+
+        return $result;
     }
 
     public function getTitle()
@@ -52,19 +102,13 @@ class Run
     /**
      * Creates run units
      */
-    public function createUnits(array $features, $currentPath = '')
+    public function createUnits(array $features)
     {
-        foreach ($features as $key => $value) {
-            $name = is_array($value) ? $key : $value;
-            $path = $currentPath === '' ? $name : $currentPath.'/'.$name;
-            if (is_array($value)) {
-                $this->createUnits($value, $path);
-            } elseif ($value) {
-                $unit = new RunUnit();
-                $unit->setFeature($path);
-                $unit->setRun($this);
-                $this->units->add($unit);
-            }
+        foreach ($features as $feature) {
+            $unit = new RunUnit();
+            $unit->setFeature($feature);
+            $unit->setRun($this);
+            $this->units->add($unit);
         }
     }
 
@@ -382,7 +426,7 @@ class Run
         $extra = $count - array_sum($ratios);
 
         reset($counters);
-        while ($extra > 0) {
+        while ($extra > 0 && key($counters)) {
             if ($ratios[key($counters)]) {
                 $ratios[key($counters)]++;
                 $extra--;
