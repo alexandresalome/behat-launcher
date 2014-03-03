@@ -55,6 +55,7 @@ class Run implements NormalizableInterface, DenormalizableInterface
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'status' => $this->getStatus(),
+            'running' => $this->isRunning(),
             'properties' => $this->getProperties(),
             'count' => array(
                 'pending'   => $this->countStatus('pending'),

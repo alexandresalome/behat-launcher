@@ -63,6 +63,7 @@ function decorateFeatureDirectory(e)
 {
     var $row = $(e);
     var $cb = $row.find("> .panel-heading > input");
+    var path = $cb.attr('data-path');
     var $exp = $('<a class="expand"><span class="glyphicon glyphicon-chevron-down"></span></a>');
     var $col = $('<a class="collapse"><span class="glyphicon glyphicon-chevron-up"></span></a>')
 

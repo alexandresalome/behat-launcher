@@ -1,6 +1,8 @@
 <h1>
     {{ 'title.project_create'|translate:{project_name: project.name} }}
 </h1>
+<hr ng-show="error" />
+<div ng-show="error" class="alert alert-danger">{{ error|translate }}</div>
 <hr />
  <form class="form-horizontal">
     <div class="form-group">

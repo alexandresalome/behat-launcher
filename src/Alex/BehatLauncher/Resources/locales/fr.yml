@@ -37,6 +37,7 @@ units_list.actions: "Actions"
 form.run.title: "Titre"
 form.run.features: "Features"
 form.run.submit: "Créer un run"
+form.run.error.no_feature: "Vous devez sélectionner au moins une feature"
 
 # Status labels
 pending: 'en attente'
