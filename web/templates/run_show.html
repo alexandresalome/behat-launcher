@@ -14,8 +14,8 @@
 <div class="run-progress">
     <div ng-repeat="(status, width) in run.progress" ng-class="'run-progress-'+ status" ng-style="{width: width + '%'}">{{ run.count[status] }}</div>
 </div>
-<div class="block-counters">
-    <div ng-repeat="(status, count) in run.count" class="counter" ng-class="'counter-'+ status + (count == 0 ? ' counter-empty' : '')">
+<div class="block-counters row">
+    <div ng-repeat="(status, count) in run.count" class="col-xs-3 counter" ng-class="'counter-'+ status + (count == 0 ? ' counter-empty' : '')">
         <span class="number">{{ count }}</span>
         <span class="status">{{ status|translate }}</span>
     </div>
