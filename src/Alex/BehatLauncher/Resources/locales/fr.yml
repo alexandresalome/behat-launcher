@@ -5,7 +5,7 @@ footer: '<p>Développé par <a href="http://alexandre-salome.fr">Alexandre Salom
 
 # Titles
 title.project_list: "Liste des projets"
-title.project_create: "%project% - nouveau run"
+title.project_create: "{{ project.name }} - nouveau run"
 title.run_list: "{0}Aucun dernier run trouvé|{1}Dernier run|[1,+Inf]Derniers %count% runs"
 
 # Buttons
