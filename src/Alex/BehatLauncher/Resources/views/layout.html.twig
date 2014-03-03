@@ -1,30 +1,17 @@
 {% set menu_active = menu_active|default(null) %}
 <!DOCTYPE html>
-<html>
+<html ng-app="blApp">
     <head>
-        <title>{% block title 'Welcome!' %} - Behat Launcher</title>
-        <link rel="stylesheet" href="/css/main.css" />
+        <title>{% block title 'Behat Launcher' %}</title>
+        <link rel="stylesheet" href="/css/all.min.css" />
     </head>
     <body class="behat-launcher">
         <div class="container">
-            <nav>
-                <a class="brand">Behat Launcher</a>
-                <a{% if menu_active == 'project_list' %} class="active"{% endif %} href="{{ path('project_list') }}">{{ 'menu.project_list'|trans }}</a>
-                <a{% if menu_active == 'run_list' %} class="active"{% endif %} href="{{ path('run_list') }}">{{ 'menu.all_runs'|trans }}</a>
-                {% if menu_active is iterable %}
-                    <a class="active" href="{{ menu_active.href }}">{{ menu_active.label|trans(menu_active.label_keys|default({})) }}</a>
-                {% endif %}
-                {% for locale in ['en', 'fr'] %}
-                    <a href="#" style="float: right" data-locale="{{ locale }}">{{ ('locale.' ~ locale)|trans }}</a>
-                {% endfor %}
-            </nav>
-            <div id="content"{% if refresh|default(false) %} class="refresh"{% endif %}>{% block content '' %}</div>
-            <footer>
-                <hr />
-                {{ 'footer'|trans|raw }}
+            <nav bl-menu="menu" ng-include="'/templates/_menu.html'"></nav>
+            <div ng-view></div>
+            <footer ng-bind-html="'<hr />' + ('footer'|translate)">
             </footer>
         </div>
-        <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
-        <script type="text/javascript" src="/js/main.js"></script>
+        <script type="text/javascript" src="/js/all.min.js"></script>
     </body>
 </html>

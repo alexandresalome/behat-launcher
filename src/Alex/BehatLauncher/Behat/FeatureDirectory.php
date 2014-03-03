@@ -2,7 +2,10 @@
 
 namespace Alex\BehatLauncher\Behat;
 
-class FeatureDirectory implements \IteratorAggregate, \Countable
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
+class FeatureDirectory implements \IteratorAggregate, \Countable, NormalizableInterface
 {
     private $parent;
     private $name;
@@ -12,7 +15,20 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
     {
         $this->name    = $name;
         $this->parent  = $parent;
-        $this->entries = $entries;
+        $this->entries = array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function normalize(NormalizerInterface $normalizer, $format = null, array $context = array())
+    {
+        return array(
+            'type'    => 'directory',
+            'path'    => $this->getPath(),
+            'name'    => $this->name,
+            'entries' => $normalizer->normalize($this->entries),
+        );
     }
 
     /**
@@ -31,6 +47,54 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
         return count($this->entries);
     }
 
+    /**
+     * @return FeatureDirectory
+     */
+    public function getOrCreateDirectory($name)
+    {
+        if (!$this->hasDirectory($name)) {
+            $sub = new FeatureDirectory($name, $this);
+            $this->addEntry($sub);
+        } else {
+            $sub = $this->getDirectory($name);
+        }
+
+        return $sub;
+    }
+
+    /**
+     * @return FeatureDirectory
+     *
+     * @throws InvalidArgumentException directory not found
+     */
+    public function getDirectory($name)
+    {
+        foreach ($this->entries as $entry) {
+            if ($entry instanceof FeatureDirectory && $entry->getName() === $name) {
+                return $entry;
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf('No directory named "%s" in "%s".', $name, $this->getPath()));
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasDirectory($name)
+    {
+        foreach ($this->entries as $entry) {
+            if ($entry->getName() == $name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return FeatureDirectory
+     */
     public function addEntry($entry)
     {
         if (!$entry instanceof FeatureDirectory && !$entry instanceof FeatureFile) {
@@ -38,6 +102,8 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
         }
 
         $this->entries[] = $entry;
+
+        return $this;
     }
 
     /**
@@ -48,9 +114,12 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getPath()
     {
-        if (null === $parent) {
+        if (null === $this->parent) {
             return '';
         }
 
@@ -60,21 +129,5 @@ class FeatureDirectory implements \IteratorAggregate, \Countable
         }
 
         return $parent.'/'.$this->name;
-    }
-
-    public function toArray()
-    {
-        return array(
-            'type' => 'directory',
-            'name' => $this->name,
-            'entries' => array_map(function ($entry) {
-                return $entry->toArray();
-            }, $this->entries)
-        );
-    }
-
-    public function getType()
-    {
-        return 'directory';
     }
 }

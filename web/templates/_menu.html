@@ -1,0 +1,6 @@
+<a href="/" class="brand">Behat Launcher</a>
+<a ng-class="nameActive == 'projects' ? 'active' : ''" href="/">{{ 'menu.project_list'|translate }}</a>
+<a ng-class="nameActive == 'runs' ? 'active' : ''" href="/runs">{{ 'menu.all_runs'|translate }}</a>
+<a ng-show="customActive" href="{{ customActive.href }}" class="active">{{ customActive.label }}</a>
+<a ng-class="locale == 'fr' ? 'active' : ''" style="float: right" href="#" ng-click="changeLocale('fr')">{{ 'locale.fr'|translate }}</a>
+<a ng-class="locale == 'en' ? 'active' : ''" style="float: right" href="#" ng-click="changeLocale('en')">{{ 'locale.en'|translate }}</a>

@@ -5,8 +5,8 @@ footer: '<p>Développé par <a href="http://alexandre-salome.fr">Alexandre Salom
 
 # Titles
 title.project_list: "Liste des projets"
-title.project_create: "%project% - nouveau run"
-title.run_list: "{0}Aucun dernier run trouvé|{1}Dernier run|[1,+Inf]Derniers %count% runs"
+title.project_create: "{project_name} - nouveau run"
+title.run_list: "{count, select, 0{Aucun run trouvé} 1{Dernier run} other{Derniers {count} runs}}"
 
 # Buttons
 button.create_run: "Créer un run"
@@ -31,10 +31,13 @@ units_list.feature: "Feature"
 units_list.started_at: "Démarré à"
 units_list.duration: "Durée"
 units_list.output: "Sortie"
+units_list.actions: "Actions"
 
 # Form
 form.run.title: "Titre"
+form.run.features: "Features"
 form.run.submit: "Créer un run"
+form.run.error.no_feature: "Vous devez sélectionner au moins une feature"
 
 # Status labels
 pending: 'en attente'
