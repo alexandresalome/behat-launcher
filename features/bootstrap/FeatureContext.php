@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\Process\ProcessBuilder;
 use WebDriver\Behat\AbstractWebDriverContext;
 use WebDriver\Behat\WebDriverContext;
+use WebDriver\By;
 
 class FeatureContext extends AbstractWebDriverContext
 {
@@ -163,10 +164,7 @@ class FeatureContext extends AbstractWebDriverContext
      */
     public function iLookIntoMainFrame()
     {
-        $this->getBrowser()->request('POST', 'frame', json_encode(array('id' => null)));
-        return array(
-            new When('I click on "Close output"')
-        );
+        $this->getBrowser()->refresh(); // temporary fix, windle handle switch 2 times fails
     }
 
     private function runConsole(array $args, $block = true)
