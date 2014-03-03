@@ -1,4 +1,9 @@
-var blApp = angular.module('blApp', ['ngRoute', 'ngResource']);
+var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'pascalprecht.translate']);
+
+blApp.config(function ($translateProvider) {
+  $translateProvider.useUrlLoader('/translations');
+  $translateProvider.preferredLanguage('en');
+});
 
 blApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
@@ -178,10 +183,15 @@ blApp.directive('decorateFeatureDirectory', function () {
     };
 });
 
-blApp.directive('blMenu', ['Menu', function (Menu) {
+blApp.directive('blMenu', ['$translate', 'Menu', function ($translate, Menu) {
     return {
         link: function (scope, element, attrs) {
             Menu.register(function() {
+                scope.locale = 'en';
+                scope.changeLocale = function (locale) {
+                    scope.locale = locale;
+                    $translate.use(locale);
+                };
                 scope.nameActive = Menu.getNameActive();
                 scope.customActive = Menu.getCustomActive();
             })
