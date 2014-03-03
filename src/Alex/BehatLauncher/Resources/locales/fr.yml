@@ -50,10 +50,6 @@ locale.en: "anglais"
 locale.fr: "français"
 
 # Date interval
-'one:one year|many:%year% years': 'one:un an|many:%year% ans'
-'one:one month|many:%month% months': 'one:un mois|many:%month% mois'
-'one:one day|many:%day% days': 'one:un jour|many:%day% jours'
-'one:one hour|many:%hour% hours': 'one:une heure|many:%hour% heures'
-'one:one minute|many:%minute% minutes': 'one:une minute|many:%minute% minutes'
-'one:one second|many:%second% seconds': 'one:une seconde|many:%second% secondes'
-'no time': 'aucune durée'
+interval.second: "{count, select, 0{} 1{1 seconde} other{{count} secondes}}"
+interval.minute: "{count, select, 0{} 1{1 minute} other{{count} minutes}}"
+interval.hour: "{count, select, 0{} 1{1 heure} other{{count} heures}}"

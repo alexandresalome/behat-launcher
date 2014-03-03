@@ -50,6 +50,6 @@ locale.en: "english"
 locale.fr: "french"
 
 # Date intervals
-"interval.second": "{count, select, 0{} 1{1 second} other{{count} seconds}}"
-"interval.minute": "{count, select, 0{} 1{1 minute} other{{count} minutes}}"
-"interval.hour": "{count, select, 0{} 1{1 hour} other{{count} hours}}"
+interval.second: "{count, select, 0{} 1{1 second} other{{count} seconds}}"
+interval.minute: "{count, select, 0{} 1{1 minute} other{{count} minutes}}"
+interval.hour: "{count, select, 0{} 1{1 hour} other{{count} hours}}"
