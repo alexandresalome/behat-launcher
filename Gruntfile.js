@@ -1,10 +1,35 @@
 module.exports = function(grunt) {
 
+    var stylesheetFiles = [
+        'bower_components/bootstrap/dist/css/bootstrap.css',
+        'assets/less/main.less',
+    ];
+
+    var javascriptFiles = [
+        'bower_components/jquery/dist/jquery.js',
+        'bower_components/bootstrap/dist/js/bootstrap.js',
+        'bower_components/angular/angular.js',
+        'bower_components/angular-sanitize/angular-sanitize.js',
+        'bower_components/angular-translate/angular-translate.js',
+        'bower_components/angular-translate-loader-url/angular-translate-loader-url.js',
+        'bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js',
+        'bower_components/angular-route/angular-route.js',
+        'bower_components/angular-resource/angular-resource.js',
+        'bower_components/angular-local-storage/angular-local-storage.js',
+        'bower_components/messageformat/messageformat.js',
+        'bower_components/messageformat/locale/fr.js',
+        'bower_components/messageformat/locale/en.js',
+        'assets/js/debt.js',
+        'assets/js/app.js',
+        'assets/js/controller/*.js',
+        'assets/js/model/*.js'
+    ];
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         watch: {
-            recess: { files: ['assets/less/*.less'], tasks: ['recess'], options: { spawn: false } },
-            uglify: { files: ['assets/js/*.js'],     tasks: ['uglify'], options: { spawn: false } }
+            recess: { files: ['assets/less/**.less'], tasks: ['recess'] },
+            uglify: { files: ['assets/js/**.js'],     tasks: ['uglify'] }
         },
 
         copy: {
@@ -17,39 +42,28 @@ module.exports = function(grunt) {
         },
 
         uglify: {
-            build: {
+            min: {
                 options: { mangle: false },
                 dest: 'web/js/all.min.js',
-                src: [
-                    'bower_components/jquery/dist/jquery.js',
-                    'bower_components/bootstrap/dist/js/bootstrap.js',
-                    'bower_components/angular/angular.js',
-                    'bower_components/angular-sanitize/angular-sanitize.js',
-                    'bower_components/angular-translate/angular-translate.js',
-                    'bower_components/angular-translate-loader-url/angular-translate-loader-url.js',
-                    'bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js',
-                    'bower_components/angular-route/angular-route.js',
-                    'bower_components/angular-resource/angular-resource.js',
-                    'bower_components/angular-local-storage/angular-local-storage.js',
-                    'bower_components/messageformat/messageformat.js',
-                    'bower_components/messageformat/locale/fr.js',
-                    'bower_components/messageformat/locale/en.js',
-                    'assets/js/main.js',
-                    'assets/js/app.js',
-                    'assets/js/controller/*.js',
-                    'assets/js/model.*.js'
-                ]
+                src: javascriptFiles
+            },
+            cat: {
+                options: { mangle: false, compress: false, beautify: true },
+                dest: 'web/js/all.js',
+                src: javascriptFiles
             }
         },
 
         recess: {
-            build: {
+            min: {
                 options: { compile: true, compress: true },
-                src: [
-                    'bower_components/bootstrap/dist/css/bootstrap.css',
-                    'assets/less/main.less',
-                ],
+                src: stylesheetFiles,
                 dest: 'web/css/all.min.css'
+            },
+            cat: {
+                options: { compile: true, compress: false },
+                src: stylesheetFiles,
+                dest: 'web/css/all.css'
             }
         }
     });
