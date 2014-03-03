@@ -1,10 +1,21 @@
-var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'ngSanitize', 'pascalprecht.translate']);
+var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'ngSanitize', 'LocalStorageModule', 'pascalprecht.translate']);
 
+/**
+ * Configure the translation service.
+ */
 blApp.config(['$translateProvider', function ($translateProvider) {
-  $translateProvider.useMessageFormatInterpolation();
-  $translateProvider.useUrlLoader('/translations');
-  $translateProvider.preferredLanguage('en');
+    $translateProvider.useMessageFormatInterpolation();
+    $translateProvider.useUrlLoader('/translations');
 }]);
+
+blApp.run(['localStorageService', '$translate', function (localStorageService, $translate) {
+    var locale = localStorageService.get('locale');
+    if (!locale) {
+        locale = 'en';
+    }
+    $translate.use(locale);
+}]);
+
 
 blApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
@@ -196,12 +207,16 @@ blApp.directive('decorateFeatureDirectory', function () {
     };
 });
 
-blApp.directive('blMenu', ['$translate', 'Menu', function ($translate, Menu) {
+blApp.directive('blMenu', ['$translate', 'localStorageService', 'Menu', function ($translate, localStorageService, Menu) {
     return {
         link: function (scope, element, attrs) {
             Menu.register(function() {
-                scope.locale = 'en';
+                scope.locale = localStorageService.get('locale');
+                if (!scope.locale) {
+                    scope.locale = 'en';
+                }
                 scope.changeLocale = function (locale) {
+                    localStorageService.add('locale', locale);
                     scope.locale = locale;
                     $translate.use(locale);
                 };

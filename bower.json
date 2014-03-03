@@ -10,6 +10,7 @@
     "angular-route": "1.2.14",
     "angular-translate": "2.0.1",
     "angular-translate-loader-url": "2.0.0",
+    "angular-local-storage": "0.0.1",
     "messageformat": "0.1.8",
     "angular-translate-interpolation-messageformat": "2.0.0"
   }
