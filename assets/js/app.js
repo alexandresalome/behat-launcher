@@ -152,6 +152,7 @@ blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location',
 
 blApp.controller('RunCreateCtrl', ['$scope', '$routeParams', '$location', 'Menu', 'Run', 'Project', function ($scope, $routeParams, $location, Menu, Run, Project) {
     Menu.setCustomActive({path: '/runs/create/' + $routeParams.projectName, label: $routeParams.projectName + ' - new run'});
+
     Project.get({name: $routeParams.projectName}).$promise.then(function (project) {
         $scope.project = project;
         for (i in project.properties) {
