@@ -1,6 +1,7 @@
 var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'pascalprecht.translate']);
 
 blApp.config(['$translateProvider', function ($translateProvider) {
+  $translateProvider.useMessageFormatInterpolation();
   $translateProvider.useUrlLoader('/translations');
   $translateProvider.preferredLanguage('en');
 }]);
@@ -92,11 +93,16 @@ blApp.controller('ProjectListCtrl', ['$scope', '$interval', 'Menu', 'ProjectList
 
 blApp.controller('RunListCtrl', ['$scope', '$interval', 'Menu', 'RunList', function ($scope, $interval, Menu, RunList) {
     Menu.setNameActive('runs');
-    $scope.runs = RunList.query();
+    $scope.count = 0;
+    RunList.query().$promise.then(function (runs) {
+        $scope.runs  = runs;
+        $scope.count = runs.length;
+    });
 
     var refresh = $interval(function() {
         RunList.query().$promise.then(function (runs) {
             $scope.runs = runs;
+            $scope.count = runs.length;
         });
     }, 2000);
 

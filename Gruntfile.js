@@ -18,6 +18,7 @@ module.exports = function(grunt) {
 
         uglify: {
             build: {
+                options: { mangle: false },
                 dest: 'web/js/all.min.js',
                 src: [
                     'bower_components/jquery/dist/jquery.js',
@@ -28,6 +29,9 @@ module.exports = function(grunt) {
                     'bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js',
                     'bower_components/angular-route/angular-route.js',
                     'bower_components/angular-resource/angular-resource.js',
+                    'bower_components/messageformat/messageformat.js',
+                    'bower_components/messageformat/locale/fr.js',
+                    'bower_components/messageformat/locale/en.js',
                     'assets/js/main.js',
                     'assets/js/app.js'
                 ]
