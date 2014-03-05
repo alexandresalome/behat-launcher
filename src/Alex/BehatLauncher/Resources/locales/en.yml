@@ -1,12 +1,13 @@
 # Layout
 menu.project_list: 'Project list'
+menu.create: 'New run'
 menu.all_runs: 'All runs'
 footer: '<p>Developed by <a href="http://alexandre-salome.fr">Alexandre Salomé</a>, inspired by <a href="http://blablacar.com">BlaBlaCar</a>. Available on <a href="https://github.com/alexandresalome/behat-launcher">Github</a>.</p>'
 loading: "Loading"
 
 # Page titles
 title.project_list: "Project list"
-title.project_create: "{project_name} - new run"
+title.project_create: "New run for"
 title.run_list: "{count, select, 0{No run found} 1{Last run} other{Last {count} runs}}"
 
 # Buttons
