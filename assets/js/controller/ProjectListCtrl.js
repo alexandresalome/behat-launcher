@@ -1,6 +1,7 @@
 blApp.controller('ProjectListCtrl', ['$scope', '$timeout', 'Menu', 'ProjectList', function ($scope, $timeout, Menu, ProjectList) {
     Menu.setNameActive('projects');
     $scope.loading  = true;
+    $scope.hide_project_name = true;
     $scope.projects = ProjectList.getList(function () {
         $scope.loading = false;
     });

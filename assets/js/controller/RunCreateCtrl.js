@@ -45,6 +45,7 @@ blApp.controller('RunCreateCtrl', ['$scope', '$location', '$routeParams', 'Menu'
         $scope.loadProjectFromName($scope.projectListChoice.name);
     });
 
+    $scope.disabled = false;
     $scope.submit = function () {
         // convert array of booleans to array of strings
         var features = $scope.run.features;
@@ -63,5 +64,7 @@ blApp.controller('RunCreateCtrl', ['$scope', '$location', '$routeParams', 'Menu'
         run.$save(function (msg, headers) {
             $location.path('/runs/' + msg.id);
         });
+
+        $scope.disabled = true;
     };
 }]);

@@ -54,6 +54,7 @@ class Run implements NormalizableInterface, DenormalizableInterface
         $result = array(
             'id' => $this->getId(),
             'title' => $this->getTitle(),
+            'projectName' => $this->getProjectName(),
             'status' => $this->getStatus(),
             'running' => $this->isRunning(),
             'properties' => $this->getProperties(),

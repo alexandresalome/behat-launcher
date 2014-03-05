@@ -1,6 +1,6 @@
 <table class="bl-table">
     <tr ng-repeat-start="run in runs" ng-class="'row-' + run.status">
-        <td colspan="4">
+        <td colspan="3">
             <div class="run-progress">
                 <div ng-repeat="(status, width) in run.progress" ng-class="'run-progress-'+ status" ng-style="{width: width + '%'}">{{ run.count[status] }}</div>
             </div>
@@ -8,14 +8,10 @@
     </tr>
     <tr ng-repeat-end ng-class="'row-' +run.status" class="row-with-separator">
         <td>
-            <a class="btn btn-sm btn-default" ng-href="/runs/{{ run.id }}">#{{ run.id }}</a>
+            <a class="btn btn-sm btn-default" ng-href="/runs/{{ run.id }}">#{{ run.id }}<span ng-show="run.title">: {{ run.title }}</span></a>
         </td>
-        <td><span class="status" ng-class="'status-' + run.status">{{ run.status|translate }}</span></td>
-        <td>{{ run.projectName }}</td>
-        <td>
-            <strong ng-repeat-start="(name, value) in run.properties">{{ name }}</strong>: {{ value }}
-            <br ng-repeat-end ng-show="!$last" />
-        </td>
+        <td><span ng-hide="hide_project_name">{{ run.projectName }}</span></td>
+        <td><span class="status pull-right" ng-class="'status-' + run.status">{{ run.status|translate }}</span></td>
     </tr>
     <tr ng-hide="runs.length">
         <td colspan="4">

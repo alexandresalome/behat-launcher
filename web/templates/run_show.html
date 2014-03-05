@@ -1,8 +1,11 @@
 <div ng-show="loading" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
 <div ng-hide="loading">
     <h1>
-        <a class="back-icon" href="#" ng-click="goBack()"><span class="glyphicon glyphicon-chevron-left"></span></a> #{{ run.id }}
-        <small><span class="status" ng-class="'status-' + run.status">&nbsp;{{ run.status|translate }}&nbsp;</span></small>
+        <a class="back-icon" href="#" ng-click="goBack()"><span class="glyphicon glyphicon-chevron-left"></span></a>
+        #{{ run.id }}<small>
+            <span ng-show="run.title">{{ run.title }}</span>
+            <span class="status" ng-class="'status-' + run.status">&nbsp;{{ run.status|translate }}&nbsp;</span>
+        </small>
     </h1>
     <div>
         <div class="btn-group">

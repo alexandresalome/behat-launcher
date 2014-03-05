@@ -30,7 +30,10 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-success" ng-click="submit()" type="submit" id="run_submit" name="run[submit]">{{ 'form.run.submit'|translate }}</button>
+                <button ng-disabled="disabled" class="btn btn-success" ng-click="submit()" type="submit" id="run_submit" name="run[submit]">
+                    <span ng-show="disabled" class="glyphicon glyphicon-asterisk"></span>
+                    {{ 'form.run.submit'|translate }}
+                </button>
             </div>
         </div>
     </form>
