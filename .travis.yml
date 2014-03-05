@@ -34,3 +34,12 @@ before_script:
 
     # Config
     - cp config.php.dist config.php
+
+    # Bower
+    - npm install -g bower
+    - bower install
+
+    # Grunt
+    - npm install -g grunt-cli
+    - npm install
+    - grunt
