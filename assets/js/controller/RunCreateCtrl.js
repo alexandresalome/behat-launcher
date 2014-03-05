@@ -1,24 +1,46 @@
-blApp.controller('RunCreateCtrl', ['$scope', '$routeParams', '$location', 'Menu', 'Run', 'Project', function ($scope, $routeParams, $location, Menu, Run, Project) {
-    Menu.setCustomActive({
-        path:  '/runs/create/' + $routeParams.projectName,
-        label: $routeParams.projectName + ' - new run'
-    });
+blApp.controller('RunCreateCtrl', ['$scope', '$location', '$routeParams', 'Menu', 'Run', 'Project', 'ProjectList', function ($scope, $location, $routeParams, Menu, Run, Project, ProjectList) {
+    Menu.setNameActive('create');
 
-    $scope.loading = true;
     $scope.run = {
         title: null,
-        projectName: $routeParams.projectName,
+        projectName: null,
         properties: {},
         features: {}
     };
 
-    Project.get({name: $routeParams.projectName}).$promise.then(function (project) {
-        $scope.loading = false;
+    $scope.loading = true;
+    $scope.projects = ProjectList.query();
+    $scope.projects.$promise.then(function (projects) {
+        if ($routeParams.project) {
+            for (k in projects) {
+                if (projects[k].name == $routeParams.project) {
+                    $scope.loadProject(projects[k]);
+
+                    return;
+                }
+            }
+
+            $location.url('/create');
+        } else {
+            for (k in projects) {
+                $scope.loadProject(projects[k]);
+
+                return;
+            }
+        }
+    });
+
+    $scope.loadProject = function (project) {
         $scope.project = project;
+        $scope.loading = false;
+        $scope.run.projectName = project.name;
+        $location.search('project', project.name);
+        $scope.run.features = {};
+        $scope.run.properties = {};
         for (i in project.properties) {
             $scope.run.properties[project.properties[i].name] = project.properties[i].default;
         }
-    });
+    };
 
     $scope.submit = function () {
         // convert array of booleans to array of strings
