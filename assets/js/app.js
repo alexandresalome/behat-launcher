@@ -12,7 +12,7 @@ blApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
         .when('/', {controller: "ProjectListCtrl", templateUrl: "/templates/project_list.html"})
         .when('/runs', {controller: "RunListCtrl", templateUrl: "/templates/run_list.html"})
         .when('/runs/:id', {controller: "RunShowCtrl", templateUrl: "/templates/run_show.html"})
-        .when('/runs/create/:projectName', {controller: "RunCreateCtrl", templateUrl: "/templates/run_create.html"})
+        .when('/create', {controller: "RunCreateCtrl", templateUrl: "/templates/run_create.html", reloadOnSearch: false})
         .when('/output/:id', {controller: "OutputFileShowCtrl", templateUrl: "/templates/outputFile_show.html"})
     ;
 }]);

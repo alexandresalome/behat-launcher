@@ -1,12 +1,13 @@
 <div ng-show="loading" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
 <div ng-hide="loading">
     <h1>
-        {{ 'title.project_create'|translate:{project_name: project.name} }}
+        {{ 'title.project_create'|translate }}
+        <select id="run_project_name" ng-change="loadProject(project)" name="run[project_name]" ng-model="project" ng-options="project as project.name for project in projects"></select>
     </h1>
     <hr ng-show="error" />
     <div ng-show="error" class="alert alert-danger">{{ error|translate }}</div>
     <hr />
-     <form class="form-horizontal">
+     <form ng-show="project" class="form-horizontal">
         <div class="form-group">
             <label for="run_title" class="col-sm-2 control-label">{{ 'form.run.title'|translate }}</label>
             <div class="col-sm-10">

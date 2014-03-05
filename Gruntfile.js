@@ -28,8 +28,8 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         watch: {
-            recess: { files: ['assets/**/*.less'], tasks: ['recess'] },
-            uglify: { files: ['assets/**/*.js'],     tasks: ['uglify'] }
+            recess: { files: ['assets/**/*.less'], tasks: ['recess:cat', 'recess:min'] },
+            uglify: { files: ['assets/**/*.js'],     tasks: ['uglify:cat', 'uglify:min'] }
         },
 
         copy: {

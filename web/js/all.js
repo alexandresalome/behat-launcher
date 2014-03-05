@@ -17405,9 +17405,10 @@ blApp.config([ "$routeProvider", "$locationProvider", function($routeProvider, $
     }).when("/runs/:id", {
         controller: "RunShowCtrl",
         templateUrl: "/templates/run_show.html"
-    }).when("/runs/create/:projectName", {
+    }).when("/create", {
         controller: "RunCreateCtrl",
-        templateUrl: "/templates/run_create.html"
+        templateUrl: "/templates/run_create.html",
+        reloadOnSearch: false
     }).when("/output/:id", {
         controller: "OutputFileShowCtrl",
         templateUrl: "/templates/outputFile_show.html"
@@ -17443,27 +17444,43 @@ blApp.controller("ProjectListCtrl", [ "$scope", "$timeout", "Menu", "ProjectList
     $scope.refreshAndTimeout();
 } ]);
 
-blApp.controller("RunCreateCtrl", [ "$scope", "$routeParams", "$location", "Menu", "Run", "Project", function($scope, $routeParams, $location, Menu, Run, Project) {
-    Menu.setCustomActive({
-        path: "/runs/create/" + $routeParams.projectName,
-        label: $routeParams.projectName + " - new run"
-    });
-    $scope.loading = true;
+blApp.controller("RunCreateCtrl", [ "$scope", "$location", "$routeParams", "Menu", "Run", "Project", "ProjectList", function($scope, $location, $routeParams, Menu, Run, Project, ProjectList) {
+    Menu.setNameActive("create");
     $scope.run = {
         title: null,
-        projectName: $routeParams.projectName,
+        projectName: null,
         properties: {},
         features: {}
     };
-    Project.get({
-        name: $routeParams.projectName
-    }).$promise.then(function(project) {
-        $scope.loading = false;
+    $scope.loading = true;
+    $scope.projects = ProjectList.query();
+    $scope.projects.$promise.then(function(projects) {
+        if ($routeParams.project) {
+            for (k in projects) {
+                if (projects[k].name == $routeParams.project) {
+                    $scope.loadProject(projects[k]);
+                    return;
+                }
+            }
+            $location.url("/create");
+        } else {
+            for (k in projects) {
+                $scope.loadProject(projects[k]);
+                return;
+            }
+        }
+    });
+    $scope.loadProject = function(project) {
         $scope.project = project;
+        $scope.loading = false;
+        $scope.run.projectName = project.name;
+        $location.search("project", project.name);
+        $scope.run.features = {};
+        $scope.run.properties = {};
         for (i in project.properties) {
             $scope.run.properties[project.properties[i].name] = project.properties[i].default;
         }
-    });
+    };
     $scope.submit = function() {
         var features = $scope.run.features;
         $scope.run.features = [];
