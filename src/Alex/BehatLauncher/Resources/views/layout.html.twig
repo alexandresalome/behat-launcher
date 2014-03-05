@@ -7,8 +7,8 @@
         <link rel="stylesheet" href="/css/all{{ min|default(true) ? '.min' : '' }}.css" />
     </head>
     <body class="behat-launcher">
+        <div ng-include="'/templates/_menu.html'"></div>
         <div class="container">
-            <nav bl-menu="menu" ng-include="'/templates/_menu.html'"></nav>
             <div ng-view></div>
             <footer ng-bind-html="'<hr />' + ('footer'|translate)">
             </footer>

@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 
     var stylesheetFiles = [
         'bower_components/bootstrap/dist/css/bootstrap.css',
+        'assets/less/navbar.less',
         'assets/less/main.less',
     ];
 

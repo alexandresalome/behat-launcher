@@ -1,7 +1,42 @@
-<a href="/" class="brand">Behat Launcher</a>
-<a ng-class="nameActive == 'projects' ? 'active' : ''" href="/">{{ 'menu.project_list'|translate }}</a>
-<a ng-class="nameActive == 'create' ? 'active' : ''" href="/create">{{ 'menu.create'|translate }}</a>
-<a ng-class="nameActive == 'runs' ? 'active' : ''" href="/runs">{{ 'menu.all_runs'|translate }}</a>
-<a ng-show="customActive" href="{{ customActive.href }}" class="active">{{ customActive.label }}</a>
-<a ng-class="locale == 'fr' ? 'active' : ''" style="float: right" href="#" ng-click="changeLocale('fr')">{{ 'locale.fr'|translate }}</a>
-<a ng-class="locale == 'en' ? 'active' : ''" style="float: right" href="#" ng-click="changeLocale('en')">{{ 'locale.en'|translate }}</a>
+<nav bl-menu="menu" class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                Behat-Launcher
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li ng-class="nameActive == 'projects' ? 'active' : ''">
+                    <a href="/">
+                        <span class="glyphicon glyphicon-th-large"></span>
+                        {{ 'menu.project_list'|translate }}
+                    </a>
+                </li>
+                <li ng-class="nameActive == 'create' ? 'active' : ''">
+                    <a href="/create">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        {{ 'menu.create'|translate }}
+                    </a>
+                </li>
+                <li ng-class="nameActive == 'runs' ? 'active' : ''">
+                    <a href="/runs">
+                        <span class="glyphicon glyphicon-asterisk"></span>
+                        {{ 'menu.all_runs'|translate }}
+                    </a>
+                </li>
+                <li ng-show="customActive" class="active"><a href="{{ customActive.href }}">{{ customActive.label }}</a></li>
+            </ul>
+            <ul class="hidden-xs hidden-sm nav navbar-nav navbar-right">
+                <li ng-hide="locale == 'fr'"><a href="#" ng-click="changeLocale('fr')">{{ 'locale.fr'|translate }}</a></li>
+                <li ng-hide="locale == 'en'"><a href="#" ng-click="changeLocale('en')">{{ 'locale.en'|translate }}</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
