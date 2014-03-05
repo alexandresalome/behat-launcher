@@ -8,6 +8,14 @@ blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location',
 
     $scope.refresh = function(callback) {
         Run.get({id: $routeParams.id}).$promise.then(function (run) {
+            var suffix = '';
+            if (run.title) {
+                suffix += ': ' + run.title;
+            }
+            Menu.setCustomActive({
+                path: '/runs/' + $routeParams.id,
+                label: 'Run #' + $routeParams.id + suffix
+            });
             $scope.loading  = false;
             $scope.run = run;
             callback();
