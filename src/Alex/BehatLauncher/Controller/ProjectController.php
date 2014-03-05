@@ -15,11 +15,11 @@ class ProjectController extends Controller
 
     public function listAction(Request $request)
     {
-        return $this->serialize($this->getProjectList()->getAll());
+        return $this->serialize($this->getProjectList()->getAll(), array('project_runs' => true));
     }
 
     public function showAction(Request $request, $name)
     {
-        return $this->serialize($this->getProjectList()->get($name));
+        return $this->serialize($this->getProjectList()->get($name), array('project_details' => true, 'project_runs' => true));
     }
 }

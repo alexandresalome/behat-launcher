@@ -2,7 +2,7 @@
 <div ng-hide="loading">
     <h1>
         {{ 'title.project_create'|translate }}
-        <select id="run_project_name" ng-change="loadProject(project)" name="run[project_name]" ng-model="project" ng-options="project as project.name for project in projects"></select>
+        <select id="run_project_name" ng-change="loadProjectFromName(projectListChoice.name)" name="run[project_name]" ng-model="projectListChoice" ng-options="project as project.name for project in projects"></select>
     </h1>
     <hr ng-show="error" />
     <div ng-show="error" class="alert alert-danger">{{ error|translate }}</div>

@@ -66,15 +66,16 @@ class Project implements NormalizableInterface
         $result = array(
             'name'        => $this->name,
             'path'        => $this->path,
-            'properties'  => $normalizer->normalize($this->properties, $format, $context),
-            'features'    => $normalizer->normalize($this->getFeatures(), $format, $context),
-            'formats'     => $this->formats,
-            'runnerCount' => $this->runnerCount
         );
 
-        if (isset($context['run_storage']) && $context['run_storage'] instanceof MysqlStorage) {
-            $runs = $context['run_storage']->getRuns($this, 0, isset($context['max_runs']) ? $context['max_runs'] : 5);
+        if (isset($context['project_details']) && $context['project_details']) {
+            $result['properties'] = $normalizer->normalize($this->properties, $format, $context);
+            $result['features']   = $normalizer->normalize($this->getFeatures(), $format, $context);
+        }
 
+        if (isset($context['project_runs']) && $context['project_runs']) {
+            $maxRuns = isset($context['max_runs']) ? $context['max_runs'] : 5;
+            $runs = $context['run_storage']->getRuns($this, 0, $maxRuns);
             $result['runs'] = $normalizer->normalize($runs, $format, $context);
         }
 

@@ -1,4 +1,4 @@
-blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location', '$timeout', '$window', 'Menu', 'Run', 'Project', function ($scope, $routeParams, $http, $location, $timeout, $window, Menu, Run, Project) {
+blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location', '$timeout', '$window', 'Menu', 'Run', function ($scope, $routeParams, $http, $location, $timeout, $window, Menu, Run) {
     Menu.setCustomActive({
         path: '/runs/' + $routeParams.id,
         label: 'Run #' + $routeParams.id
