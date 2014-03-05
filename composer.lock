@@ -2034,16 +2034,16 @@
     "packages-dev": [
         {
             "name": "alexandresalome/php-webdriver",
-            "version": "v0.7.1",
+            "version": "v0.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alexandresalome/php-webdriver.git",
-                "reference": "3c24eaf890f4baeeeebebb85f3f21db8da510cb1"
+                "reference": "ecafb5877fd37e5e1ce76a65cdf425c424d6705b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alexandresalome/php-webdriver/zipball/3c24eaf890f4baeeeebebb85f3f21db8da510cb1",
-                "reference": "3c24eaf890f4baeeeebebb85f3f21db8da510cb1",
+                "url": "https://api.github.com/repos/alexandresalome/php-webdriver/zipball/ecafb5877fd37e5e1ce76a65cdf425c424d6705b",
+                "reference": "ecafb5877fd37e5e1ce76a65cdf425c424d6705b",
                 "shasum": ""
             },
             "require": {
@@ -2075,7 +2075,7 @@
                 }
             ],
             "description": "PHP-WebDriver is a client for WebDriver and a Behat extension",
-            "time": "2014-03-03 18:19:05"
+            "time": "2014-03-05 19:50:02"
         },
         {
             "name": "alom/journal-extension",
