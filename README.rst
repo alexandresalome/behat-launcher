@@ -23,6 +23,7 @@ To install Behat-Launcher, you will need:
 * PHP 5.5 (yeah, it's a project from the future)
 * Apache2 or Nginx or anything that can run a PHP application
 * A MySQL database
+* NodeJS and npm to install Bower and Grunt
 
 **1. Get the code**
 
@@ -47,6 +48,23 @@ Download it in behat-launcher folder:
     php composer.phar install
 
 This command will download dependencies in **vendor/** folder to make them available to the application.
+
+Next you will need to install the assets using Bower and Grunt.
+
+You can install these tools using npm, the NodeJS package manager:
+
+.. code-block:: bash
+
+    npm install -g bower
+    npm install -g grunt-cli
+
+You can now install the assets:
+
+.. code-block:: bash
+
+    bower install
+    npm install
+    grunt
 
 **3. Configuration**
 
