@@ -1,29 +1,32 @@
-blApp.controller('RunCreateCtrl', ['$scope', '$location', '$routeParams', 'Menu', 'Run', 'ProjectList', function ($scope, $location, $routeParams, Menu, Run, ProjectList) {
+blApp.controller('RunCreateCtrl', function ($scope, $location, $routeParams, Menu, Run, ProjectList) {
     Menu.setNameActive('create');
 
-    $scope.run = {
-        title: null,
-        projectName: null,
-        properties: {},
-        features: {}
-    };
+    $scope.projects = ProjectList.getList();
+    $scope.run = new Run();
 
-    $scope.loading = true;
+    $scope.$on('projectlist_update', function (event, data) {
+        $scope.projects = data.projects;
+    });
 
-    $scope.loadProject = function (project) {
-        $scope.project = project;
-        $scope.loading = false;
+    return;
+
+    $scope.$on('project_update', function (event, data) {
+        if ($scope.project && data.project.name === $scope.project.name) {
+            $scope.project = data.project;
+        }
+    });
+
+    $scope.loadProject = function () {
         $scope.run.projectName = project.name;
         $location.search('project', project.name);
-        $scope.run.features = {};
-        $scope.run.properties = {};
         for (i in project.properties) {
-            $scope.run.properties[project.properties[i].name] = project.properties[i].default;
+            if (!$scope.run.properties[project.properties[i].name]) {
+                $scope.run.properties[project.properties[i].name] = project.properties[i].default;
+            }
         }
     };
 
     $scope.loadProjectFromName = function (name) {
-        $scope.loading = true;
         ProjectList.get(name, function (project) {
             $scope.loading = false;
             $scope.loadProject(project);
@@ -67,4 +70,4 @@ blApp.controller('RunCreateCtrl', ['$scope', '$location', '$routeParams', 'Menu'
 
         $scope.disabled = true;
     };
-}]);
+});

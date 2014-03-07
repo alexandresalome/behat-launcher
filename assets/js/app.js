@@ -1,12 +1,10 @@
 var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'ngSanitize', 'LocalStorageModule', 'pascalprecht.translate']);
 
-blApp.config(['$translateProvider', function ($translateProvider) {
+blApp.config(function ($translateProvider, $routeProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
+
     $translateProvider.useMessageFormatInterpolation();
     $translateProvider.useUrlLoader('/translations');
-}]);
-
-blApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
 
     $routeProvider
         .when('/', {controller: "ProjectListCtrl", templateUrl: "/templates/project_list.html"})
@@ -15,12 +13,12 @@ blApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
         .when('/create', {controller: "RunCreateCtrl", templateUrl: "/templates/run_create.html", reloadOnSearch: false})
         .when('/output/:id', {controller: "OutputFileShowCtrl", templateUrl: "/templates/outputFile_show.html"})
     ;
-}]);
+});
 
-blApp.run(['localStorageService', '$translate', function (localStorageService, $translate) {
+blApp.run(function (localStorageService, $translate) {
     var locale = localStorageService.get('locale');
     if (!locale) {
         locale = 'en';
     }
     $translate.use(locale);
-}]);
+});

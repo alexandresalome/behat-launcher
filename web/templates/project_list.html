@@ -1,9 +1,11 @@
-<div ng-show="loading" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
-<div ng-repeat="project in projects" data-project="{{ project.name }}">
-    <hr ng-show="!$first" />
-    <h2>
-        {{ project.name }}
-        <a class="btn btn-sm btn-default" ng-href="/create?project={{ project.name }}"><span class="glyphicon glyphicon-plus"></span> {{ 'button.create_run'|translate }}</a>
-    </h2>
-    <div ng-repeat="runs in [project.runs]" ng-include="'/templates/_run_list.html'" />
+<div ng-init="hide_project_name = true">
+    <div ng-show="projects === null" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
+    <div ng-show="projects !== null" ng-repeat="project in projects" data-project="{{ project.name }}">
+        <hr ng-show="!$first" />
+        <h2>
+            {{ project.name }}
+            <a class="btn btn-sm btn-default" ng-href="/create?project={{ project.name }}"><span class="glyphicon glyphicon-plus"></span> {{ 'button.create_run'|translate }}</a>
+        </h2>
+        <div ng-repeat="runs in [project.runs]" ng-include="'/templates/_run_list.html'" />
+    </div>
 </div>

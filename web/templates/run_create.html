@@ -1,5 +1,5 @@
-<div ng-show="loading" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
-<div ng-hide="loading">
+<div ng-show="projects === null" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
+<div ng-hide="projects === null">
     <h1>
         {{ 'title.project_create'|translate }}
         <select id="run_project_name" ng-change="loadProjectFromName(projectListChoice.name)" name="run[project_name]" ng-model="projectListChoice" ng-options="project as project.name for project in projects"></select>

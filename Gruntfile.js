@@ -23,7 +23,8 @@ module.exports = function(grunt) {
         'assets/js/debt.js',
         'assets/js/app.js',
         'assets/js/controller/*.js',
-        'assets/js/model/*.js'
+        'assets/js/directive/*.js',
+        'assets/js/factory/*.js'
     ];
 
     grunt.initConfig({
