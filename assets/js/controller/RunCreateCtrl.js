@@ -1,9 +1,11 @@
 blApp.controller('RunCreateCtrl', function ($scope, $location, $routeParams, Menu, Run, ProjectList) {
     Menu.setNameActive('create');
 
-    $scope.projects    = ProjectList.getList();
-    $scope.project     = null;
-    $scope.projectName = null;
+    $scope.projects          = ProjectList.getList();
+    $scope.projectListChoice = null;
+    $scope.selectedFeatures  = {};
+    $scope.project           = null;
+    $scope.projectName       = null;
 
     $scope.run = new Run({
         projectName: $scope.projectName
@@ -30,27 +32,29 @@ blApp.controller('RunCreateCtrl', function ($scope, $location, $routeParams, Men
         }
     };
 
-    $scope.syncProjectList = function (name) {
+    $scope.syncProjectList = function () {
         for (i in $scope.projects) {
-            if ($scope.projects[i].name == name) {
+            if ($scope.projects[i].name == $scope.projectName) {
                 $scope.projectListChoice = $scope.projects[i];
             }
         }
     };
 
     $scope.setProjectName = function (name) {
-        $scope.projectName = name;
-        $scope.project = ProjectList.get(name);
-        $scope.syncProjectList(name);
+        $scope.run.projectName = name;
+        $scope.projectName     = name;
+        $scope.project         = ProjectList.get(name);
+        $scope.syncProjectList();
         $location.search('project', name);
     };
 
     $scope.submit = function () {
-        // convert array of booleans to array of strings
-        var features = $scope.run.features;
         $scope.run.features = [];
-        for (i in features) {
-            $scope.run.features.push(i);
+
+        for (k in $scope.selectedFeatures) {
+            if ($scope.selectedFeatures[k] && $scope.selectedFeatures[k]) {
+                $scope.run.features.push(k);
+            }
         }
 
         if ($scope.run.features.length == 0) {
@@ -59,12 +63,11 @@ blApp.controller('RunCreateCtrl', function ($scope, $location, $routeParams, Men
             return;
         }
 
-        var run = new Run($scope.run);
-        run.$save(function (msg, headers) {
-            $location.path('/runs/' + msg.id);
-        });
-
         $scope.disabled = true;
+
+        $scope.run.save(function (run) {
+            $location.url('/runs/' + run.id);
+        });
     };
 
     if ($routeParams.project) {
