@@ -4,7 +4,7 @@
     </div>
     <div class="panel-body hide">
         <div ng-switch on="entry.type" ng-repeat="entry in directory.entries">
-            <p ng-switch-when="file"><label><input type="checkbox" data-path="{{ entry.path }}" ng-model="run.features[entry.path]" /> {{ entry.name }}</label></p>
+            <p ng-switch-when="file"><label><input type="checkbox" data-path="{{ entry.path }}" ng-model="selectedFeatures[entry.path]" /> {{ entry.name }}</label></p>
             <div ng-switch-when="directory">
                 <div ng-repeat="directory in [entry]" ng-include="'/templates/_feature_directory.html'"></div>
             </div>

@@ -1,38 +1,28 @@
-blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location', '$timeout', '$window', 'Menu', 'Run', function ($scope, $routeParams, $http, $location, $timeout, $window, Menu, Run) {
+blApp.controller('RunShowCtrl', function ($scope, $routeParams, $http, $location, $timeout, $window, Menu, Run) {
     Menu.setCustomActive({
         path: '/runs/' + $routeParams.id,
         label: 'Run #' + $routeParams.id
     });
 
-    $scope.loading = true;
+    $scope.run = new Run({id: $routeParams.id});
+    $scope.run.setAutorefresh(true);
 
-    $scope.refresh = function(callback) {
-        Run.get({id: $routeParams.id}).$promise.then(function (run) {
-            var suffix = '';
-            if (run.title) {
-                suffix += ': ' + run.title;
-            }
-            Menu.setCustomActive({
-                path: '/runs/' + $routeParams.id,
-                label: 'Run #' + $routeParams.id + suffix
-            });
-            $scope.loading  = false;
-            $scope.run = run;
-            callback();
+    $scope.$on('run_update', function (event, data) {
+        $scope.run = data.run;
+
+        var suffix = '';
+        if (run.title) {
+            suffix += ': ' + run.title;
+        }
+        Menu.setCustomActive({
+            path: '/runs/' + $routeParams.id,
+            label: 'Run #' + $routeParams.id + suffix
         });
-    };
-
-    $scope.refreshAndTimeout = function () {
-        $scope.refresh(function () {
-            $scope.timeout = $timeout($scope.refreshAndTimeout, 2000);
-        });
-    };
-
-    $scope.$on('$destroy', function() {
-        $scope.timeout && $timeout.cancel($scope.timeout);
     });
 
-    $scope.refreshAndTimeout();
+    $scope.$on('$destroy', function() {
+        $scope.run.setAutorefresh(false);
+    });
 
     $scope.goBack = function () {
          $window.history.back();
@@ -61,4 +51,4 @@ blApp.controller('RunShowCtrl', ['$scope', '$routeParams', '$http', '$location',
             })
         ;
     };
-}]);
+});
