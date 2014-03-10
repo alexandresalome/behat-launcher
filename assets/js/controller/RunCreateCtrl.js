@@ -1,24 +1,28 @@
 blApp.controller('RunCreateCtrl', function ($scope, $location, $routeParams, Menu, Run, ProjectList) {
     Menu.setNameActive('create');
 
-    $scope.projects = ProjectList.getList();
-    $scope.run = new Run();
+    $scope.projects    = ProjectList.getList();
+    $scope.project     = null;
+    $scope.projectName = null;
+
+    $scope.run = new Run({
+        projectName: $scope.projectName
+    });
 
     $scope.$on('projectlist_update', function (event, data) {
         $scope.projects = data.projects;
+        $scope.syncProjectList($scope.projectName);
     });
 
-    return;
-
     $scope.$on('project_update', function (event, data) {
-        if ($scope.project && data.project.name === $scope.project.name) {
+        if (data.project.name === $scope.projectName) {
             $scope.project = data.project;
         }
     });
 
-    $scope.loadProject = function () {
-        $scope.run.projectName = project.name;
-        $location.search('project', project.name);
+    $scope.hydrateRunFromProject = function () {
+        $scope.run.projectName = $scope.project.name;
+        $location.search('project', $scope.project.name);
         for (i in project.properties) {
             if (!$scope.run.properties[project.properties[i].name]) {
                 $scope.run.properties[project.properties[i].name] = project.properties[i].default;
@@ -26,29 +30,21 @@ blApp.controller('RunCreateCtrl', function ($scope, $location, $routeParams, Men
         }
     };
 
-    $scope.loadProjectFromName = function (name) {
-        ProjectList.get(name, function (project) {
-            $scope.loading = false;
-            $scope.loadProject(project);
-        });
+    $scope.syncProjectList = function (name) {
+        for (i in $scope.projects) {
+            if ($scope.projects[i].name == name) {
+                $scope.projectListChoice = $scope.projects[i];
+            }
+        }
     };
 
-    ProjectList.getList(function (projects) {
-        $scope.projects = projects;
-        if ($routeParams.project) {
-            for (k in projects) {
-                if (projects[k].name == $routeParams.project) {
-                    $scope.projectListChoice = projects[k];
-                }
-            }
-        } else {
-            $scope.projectListChoice = projects[0];
-        }
+    $scope.setProjectName = function (name) {
+        $scope.projectName = name;
+        $scope.project = ProjectList.get(name);
+        $scope.syncProjectList(name);
+        $location.search('project', name);
+    };
 
-        $scope.loadProjectFromName($scope.projectListChoice.name);
-    });
-
-    $scope.disabled = false;
     $scope.submit = function () {
         // convert array of booleans to array of strings
         var features = $scope.run.features;
@@ -70,4 +66,8 @@ blApp.controller('RunCreateCtrl', function ($scope, $location, $routeParams, Men
 
         $scope.disabled = true;
     };
+
+    if ($routeParams.project) {
+        $scope.setProjectName($routeParams.project);
+    }
 });
