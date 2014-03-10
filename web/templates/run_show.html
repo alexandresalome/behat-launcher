@@ -1,5 +1,5 @@
-<div ng-hide="run" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
-<div ng-show="run">
+<div ng-hide="run.status" class="panel panel-info"><div class="panel-heading"><span class="glyphicon glyphicon-time"></span> <strong>{{ 'loading'|translate }}</strong></div></div>
+<div ng-show="run.status">
     <h1>
         <a class="back-icon" href="#" ng-click="goBack()"><span class="glyphicon glyphicon-chevron-left"></span></a>
         #{{ run.id }}<small>
