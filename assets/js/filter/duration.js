@@ -1,4 +1,4 @@
-blApp.filter('duration', ['$translate', function ($translate) {
+blApp.filter('duration', function ($translate) {
     return function (sec) {
         var res = '';
         if (sec > 3600) {
@@ -28,4 +28,4 @@ blApp.filter('duration', ['$translate', function ($translate) {
 
         return res;
     };
-}]);
+});

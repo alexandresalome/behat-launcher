@@ -24,7 +24,8 @@ module.exports = function(grunt) {
         'assets/js/app.js',
         'assets/js/controller/*.js',
         'assets/js/directive/*.js',
-        'assets/js/factory/*.js'
+        'assets/js/factory/*.js',
+        'assets/js/filter/*.js'
     ];
 
     grunt.initConfig({
