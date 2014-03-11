@@ -6,6 +6,7 @@ use Alex\BehatLauncher\Behat\MysqlStorage;
 use Alex\BehatLauncher\Behat\Project;
 use Alex\BehatLauncher\Behat\ProjectList;
 use Alex\BehatLauncher\Form\BehatLauncherExtension;
+use Alex\BehatLauncher\Frontend\TemplateLoader;
 use Alex\BehatLauncher\Twig\DateExtension;
 use Doctrine\DBAL\DriverManager;
 use Silex\Application as BaseApplication;
@@ -99,6 +100,13 @@ class Application extends BaseApplication
 
         $this['workspace'] = $this->share(function ($app) {
             return new Workspace($app['project_list'], $app['run_storage']);
+        });
+
+        $this['template_loader'] = $this->share(function ($app) {
+            $loader = new TemplateLoader();
+            $loader->addDirectory(__DIR__.'/../../../assets/templates');
+
+            return $loader;
         });
 
         $this->extend('twig', function ($twig, $app) {

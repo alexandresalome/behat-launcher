@@ -3,6 +3,7 @@
 namespace Alex\BehatLauncher\Controller;
 
 use Alex\BehatLauncher\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,11 @@ abstract class Controller
     public function getRunStorage()
     {
         return $this->application['run_storage'];
+    }
+
+    public function getTemplateLoader()
+    {
+        return $this->application['template_loader'];
     }
 
     public function serialize($data, array $context = array())
@@ -114,5 +120,10 @@ abstract class Controller
     public function createNotFoundException($message = 'Not Found')
     {
         return new NotFoundHttpException($message);
+    }
+
+    public function jsonEncode($data)
+    {
+        return new JsonResponse($data);
     }
 }

@@ -1,5 +1,40 @@
 var blApp = angular.module('blApp', ['ngRoute', 'ngResource', 'ngSanitize', 'LocalStorageModule', 'pascalprecht.translate']);
 
+blApp.factory('$templateCache', function ($cacheFactory, $http, $injector) {
+    var cache = $cacheFactory('templates');
+    var allTplPromise;
+
+    return {
+        get: function(url) {
+            var fromCache = cache.get(url);
+            if (fromCache) {
+                return fromCache;
+            }
+
+            if (!allTplPromise) {
+                allTplPromise = $http.get('/template').then(function(response) {
+                    for (name in response.data) {
+                        cache.put(name, response.data[name]);
+                    }
+
+                    return response;
+                });
+            }
+
+            return allTplPromise.then(function(response) {
+                return {
+                    status: response.status,
+                    data: cache.get(url)
+                };
+            });
+        },
+
+        put: function(key, value) {
+            cache.put(key, value);
+        }
+    };
+});
+
 blApp.config(function ($translateProvider, $routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 
@@ -7,11 +42,11 @@ blApp.config(function ($translateProvider, $routeProvider, $locationProvider) {
     $translateProvider.useUrlLoader('/translations');
 
     $routeProvider
-        .when('/', {controller: "ProjectListCtrl", templateUrl: "/templates/project_list.html"})
-        .when('/runs', {controller: "RunListCtrl", templateUrl: "/templates/run_list.html"})
-        .when('/runs/:id', {controller: "RunShowCtrl", templateUrl: "/templates/run_show.html"})
-        .when('/create', {controller: "RunCreateCtrl", templateUrl: "/templates/run_create.html", reloadOnSearch: false})
-        .when('/output/:id', {controller: "OutputFileShowCtrl", templateUrl: "/templates/outputFile_show.html"})
+        .when('/', {controller: "ProjectListCtrl", templateUrl: "project_list.html"})
+        .when('/runs', {controller: "RunListCtrl", templateUrl: "run_list.html"})
+        .when('/runs/:id', {controller: "RunShowCtrl", templateUrl: "run_show.html"})
+        .when('/create', {controller: "RunCreateCtrl", templateUrl: "run_create.html", reloadOnSearch: false})
+        .when('/output/:id', {controller: "OutputFileShowCtrl", templateUrl: "outputFile_show.html"})
     ;
 });
 

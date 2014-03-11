@@ -6,6 +6,6 @@
             {{ project.name }}
             <a class="btn btn-sm btn-default" ng-href="/create?project={{ project.name }}"><span class="glyphicon glyphicon-plus"></span> {{ 'button.create_run'|translate }}</a>
         </h2>
-        <div ng-repeat="runs in [project.runs]" ng-include="'/templates/_run_list.html'" />
+        <div ng-repeat="runs in [project.runs]" ng-include="'_run_list.html'" />
     </div>
 </div>
