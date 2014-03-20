@@ -105,6 +105,8 @@ To run tests, Behat-Launcher needs to run jobs in background. Start it using:
     cd /var/www/behat-launcher
     php behat-launcher run
 
+**If you are using Linux**, take a look at `this gist <https://gist.github.com/OwlyCode/9661213>`_ to daemonize it.
+
 This command will execute until you stop it. If you want command to stop after all units are ran, pass the **--stop-on-finish** option:
 
 .. code-block:: bash
