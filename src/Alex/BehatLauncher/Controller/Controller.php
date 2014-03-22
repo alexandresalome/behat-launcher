@@ -80,7 +80,7 @@ abstract class Controller
             throw new BadRequestHttpException(sprintf('Cannot deserialize from format "%s". Expected %s', $format, implode(' or ', $expected)));
         }
 
-        return $this->application['serializer']->deserialize($request->getContent(), 'Alex\BehatLauncher\Behat\Run', $format);
+        return $this->application['serializer']->deserialize($request->getContent(), 'Alex\BehatLauncher\Model\Run', $format);
     }
 
     public function render($template, array $parameters = array())

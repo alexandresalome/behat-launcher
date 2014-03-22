@@ -1,6 +1,6 @@
 <?php
 
-namespace Alex\BehatLauncher\Behat;
+namespace Alex\BehatLauncher\Model;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;

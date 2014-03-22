@@ -1,8 +1,8 @@
 <?php
 
-namespace Alex\BehatLauncher\Tests\Behat;
+namespace Alex\BehatLauncher\Tests\Model;
 
-use Alex\BehatLauncher\Behat\ProjectProperty;
+use Alex\BehatLauncher\Model\ProjectProperty;
 
 class ProjectPropertyTest extends \PHPUnit_Framework_TestCase
 {

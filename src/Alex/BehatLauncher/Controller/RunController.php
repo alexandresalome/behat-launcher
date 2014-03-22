@@ -19,7 +19,7 @@ class RunController extends Controller
 
     public function createAction(Request $request)
     {
-        $run = $this->unserialize('Alex\BehatLauncher\Behat\Run');
+        $run = $this->unserialize('Alex\BehatLauncher\Model\Run');
 
         if (!$this->getProjectList()->get($run->getProjectName())) {
             throw $this->createNotFoundException(sprintf('Project named "%s" not found.', $project));

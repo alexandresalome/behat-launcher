@@ -2,9 +2,9 @@
 
 namespace Alex\BehatLauncher;
 
-use Alex\BehatLauncher\Behat\MysqlStorage;
-use Alex\BehatLauncher\Behat\ProjectList;
-use Alex\BehatLauncher\Behat\RunUnit;
+use Alex\BehatLauncher\Model\RunStorage;
+use Alex\BehatLauncher\Model\ProjectList;
+use Alex\BehatLauncher\Model\RunUnit;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -24,7 +24,7 @@ class Workspace
     /**
      * Instanciates workspace.
      */
-    public function __construct(ProjectList $projectList, MysqlStorage $runStorage)
+    public function __construct(ProjectList $projectList, RunStorage $runStorage)
     {
         $this->projectList = $projectList;
         $this->runStorage = $runStorage;

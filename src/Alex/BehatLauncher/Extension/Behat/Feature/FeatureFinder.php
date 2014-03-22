@@ -1,6 +1,6 @@
 <?php
 
-namespace Alex\BehatLauncher\Behat;
+namespace Alex\BehatLauncher\Extension\Behat\Feature;
 
 use Symfony\Component\Finder\Finder;
 
