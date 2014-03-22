@@ -1,8 +1,8 @@
 <?php
 
 use Alex\BehatLauncher\Application;
-use Alex\BehatLauncher\Behat\Run;
-use Alex\BehatLauncher\Behat\RunUnit;
+use Alex\BehatLauncher\Model\Run;
+use Alex\BehatLauncher\Model\RunUnit;
 use Behat\Behat\Context\Step\When;
 use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\Process\ProcessBuilder;

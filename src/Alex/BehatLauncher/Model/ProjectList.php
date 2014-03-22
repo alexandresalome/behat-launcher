@@ -1,6 +1,6 @@
 <?php
 
-namespace Alex\BehatLauncher\Behat;
+namespace Alex\BehatLauncher\Model;
 
 /**
  * A collection of projects.

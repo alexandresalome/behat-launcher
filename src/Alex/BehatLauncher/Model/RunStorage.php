@@ -1,17 +1,11 @@
 <?php
 
-namespace Alex\BehatLauncher\Behat;
+namespace Alex\BehatLauncher\Model;
 
-use Alex\BehatLauncher\Behat\LazyRunUnitList;
-use Alex\BehatLauncher\Behat\OutputFile;
-use Alex\BehatLauncher\Behat\Project;
-use Alex\BehatLauncher\Behat\Run;
-use Alex\BehatLauncher\Behat\RunUnit;
-use Alex\BehatLauncher\Behat\RunUnitList;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
-class MysqlStorage
+class RunStorage
 {
     private $connection;
     private $filesDir;

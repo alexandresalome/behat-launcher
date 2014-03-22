@@ -2,11 +2,11 @@
 
 namespace Alex\BehatLauncher;
 
-use Alex\BehatLauncher\Behat\MysqlStorage;
-use Alex\BehatLauncher\Behat\Project;
-use Alex\BehatLauncher\Behat\ProjectList;
 use Alex\BehatLauncher\Form\BehatLauncherExtension;
 use Alex\BehatLauncher\Frontend\TemplateLoader;
+use Alex\BehatLauncher\Model\Project;
+use Alex\BehatLauncher\Model\ProjectList;
+use Alex\BehatLauncher\Model\RunStorage;
 use Alex\BehatLauncher\Twig\DateExtension;
 use Doctrine\DBAL\DriverManager;
 use Silex\Application as BaseApplication;
@@ -95,7 +95,7 @@ class Application extends BaseApplication
         });
 
         $this['run_storage'] = $this->share(function ($app) {
-            return new MysqlStorage($app['db'], __DIR__.'/../../../data/output_files');
+            return new RunStorage($app['db'], __DIR__.'/../../../data/output_files');
         });
 
         $this['workspace'] = $this->share(function ($app) {

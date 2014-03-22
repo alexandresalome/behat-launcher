@@ -1,9 +1,9 @@
 <?php
 
-namespace Alex\BehatLauncher\Behat;
+namespace Alex\BehatLauncher\Model;
 
-use Alex\BehatLauncher\Behat\MysqlStorage;
-use Alex\BehatLauncher\Behat\ProjectProperty;
+use Alex\BehatLauncher\Extension\Behat\Feature\FeatureDirectory;
+use Alex\BehatLauncher\Extension\Behat\Feature\FeatureFinder;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

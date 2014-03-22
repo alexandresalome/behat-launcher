@@ -3,7 +3,7 @@
 namespace Alex\BehatLauncher\Controller;
 
 use Alex\BehatLauncher\Application;
-use Alex\BehatLauncher\Behat\OutputFile;
+use Alex\BehatLauncher\Model\OutputFile;
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 
 class OutputFileController extends Controller
