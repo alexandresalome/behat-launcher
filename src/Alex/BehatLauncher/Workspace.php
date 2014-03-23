@@ -5,6 +5,7 @@ namespace Alex\BehatLauncher;
 use Alex\BehatLauncher\Model\RunStorage;
 use Alex\BehatLauncher\Model\ProjectList;
 use Alex\BehatLauncher\Model\RunUnit;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -12,8 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Workspace
 {
-    private $projectList;
-    private $runStorage;
+    private $em;
     private $output;
 
     /**
@@ -24,10 +24,9 @@ class Workspace
     /**
      * Instanciates workspace.
      */
-    public function __construct(ProjectList $projectList, RunStorage $runStorage)
+    public function __construct(EntityManager $em)
     {
-        $this->projectList = $projectList;
-        $this->runStorage = $runStorage;
+        $this->em = $em;
     }
 
     /**

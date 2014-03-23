@@ -1,0 +1,26 @@
+<?php
+
+namespace Alex\BehatLauncher\Extension\Core\Controller;
+
+use Alex\BehatLauncher\Application;
+use Alex\BehatLauncher\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+
+class ProjectController extends AbstractController
+{
+    public static function route(Application $app)
+    {
+        $app->get('/projects', 'controller.project:listAction')->bind('project_list');
+        $app->get('/projects/{name}', 'controller.project:showAction')->bind('project_show');
+    }
+
+    public function listAction(Request $request)
+    {
+        return $this->serialize($this->getProjectList()->getAll(), array('project_runs' => true));
+    }
+
+    public function showAction(Request $request, $name)
+    {
+        return $this->serialize($this->getProjectList()->get($name), array('project_details' => true, 'project_runs' => true));
+    }
+}

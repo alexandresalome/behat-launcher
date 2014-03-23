@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="vendor/autoload.php"
+         bootstrap="init.php"
 >
     <testsuites>
         <testsuite name="Behat Launcher test suite">

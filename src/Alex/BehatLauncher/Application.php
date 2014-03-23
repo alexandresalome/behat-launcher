@@ -2,13 +2,11 @@
 
 namespace Alex\BehatLauncher;
 
-use Alex\BehatLauncher\Form\BehatLauncherExtension;
-use Alex\BehatLauncher\Frontend\TemplateLoader;
-use Alex\BehatLauncher\Model\Project;
-use Alex\BehatLauncher\Model\ProjectList;
-use Alex\BehatLauncher\Model\RunStorage;
-use Alex\BehatLauncher\Twig\DateExtension;
+use Alex\BehatLauncher\Extension\ExtensionInterface;
+use Alex\BehatLauncher\Extension\ExtensionManager;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Silex\Application as BaseApplication;
 use Silex\Provider\FormServiceProvider;
 use Silex\Provider\SerializerServiceProvider;
@@ -20,8 +18,6 @@ use Silex\Provider\WebProfilerServiceProvider;
 
 class Application extends BaseApplication
 {
-    const VERSION = 'dev-master';
-
     public function __construct(array $values = array())
     {
         parent::__construct($values);
@@ -41,27 +37,18 @@ class Application extends BaseApplication
         return $this;
     }
 
-    public function createProject($name, $path)
-    {
-        $project = new Project();
-        $project
-            ->setName($name)
-            ->setPath($path)
-        ;
-
-        $this['project_list']->add($project);
-
-        return $project;
-    }
-
     /**
-     * Returns the workspace.
+     * Adds an extension to Behat-Launcher application.
      *
-     * @return Workspace
+     * @param ExtensionInterface $extension
+     *
+     * @return Application
      */
-    public function getWorkspace()
+    public function addExtension(ExtensionInterface $extension)
     {
-        return $this['workspace'];
+        $this['extensions']->add($extension);
+
+        return $this;
     }
 
     private function registerProviders()
@@ -80,7 +67,7 @@ class Application extends BaseApplication
 
     private function registerServices()
     {
-        $this['db'] = $this->share(function ($app) {
+        $this['connection'] = $this->share(function ($app) {
             return DriverManager::getConnection(array(
                 'driver'   => 'pdo_mysql',
                 'host'     => $app['db_host'],
@@ -90,12 +77,10 @@ class Application extends BaseApplication
             ));
         });
 
-        $this['project_list'] = $this->share(function () {
-            return new ProjectList();
-        });
+        $this['em'] = $this->share(function ($app) {
+            $config = Setup::createAnnotationMetadataConfiguration($app['extensions']->getModelPaths(), true, null, null, false);
 
-        $this['run_storage'] = $this->share(function ($app) {
-            return new RunStorage($app['db'], __DIR__.'/../../../data/output_files');
+            return EntityManager::create($app['connection'], $config);
         });
 
         $this['workspace'] = $this->share(function ($app) {
@@ -116,24 +101,19 @@ class Application extends BaseApplication
             return $twig;
         });
 
-        $this->extend('form.extensions', function ($extensions, $app) {
-            $extensions[] = new BehatLauncherExtension();
+        $this['extensions'] = $this->share(function ($app) {
+            $em = new ExtensionManager();
+            $em->addExtension(new Extension\Core\CoreExtension());
+            $em->addExtension(new Extension\Behat\BehatExtension());
 
-            return $extensions;
+            return $em;
         });
     }
 
     private function registerControllers()
     {
-        $controllers = array(
-            'outputFile' => 'Alex\BehatLauncher\Controller\OutputFileController',
-            'project'    => 'Alex\BehatLauncher\Controller\ProjectController',
-            'run'        => 'Alex\BehatLauncher\Controller\RunController',
-            'frontend'   => 'Alex\BehatLauncher\Controller\FrontendController',
-        );
-
         // Controllers as service
-        foreach ($controllers as $id => $class) {
+        foreach ($this['extensions']->getControllers() as $id => $class) {
             $this['controller.'.$id] = $this->share(function($app) use ($class) {
                 return new $class($app);
             });

@@ -1,7 +1,9 @@
+# Configuration for stage1.io
 build:
     - "composer install --no-interaction --ansi --no-progress"
     - "cp config.php.dist config.php"
     - "php behat-launcher init-db"
     - "php behat-launcher run &"
 writable:
-    - data
+    - app/cache
+    - app/data

@@ -42,7 +42,7 @@ class FeatureContext extends AbstractWebDriverContext
 
         $content = file_get_contents($configFile);
 
-        $path = realpath(__DIR__.'/../../test_projects/'.$name);
+        $path = realpath(__DIR__.'/test_projects/'.$name);
         if (!$path) {
             throw new \InvalidArgumentException(sprintf('Found no test project named "%s".', $name));
         }

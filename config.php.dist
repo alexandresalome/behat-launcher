@@ -6,18 +6,3 @@
 
 // MANDATORY: Configure database
 $app->configureMysql('localhost', 'behat_launcher', 'root', '');
-
-// RECOMMENDED: Simple project creation
-// $app->createProject('Bros', '/var/www/bros');
-
-// OPTIONAL: Advanced project configuration
-// $app->createProject('Gitonomy', '/var/www/gitonomy')
-//     ->setRunnerCount(3)              // Changes number of processes to run concurrently.
-//     ->setBehatBin('bin/behat')       // Path where behat is located
-
-// Override behat.yml
-//     ->createProperty('Browser')
-//         ->setConfig('default.extensions.WebDriver\Behat\WebDriverExtension\Extension.browser')
-//         ->setDefault('chrome')
-//         ->setChoices(array('firefox' => 'Mozilla Firefox', 'chrome' => 'Google Chrome'))
-//     ->endProperty()
