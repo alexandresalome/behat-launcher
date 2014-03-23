@@ -25,31 +25,10 @@ Then, register it in the application:
 
     $app->addExtension(new DemoExtension());
 
-Access web application for futher installation.
+Create new routes
+-----------------
 
-Register routes
----------------
-
-A Behat-Launcher extension can register routes to the application. First, in
-your extension class, declare controller:
-
-.. code-block:: php
-
-    # src/Acme/BehatLauncher/Extensions/Demo/Controller/DemoExtension.php
-
-    # ...
-
-    class DemoExtension extends AbstractExtension
-    {
-        public function getControllers()
-        {
-            return array(
-                'test' => 'Acme\BehatLauncher\Extensions\Demo\Controller\TestController',
-            );
-        }
-    }
-
-Then, create a controller class in *Controller/* folder:
+An extension can register routes to the application:
 
 .. code-block:: php
 
@@ -61,7 +40,8 @@ Then, create a controller class in *Controller/* folder:
     {
         public static function route(Application $app)
         {
-            $app->get('/test', 'controller.test:indexAction')->bind('test_index');
+            $id = self::id();
+            $app->get('/test', $id.':indexAction')->bind('test_index');
         }
 
         public function indexAction()
@@ -69,6 +49,16 @@ Then, create a controller class in *Controller/* folder:
             return $this->render('some/template.html.twig');
         }
     }
+
+Add your views to twig
+----------------------
+
+Create a folder named *Resources/views* and they'll be automatically available to Twig.
+
+Add your templates to angular
+-----------------------------
+
+Create a folder named *Resources/templates* and they'll be automatically available to Angular.
 
 Register model entities
 -----------------------

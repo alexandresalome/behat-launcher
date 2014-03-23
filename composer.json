@@ -5,33 +5,34 @@
 
     "autoload": {
         "psr-0": {
-            "Alex\\BehatLauncher": "src"
+            "BehatLauncher": "src"
         }
     },
 
     "require": {
-        "php"                 :    ">=5.5",
-        "silex/silex"         :    "~1.1",
-        "silex/web-profiler"  :    "~1.0",
-        "symfony/console"     :    "~2.4",
-        "symfony/form"        :    "~2.4",
-        "symfony/locale"      :    "~2.4",
-        "symfony/translation" :    "~2.4",
-        "symfony/twig-bridge" :    "~2.4",
-        "symfony/validator"   :    "~2.4",
-        "symfony/process"     :    "~2.4",
-        "symfony/serializer"  :    "~2.4",
-        "twig/twig"           :    "~1.15",
-        "doctrine/dbal"       :    "~2.4",
-        "doctrine/orm"        :    "~2.4",
+        "php"                    : ">=5.5",
+        "silex/silex"            : "~1.1",
+        "silex/web-profiler"     : "~1.0",
+        "symfony/console"        : "~2.4",
+        "symfony/form"           : "~2.4",
+        "symfony/locale"         : "~2.4",
+        "symfony/translation"    : "~2.4",
+        "symfony/twig-bridge"    : "~2.4",
+        "symfony/validator"      : "~2.4",
+        "symfony/process"        : "~2.4",
+        "symfony/serializer"     : "~2.4",
+        "kriswallsmith/assetic"  : "~1.1",
+        "twig/twig"              : "~1.15",
+        "doctrine/dbal"          : "~2.4",
+        "doctrine/orm"           : "~2.4",
         "sensiolabs/ansi-to-html": "~1.0"
     },
 
     "require-dev": {
-        "behat/behat": "~2.4",
-        "phpunit/phpunit": "~3.7",
+        "behat/behat"                  : "~2.4",
+        "phpunit/phpunit"              : "~3.7",
         "alexandresalome/php-webdriver": "~0.6",
-        "alom/journal-extension": "~0.2"
+        "alom/journal-extension":        "~0.2"
     },
 
     "config": {

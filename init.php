@@ -24,8 +24,7 @@ Doctrine\Common\Annotations\AnnotationRegistry::registerLoader(array($loader, 'l
 // enable debug
 Symfony\Component\Debug\Debug::enable();
 
-$app = new Alex\BehatLauncher\Application();
+$app = new BehatLauncher\Application();
 require_once __DIR__.'/config.php';
 
-$console = new Alex\BehatLauncher\Console($app);
-$console->run();
+return $app;
