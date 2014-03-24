@@ -1,9 +1,10 @@
-{% set min = app.request.query.get('min', 1) %}
 <!DOCTYPE html>
-<html ng-app="behatLauncher">
+<html ng-app="blApp">
     <head>
         <title>Behat Launcher</title>
-        <link rel="stylesheet" href="/css/all{{ min|default(true) ? '.min' : '' }}.css" />
+        {% stylesheets output="css/all.css" "@css" %}
+            <link rel="stylesheet" href="/{{ asset_url }}" />
+        {% endstylesheets %}
     </head>
     <body class="behat-launcher">
         <div ng-include="'_menu.html'"></div>
@@ -12,6 +13,8 @@
             <footer ng-bind-html="'<hr />' + ('footer'|translate)">
             </footer>
         </div>
-        <script type="text/javascript" src="/js/all{{ min|default(true) ? '.min' : '' }}.js"></script>
+        {% javascripts output="js/all.js" "@js" %}
+            <script type="text/javascript" src="/{{ asset_url }}"></script>
+        {% endjavascripts %}
     </body>
 </html>

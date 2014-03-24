@@ -29,5 +29,7 @@ interface ExtensionInterface
 
     public function getAngularTemplatesDir();
 
-    public function getResourcesDir();
+    public function getJavascriptFiles();
+
+    public function getStylesheetFiles();
 }

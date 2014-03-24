@@ -25,7 +25,8 @@
         "twig/twig"              : "~1.15",
         "doctrine/dbal"          : "~2.4",
         "doctrine/orm"           : "~2.4",
-        "sensiolabs/ansi-to-html": "~1.0"
+        "sensiolabs/ansi-to-html": "~1.0",
+        "leafo/lessphp"          : "~0.4"
     },
 
     "require-dev": {

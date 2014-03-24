@@ -39,7 +39,5 @@ before_script:
     - npm install -g bower
     - bower install
 
-    # Grunt
-    - npm install -g grunt-cli
+    # NPM
     - npm install
-    - grunt

@@ -93,18 +93,23 @@ class ExtensionManager
         return $dirs;
     }
 
-    public function getResourcesDirs()
+    public function getJavascriptFiles()
     {
-        $dirs = array();
+        $files = array();
         foreach ($this->extensions as $extension) {
-            $dir = $extension->getResourcesDir();
-            if (!$dir) {
-                continue;
-            }
-
-            $dirs[] = $dir;
+            $files = array_merge($files, $extension->getJavascriptFiles());
         }
 
-        return $dirs;
+        return $files;
+    }
+
+    public function getStylesheetFiles()
+    {
+        $files = array();
+        foreach ($this->extensions as $extension) {
+            $files = array_merge($files, $extension->getStylesheetFiles());
+        }
+
+        return $files;
     }
 }

@@ -14,12 +14,14 @@ class Application extends BaseApplication
     /**
      * Constructs the application
      */
-    public function __construct()
+    public function __construct($debug = false)
     {
         parent::__construct(array(
-            'debug'     => true,
+            'debug'     => $debug,
+            'root_dir'  => __DIR__.'/../..',
+            'web_dir'   => __DIR__.'/../../web',
             'data_dir'  => __DIR__.'/../../data',
-            'cache_dir' => __DIR__.'/../../data/cache',
+            'cache_dir' => __DIR__.'/../../data/cache'.($debug ? '_dev' : ''),
         ));
 
         $this->registerProviders();
@@ -77,13 +79,17 @@ class Application extends BaseApplication
                 return $app['extensions']->getTwigTemplatesDirs();
             }),
             'debug'        => $this['debug'],
-            'twig.options' => array('cache' => $this['cache_dir'].'/twig'),
+            'twig.options' => array(
+                'cache' => $this['cache_dir'].'/twig',
+                'strict_variables' => $this['debug'],
+            ),
         ));
 
         // behat-launcher
         $this->register(new ServiceProvider\BehatLauncherProvider());
         $this->register(new ServiceProvider\ConsoleProvider());
         $this->register(new ServiceProvider\DoctrineProvider());
+        $this->register(new ServiceProvider\AsseticProvider());
     }
 
     private function registerControllers()

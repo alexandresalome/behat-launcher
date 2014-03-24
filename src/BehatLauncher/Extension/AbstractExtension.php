@@ -106,6 +106,37 @@ abstract class AbstractExtension implements ExtensionInterface
     {
     }
 
+    public function getJavascriptFiles()
+    {
+        if (!is_dir($dir = $this->getDir().'/Resources/js')) {
+            return array();
+        }
+
+        $files = array();
+
+        foreach (Finder::create()->in($dir)->files() as $file) {
+            $files[] = $file->getPathname();
+        }
+
+        return $files;
+    }
+
+    public function getStylesheetFiles()
+    {
+        if (!is_dir($dir = $this->getDir().'/Resources/less')) {
+            return array();
+        }
+
+        $files = array();
+
+        foreach (Finder::create()->in($dir)->files() as $file) {
+            $files[] = $file->getPathname();
+        }
+
+
+        return $files;
+    }
+
     private function getDir()
     {
         $refl = new \ReflectionClass($this);

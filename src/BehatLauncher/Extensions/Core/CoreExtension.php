@@ -22,18 +22,11 @@ class CoreExtension extends AbstractExtension
             return $loader;
         });
 
-        $app->extend('twig', function ($twig, $app) {
+        $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
             $twig->addExtension(new DateExtension($app['translator']));
             $twig->addExtension(new \Twig_Extension_StringLoader());
 
             return $twig;
-        });
-
-        $app['assets_manager'] = $app->share(function ($app) {
-            $am = new AssetsManager();
-            $am->addResourcesDirs($app['extensions']->getResourcesDirs());
-
-            return $am;
-        });
+        }));
     }
 }
