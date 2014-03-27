@@ -8,4 +8,12 @@
         </h2>
         <div ng-repeat="runs in [project.runs]" ng-include="'_run_list.html'" />
     </div>
+    <div ng-show="projects.length === 0">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h2>No project found</h2>
+                <p><a class="btn btn-primary" ng-href="/create-project">Create a new project</a>.</p>
+            </div>
+        </div>
+    </div>
 </div>

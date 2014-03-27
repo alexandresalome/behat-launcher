@@ -14,25 +14,22 @@ class Application extends BaseApplication
     /**
      * Constructs the application
      */
-    public function __construct($debug = false)
+    public function __construct()
     {
         parent::__construct(array(
-            'debug'     => $debug,
+            'debug'     => true,
             'root_dir'  => __DIR__.'/../..',
             'web_dir'   => __DIR__.'/../../web',
             'data_dir'  => __DIR__.'/../../data',
-            'cache_dir' => __DIR__.'/../../data/cache'.($debug ? '_dev' : ''),
+            'cache_dir' => __DIR__.'/../../data/cache',
         ));
 
         $this->registerProviders();
 
         $this->addExtension(new Extensions\Core\CoreExtension());
         $this->addExtension(new Extensions\Behat\BehatExtension());
-    }
 
-    public function boot()
-    {
-        $this->registerControllers();
+        $this->get('/{any}', 'controller.frontend:showAction')->assert('any', '.*')->bind('fallback');
     }
 
     /**
@@ -76,7 +73,7 @@ class Application extends BaseApplication
         $this->register(new SilexProvider\SerializerServiceProvider());
         $this->register(new SilexProvider\TwigServiceProvider(), array(
             'twig.path'    => $this->share(function ($app) {
-                return $app['extensions']->getTwigTemplatesDirs();
+                return $app['extensions']->getResourceWorkspace()->getDirectories('views');
             }),
             'debug'        => $this['debug'],
             'twig.options' => array(
@@ -90,17 +87,5 @@ class Application extends BaseApplication
         $this->register(new ServiceProvider\ConsoleProvider());
         $this->register(new ServiceProvider\DoctrineProvider());
         $this->register(new ServiceProvider\AsseticProvider());
-    }
-
-    private function registerControllers()
-    {
-        foreach ($this['extensions']->getControllers() as $id => $class) {
-            $this['controller.'.$id] = $this->share(function($app) use ($class) {
-                return new $class($app);
-            });
-
-            call_user_func($class.'::route', $this);
-        }
-
     }
 }

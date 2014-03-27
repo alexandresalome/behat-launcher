@@ -38,7 +38,7 @@ class AsseticProvider implements ServiceProviderInterface
             $am = $app['assetic.lazy_asset_manager'];
 
             // enable loading assets from twig templates
-            $finder = Finder::create()->in($app['extensions']->getTwigTemplatesDirs())->files();
+            $finder = Finder::create()->in($app['extensions']->getResourceWorkspace()->getDirectories('views'))->files();
             foreach ($finder as $file) {
                 $resource = new TwigResource($app['twig']->getLoader(), $file->getRelativePathname());
                 $am->addResource($resource, 'twig');
@@ -98,8 +98,13 @@ class AsseticProvider implements ServiceProviderInterface
                 $app['root_dir'].'/src/BehatLauncher/Resources/js/app.js',
             );
 
+            $extensionFiles = $app['extensions']
+                ->getResourceWorkspace()
+                ->getMergedFiles('/^js\/.*\.js$/')
+            ;
+
             $coll = new AssetCollection();
-            foreach (array_merge($defaultFiles, $app['extensions']->getJavascriptFiles()) as $file) {
+            foreach (array_merge($defaultFiles, $extensionFiles) as $file) {
                 $coll->add(new AssetCache(new FileAsset($file), $app['assetic.cache']));
             }
 
@@ -111,8 +116,13 @@ class AsseticProvider implements ServiceProviderInterface
             $bower = $app['root_dir'].'/bower_components/';
             $defaultFiles = array($bower.'bootstrap/dist/css/bootstrap.css');
 
+            $extensionFiles = $app['extensions']
+                ->getResourceWorkspace()
+                ->getMergedFiles('/^less\/.*\.less$/')
+            ;
+
             $coll = new AssetCollection();
-            foreach (array_merge($defaultFiles, $app['extensions']->getStylesheetFiles()) as $file) {
+            foreach (array_merge($defaultFiles, $extensionFiles) as $file) {
                 $coll->add(new AssetCache(new FileAsset($file), $app['assetic.cache']));
             }
 

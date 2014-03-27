@@ -7,29 +7,21 @@ use BehatLauncher\Application;
 interface ExtensionInterface
 {
     /**
-     * Returns path to Doctrine entities.
-     *
-     * @return string|false false if no directory
-     */
-    public function getModelPath();
-
-    /**
-     * Returns list of controller classes.
-     *
-     * @return string[]
-     */
-    public function getControllers();
-
-    /**
      * Register services in the application
      */
     public function register(Application $app);
 
-    public function getTwigTemplatesDir();
+    /**
+     * Returns path on disk to the extension, containing classes and resources.
+     *
+     * @return string
+     */
+    public function getDirectory();
 
-    public function getAngularTemplatesDir();
-
-    public function getJavascriptFiles();
-
-    public function getStylesheetFiles();
+    /**
+     * Returns extension namespace.
+     *
+     * @return string
+     */
+    public function getNamespace();
 }

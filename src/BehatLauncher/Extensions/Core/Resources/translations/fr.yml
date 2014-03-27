@@ -7,7 +7,8 @@ loading: "Chargement"
 
 # Titles
 title.project_list: "Liste des projets"
-title.project_create: "Nouveau run pour"
+title.project_create: "Nouveau projet"
+title.run_create: "Nouveau run pour"
 title.run_list: "{count, select, 0{Aucun run trouvé} 1{Dernier run} other{Derniers {count} runs}}"
 
 # Buttons
@@ -40,6 +41,9 @@ form.run.title: "Titre"
 form.run.features: "Features"
 form.run.submit: "Créer un run"
 form.run.error.no_feature: "Vous devez sélectionner au moins une feature"
+form.project.name: "Nom du projet"
+form.project.path: "Chemin du projet"
+form.project.submit: "Créer le projet"
 
 # Status labels
 pending: 'en attente'

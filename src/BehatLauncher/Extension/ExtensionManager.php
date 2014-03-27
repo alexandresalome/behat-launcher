@@ -5,10 +5,12 @@ namespace BehatLauncher\Extension;
 use BehatLauncher\Application;
 use BehatLauncher\Exception\ExtensionManagerFrozenException;
 use BehatLauncher\Extension\ExtensionInterface;
+use BehatLauncher\Extension\Resource\ResourceWorkspace;
 
 class ExtensionManager
 {
     private $extensions = array();
+    private $resourceWorkspace;
 
     /**
      * Adds an extension to the extension manager.
@@ -17,99 +19,34 @@ class ExtensionManager
      */
     public function addExtension(ExtensionInterface $extension)
     {
+        if ($this->resourceWorkspace !== null) {
+            throw new \RuntimeException('Cannot add extension: resource workspace initialized.');
+        }
+
         $this->extensions[] = $extension;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getModelPaths()
+    public function getResourceWorkspace()
     {
-        $paths = array();
+        if (null === $this->resourceWorkspace) {
+            $this->resourceWorkspace = new ResourceWorkspace($this->getResourceDirectories());
+        }
+
+        return $this->resourceWorkspace;
+    }
+
+    private function getResourceDirectories()
+    {
+        $result = array();
+
         foreach ($this->extensions as $extension) {
-            $path = $extension->getModelPath();
-            if (!$path) {
-                continue;
+            if (is_dir($dir = $extension->getDirectory().'/Resources')) {
+                $result[] = $dir;
             }
-
-            $paths[] = $path;
         }
 
-        return $paths;
-    }
-
-    /**
-     * @return array
-     */
-    public function getControllers()
-    {
-        $controllers = array();
-        foreach ($this->extensions as $extension) {
-            $controllers = array_merge($controllers, $extension->getControllers());
-        }
-
-        return $controllers;
-    }
-
-    public function getCommands(Application $app)
-    {
-        $commands = array();
-        foreach ($this->extensions as $extension) {
-            $commands = array_merge($commands, $extension->getCommands($app));
-        }
-
-        return $commands;
-    }
-
-    public function getTwigTemplatesDirs()
-    {
-        $dirs = array();
-        foreach ($this->extensions as $extension) {
-            $dir = $extension->getTwigTemplatesDir();
-            if (!$dir) {
-                continue;
-            }
-
-            $dirs[] = $dir;
-        }
-
-        return $dirs;
-    }
-
-    public function getAngularTemplatesDirs()
-    {
-        $dirs = array();
-        foreach ($this->extensions as $extension) {
-            $dir = $extension->getAngularTemplatesDir();
-            if (!$dir) {
-                continue;
-            }
-
-            $dirs[] = $dir;
-        }
-
-        return $dirs;
-    }
-
-    public function getJavascriptFiles()
-    {
-        $files = array();
-        foreach ($this->extensions as $extension) {
-            $files = array_merge($files, $extension->getJavascriptFiles());
-        }
-
-        return $files;
-    }
-
-    public function getStylesheetFiles()
-    {
-        $files = array();
-        foreach ($this->extensions as $extension) {
-            $files = array_merge($files, $extension->getStylesheetFiles());
-        }
-
-        return $files;
+        return $result;
     }
 }

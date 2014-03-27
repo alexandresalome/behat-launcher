@@ -15,12 +15,7 @@ class CoreExtension extends AbstractExtension
      */
     public function register(Application $app)
     {
-        $app['template_loader'] = $app->share(function ($app) {
-            $loader = new TemplateLoader();
-            $loader->addDirectories($app['extensions']->getAngularTemplatesDirs());
-
-            return $loader;
-        });
+        parent::register($app);
 
         $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
             $twig->addExtension(new DateExtension($app['translator']));

@@ -22,8 +22,12 @@ class DoctrineProvider implements ServiceProviderInterface
             ));
         });
 
+        $app['em.model_dirs'] = $app->share(function ($app) {
+            return array();
+        });
+
         $app['em'] = $app->share(function ($app) {
-            $config = Setup::createAnnotationMetadataConfiguration($app['extensions']->getModelPaths(), true, null, null, false);
+            $config = Setup::createAnnotationMetadataConfiguration($app['em.model_dirs'], true, null, null, false);
 
             return EntityManager::create($app['connection'], $config);
         });

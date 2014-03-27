@@ -13,7 +13,7 @@
 >
     <testsuites>
         <testsuite name="Behat Launcher test suite">
-            <directory>src/Alex/BehatLauncher/Tests</directory>
+            <directory>src/BehatLauncher/Tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

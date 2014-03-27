@@ -3,6 +3,7 @@
 namespace BehatLauncher\Extension;
 
 use BehatLauncher\Application;
+use BehatLauncher\Extension\Utils\ClassDiscoverer;
 use Symfony\Component\Finder\Finder;
 
 abstract class AbstractExtension implements ExtensionInterface
@@ -10,136 +11,86 @@ abstract class AbstractExtension implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function getModelPath()
-    {
-        $dir = $this->getDir();
-        if (is_dir($dir.'/Model')) {
-            return $dir;
-        }
-
-        return false;
-    }
-
-    public function getTwigTemplatesDir()
-    {
-        $dir = $this->getDir().'/Resources/views';
-
-        return is_dir($dir) ? $dir : null;
-    }
-
-    public function getAngularTemplatesDir()
-    {
-        $dir = $this->getDir().'/Resources/templates';
-
-        return is_dir($dir) ? $dir : null;
-    }
-
-    public function getResourcesDir()
-    {
-        $dir = $this->getDir().'/Resources';
-
-        return is_dir($dir) ? $dir : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getControllers()
-    {
-        $dir = $this->getDir().'/Controller';
-        if (!is_dir($dir)) {
-            return array();
-        }
-
-        $finder = Finder::create()
-            ->in($dir)
-            ->name('*Controller.php')
-        ;
-
-        $refl = new \ReflectionClass($this);
-        $name = $refl->getName();
-        $prefix = substr($name, 0, strrpos($name, '\\')).'\\Controller\\';
-
-        $controllers = array();
-        foreach ($finder as $file) {
-            $name = $file->getFilename();
-            $controller = substr($name, 0, strrpos($name, '.'));
-            $id = strtolower(substr($controller, 0, -10));
-            $controllers[$id] = $prefix.$controller;
-        }
-
-        return $controllers;
-    }
-
-    public function getCommands(Application $app)
-    {
-        $dir = $this->getDir().'/Command';
-        if (!is_dir($dir)) {
-            return array();
-        }
-
-        $finder = Finder::create()
-            ->in($dir)
-            ->name('*Command.php')
-        ;
-
-        $refl = new \ReflectionClass($this);
-        $name = $refl->getName();
-        $prefix = substr($name, 0, strrpos($name, '\\')).'\\Command\\';
-
-        $commands = array();
-        foreach ($finder as $file) {
-            $name = $file->getFilename();
-            $controller = substr($name, 0, strrpos($name, '.'));
-            $id = strtolower(substr($controller, 0, -7));
-            $class = $prefix.$controller;
-            $commands[] = new $class($app);
-        }
-
-        return $commands;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function register(Application $app)
     {
+        $this->registerCommands($app);
+        $this->registerControllers($app);
+        $this->registerModel($app);
     }
 
-    public function getJavascriptFiles()
-    {
-        if (!is_dir($dir = $this->getDir().'/Resources/js')) {
-            return array();
-        }
-
-        $files = array();
-
-        foreach (Finder::create()->in($dir)->files() as $file) {
-            $files[] = $file->getPathname();
-        }
-
-        return $files;
-    }
-
-    public function getStylesheetFiles()
-    {
-        if (!is_dir($dir = $this->getDir().'/Resources/less')) {
-            return array();
-        }
-
-        $files = array();
-
-        foreach (Finder::create()->in($dir)->files() as $file) {
-            $files[] = $file->getPathname();
-        }
-
-
-        return $files;
-    }
-
-    private function getDir()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDirectory()
     {
         $refl = new \ReflectionClass($this);
+
         return dirname($refl->getFilename());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNamespace()
+    {
+        $refl = new \ReflectionClass($this);
+        $name = $refl->getName();
+
+        return substr($name, 0, strrpos($name, '\\'));
+    }
+
+
+    private function registerCommands(Application $app)
+    {
+        if (!is_dir($this->getDirectory().'/Command')) {
+            return;
+        }
+
+        $discoverer = new ClassDiscoverer();
+        $classes    = $discoverer->discoverFinder(Finder::create()
+            ->in($this->getDirectory().'/Command')
+            ->name('*Command.php')
+        );
+
+        $app['console.commands'] = $app->share($app->extend('console.commands', function ($commands, $app) use ($classes) {
+            return array_merge($commands, array_map(function ($class) use ($app) {
+                return new $class($app);
+            }, $classes));
+        }));
+    }
+
+    private function registerControllers(Application $app)
+    {
+        if (!is_dir($this->getDirectory().'/Controller')) {
+            return;
+        }
+
+        $discoverer = new ClassDiscoverer();
+        $classes    = $discoverer->discoverFinder(Finder::create()
+            ->in($this->getDirectory().'/Controller')
+            ->name('*Controller.php')
+        );
+
+        foreach ($classes as $class) {
+            $id = $class::id();
+            $app[$id] = $app->share(function ($app) use ($class) {
+                return new $class($app);
+            });
+
+            $class::route($app);
+        }
+    }
+
+    private function registerModel(Application $app)
+    {
+        $dir = $this->getDirectory().'/Model';
+
+        if (is_dir($dir)) {
+            $app['em.model_dirs'] = $app->share($app->extend('em.model_dirs', function ($dirs, $app) use ($dir) {
+                $dirs[] = $dir;
+
+                return $dirs;
+            }));
+        }
     }
 }

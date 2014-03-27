@@ -11,11 +11,11 @@ class ConsoleProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $app['console'] = $app->share(function ($app) {
-            return new Console($app['console_commands']);
+            return new Console($app['console.commands']);
         });
 
-        $app['console_commands'] = $app->share(function ($app) {
-            return $app['extensions']->getCommands($app);
+        $app['console.commands'] = $app->share(function ($app) {
+            return array();
         });
     }
 

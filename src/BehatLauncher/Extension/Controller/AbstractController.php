@@ -25,7 +25,10 @@ abstract class AbstractController implements \ArrayAccess
         $this->app = $app;
     }
 
-    abstract public static function route(Application $app);
+    public static function route(Application $app)
+    {
+        throw new \RuntimeException(sprintf('%s::route() not implemented.', self::class));
+    }
 
     /**
      * {@inheritdoc}
@@ -61,8 +64,7 @@ abstract class AbstractController implements \ArrayAccess
 
     protected function serialize($data, array $context = array())
     {
-        $context['run_storage'] = $this->getRunStorage();
-        $context['project_list'] = $this->getProjectList();
+        $context['app'] = $this->app;
 
         $request = $this->app['request'];
         $accepted = explode(',', $request->headers->get('Accept'));
@@ -73,7 +75,7 @@ abstract class AbstractController implements \ArrayAccess
         }
 
         if ($format === 'html') {
-            return $this->render('layout.html.twig');
+            return $this->render('app.html.twig');
         }
 
         if (!in_array($format, $expected = array('json', 'xml'))) {
@@ -127,7 +129,7 @@ abstract class AbstractController implements \ArrayAccess
         return new JsonResponse($data);
     }
 
-    protected static function id()
+    public static function id()
     {
         $class = static::class;
         $class = substr($class, strrpos($class, '\\') + 1);

@@ -24,7 +24,13 @@ class FrontendController extends AbstractController
 
     public function templateAction(Request $request)
     {
-        return $this->jsonEncode($this['template_loader']->getSources());
+        $files = $this['extensions']->getResourceWorkspace()->getMergedFiles('/^templates\/.*\.html$/');
+        $result = array();
+        foreach ($files as $path => $file) {
+            $result[substr($path, 10)] = file_get_contents($file);
+        }
+
+        return $this->jsonEncode($result);
     }
 
     public function langAction(Request $request)
@@ -33,6 +39,15 @@ class FrontendController extends AbstractController
         if (!in_array($locale, array('en', 'fr'))) {
             $locale = 'en';
         }
-        return $this->serialize(Yaml::parse(__DIR__.'/../Resources/locales/'.$locale.'.yml'));
+
+        $data = array();
+        $locale = preg_quote($locale);
+        $files = $this['extensions']->getResourceWorkspace()->getMergedFiles('/^translations\/'.$locale.'\.yml$/');
+        foreach ($files as $file) {
+            $translations = Yaml::parse($file);
+            $data = array_merge($data, $translations);
+        }
+
+        return $this->serialize($data);
     }
 }

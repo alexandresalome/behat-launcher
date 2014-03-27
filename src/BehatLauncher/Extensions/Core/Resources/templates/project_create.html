@@ -1,0 +1,25 @@
+<div>
+    <h2>{{ 'title.project_create'|translate }}</h2>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="project_name" class="col-sm-2 control-label">{{ 'form.project.name'|translate }}</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="project_name" ng-model="project.name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="project_name" class="col-sm-2 control-label">{{ 'form.project.path'|translate }}</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="project_path" ng-model="project.path" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button ng-disabled="disabled" class="btn btn-success" ng-click="submit()" type="submit" id="project_submit" name="project[submit]">
+                    <span ng-show="disabled" class="glyphicon glyphicon-asterisk"></span>
+                    {{ 'form.project.submit'|translate }}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

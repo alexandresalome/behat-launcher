@@ -17,11 +17,18 @@ class ProjectController extends AbstractController
 
     public function listAction(Request $request)
     {
-        return $this->serialize($this->getProjectList()->getAll(), array('project_runs' => true));
+        $projects = $this->getProjectRepository()->findAll();
+
+        return $this->serialize($projects, array('project_runs' => true));
     }
 
     public function showAction(Request $request, $name)
     {
-        return $this->serialize($this->getProjectList()->get($name), array('project_details' => true, 'project_runs' => true));
+        return $this->serialize($this->getProjectRepository()->findOneByName($name), array('project_details' => true, 'project_runs' => true));
+    }
+
+    private function getProjectRepository()
+    {
+        return $this['em']->getRepository('BehatLauncher\Extensions\Core\Model\Project');
     }
 }

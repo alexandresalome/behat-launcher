@@ -41,11 +41,14 @@ blApp.config(function ($translateProvider, $routeProvider, $locationProvider) {
     $translateProvider.useMessageFormatInterpolation();
     $translateProvider.useUrlLoader('/translations');
 
+    var prefix = $("html").attr('ng-path') || '/';
+
     $routeProvider
         .when('/', {controller: "ProjectListCtrl", templateUrl: "project_list.html"})
         .when('/runs', {controller: "RunListCtrl", templateUrl: "run_list.html"})
         .when('/runs/:id', {controller: "RunShowCtrl", templateUrl: "run_show.html"})
         .when('/create', {controller: "RunCreateCtrl", templateUrl: "run_create.html", reloadOnSearch: false})
+        .when('/create-project', {controller: "ProjectCreateCtrl", templateUrl: "project_create.html", reloadOnSearch: false})
         .when('/output/:id', {controller: "OutputFileShowCtrl", templateUrl: "outputFile_show.html"})
     ;
 });

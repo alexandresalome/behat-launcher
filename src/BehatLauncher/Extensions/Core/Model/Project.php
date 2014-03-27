@@ -1,6 +1,6 @@
 <?php
 
-namespace BehatLauncher\Extension\Core\Model;
+namespace BehatLauncher\Extensions\Core\Model;
 
 use BehatLauncher\Configuration\PropertySet;
 use BehatLauncher\Extension\Behat\Feature\FeatureDirectory;
