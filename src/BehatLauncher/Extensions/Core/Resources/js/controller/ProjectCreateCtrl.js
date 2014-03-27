@@ -1,4 +1,4 @@
-blApp.controller('ProjectCreateCtrl', function ($scope, $timeout, Menu, Project) {
+blApp.controller('ProjectCreateCtrl', function ($scope, $timeout, Menu, Project, FormFactory) {
     Menu.setCustomActive({
         path: '/create-project',
         label: 'New project'
@@ -6,6 +6,7 @@ blApp.controller('ProjectCreateCtrl', function ($scope, $timeout, Menu, Project)
 
     $scope.project  = new Project();
     $scope.disabled = false;
+    $scope.form     = FormFactory.create('project');
 
     $scope.submit = function () {
         console.log($scope.project);
