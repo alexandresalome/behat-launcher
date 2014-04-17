@@ -14,6 +14,8 @@ Symfony\Component\Debug\Debug::enable();
 
 $config = __DIR__.'/../config.php';
 $app = new Alex\BehatLauncher\Application(array('debug' => true));
-opcache_invalidate($config, true);
+if (function_exists('opcache_invalidate')) {
+    opcache_invalidate($config, true);
+}
 require_once $config;
 $app->run();
