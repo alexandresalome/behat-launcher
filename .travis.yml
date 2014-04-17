@@ -1,5 +1,5 @@
 language: php
-php:      [ "5.5" ]
+php:      [ "5.5", "5.4" ]
 script:   "./test.sh"
 
 before_script:
