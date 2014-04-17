@@ -10,7 +10,7 @@
     },
 
     "require": {
-        "php"                 :    ">=5.5",
+        "php"                 :    ">=5.4",
         "silex/silex"         :    "~1.1",
         "silex/web-profiler"  :    "~1.0",
         "symfony/console"     :    "~2.4",
