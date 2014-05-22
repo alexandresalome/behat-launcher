@@ -27,6 +27,11 @@ class Project implements NormalizableInterface
     /**
      * @var string
      */
+    private $featuresPath = 'features';
+
+    /**
+     * @var string
+     */
     private $behatBin;
 
     /**
@@ -148,16 +153,6 @@ class Project implements NormalizableInterface
     }
 
     /**
-     * Returns directory containing .features files.
-     *
-     * @return string
-     */
-    public function getFeaturesPath()
-    {
-        return 'features';
-    }
-
-    /**
      * Changes project name.
      *
      * @param string $name new project name
@@ -169,6 +164,26 @@ class Project implements NormalizableInterface
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * Change directory containing .features files.
+     *
+     * @return string
+     */
+    public function getFeaturesPath()
+    {
+        return $this->featuresPath;
+    }
+
+    /**
+     * Returns directory containing .features files.
+     *
+     * @param string $featuresPath
+     */
+    public function setFeaturesPath($featuresPath)
+    {
+        $this->featuresPath = $featuresPath;
     }
 
     /**
