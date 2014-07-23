@@ -158,6 +158,9 @@ class RunUnit implements NormalizableInterface
             unlink($configFile);
 
             $this->returnCode = $this->process->getExitCode();
+            if (null === $this->returnCode) {
+                $this->returnCode = 255;
+            }
             $this->finishedAt = new \DateTime();
         };
 
