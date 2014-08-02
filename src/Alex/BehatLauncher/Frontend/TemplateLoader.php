@@ -38,9 +38,9 @@ class TemplateLoader
     /**
      * Returns source for a given template.
      *
-     * @param  string $name a template name
+     * @param string $name a template name
      *
-     * @return  string a template source
+     * @return string a template source
      *
      * @throws InvalidArgumentException If template not found
      */
@@ -54,7 +54,7 @@ class TemplateLoader
     /**
      * Updates the template loader file cache.
      *
-     * @return  TemplateLoader fluid interface
+     * @return TemplateLoader fluid interface
      */
     public function update($force = false)
     {

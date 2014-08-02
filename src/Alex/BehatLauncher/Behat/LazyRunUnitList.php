@@ -2,8 +2,6 @@
 
 namespace Alex\BehatLauncher\Behat;
 
-use Alex\BehatLauncher\Behat\RunUnit;
-
 /**
  * Lazy-load run units from storage on call.
  */

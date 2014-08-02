@@ -4,7 +4,6 @@ namespace Alex\BehatLauncher\Behat;
 
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Holds a collection of output files and provide methods around it.

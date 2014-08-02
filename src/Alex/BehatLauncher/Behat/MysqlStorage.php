@@ -2,12 +2,6 @@
 
 namespace Alex\BehatLauncher\Behat;
 
-use Alex\BehatLauncher\Behat\LazyRunUnitList;
-use Alex\BehatLauncher\Behat\OutputFile;
-use Alex\BehatLauncher\Behat\Project;
-use Alex\BehatLauncher\Behat\Run;
-use Alex\BehatLauncher\Behat\RunUnit;
-use Alex\BehatLauncher\Behat\RunUnitList;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
@@ -47,7 +41,6 @@ class MysqlStorage
         $name = $params['dbname'];
         unset($params['dbname']);
         $conn = DriverManager::getConnection($params);
-
 
         $conn->exec('CREATE DATABASE IF NOT EXISTS '.$name);
 
@@ -126,7 +119,6 @@ class MysqlStorage
             $stmt->bindValue('finished_at', $unit->getFinishedAt(), "datetime");
             $stmt->bindValue('return_code', $unit->getReturnCode());
             $stmt->bindValue('output_files', json_encode($unit->getOutputFiles()->toArrayOfID()));
-
 
             $stmt->execute();
             $unit->setId($this->connection->lastInsertId());
@@ -239,6 +231,7 @@ class MysqlStorage
 
         if (!$row = $stmt->fetch()) {
             $this->connection->commit();
+
             return; // nothing to process
         }
 
