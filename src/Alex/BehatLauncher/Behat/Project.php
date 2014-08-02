@@ -2,8 +2,6 @@
 
 namespace Alex\BehatLauncher\Behat;
 
-use Alex\BehatLauncher\Behat\MysqlStorage;
-use Alex\BehatLauncher\Behat\ProjectProperty;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -52,9 +50,9 @@ class Project implements NormalizableInterface
     /**
      * Creates a new Behat Launcher project, to execute runs on it.
      *
-     * @param string $name project name
-     * @param string $path path to the Behat project
-     * @param array $properties an array of ProjectProperty objects
+     * @param string $name       project name
+     * @param string $path       path to the Behat project
+     * @param array  $properties an array of ProjectProperty objects
      */
     public function __construct($name = null, $path = null, array $properties = array())
     {

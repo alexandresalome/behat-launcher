@@ -129,7 +129,6 @@ class OutputFile
         return !$this->exists() || filesize($this->path) == 0;
     }
 
-
     /**
      * @return string an absolute path
      */

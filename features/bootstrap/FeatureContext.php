@@ -8,7 +8,6 @@ use Behat\Gherkin\Node\TableNode;
 use Symfony\Component\Process\ProcessBuilder;
 use WebDriver\Behat\AbstractWebDriverContext;
 use WebDriver\Behat\WebDriverContext;
-use WebDriver\By;
 
 class FeatureContext extends AbstractWebDriverContext
 {

@@ -16,7 +16,6 @@ use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
 
 class Application extends BaseApplication
 {
@@ -134,7 +133,7 @@ class Application extends BaseApplication
 
         // Controllers as service
         foreach ($controllers as $id => $class) {
-            $this['controller.'.$id] = $this->share(function($app) use ($class) {
+            $this['controller.'.$id] = $this->share(function ($app) use ($class) {
                 return new $class($app);
             });
 
