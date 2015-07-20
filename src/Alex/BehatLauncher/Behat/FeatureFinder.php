@@ -6,13 +6,25 @@ use Symfony\Component\Finder\Finder;
 
 class FeatureFinder
 {
-    public function findFeatures($path)
+    public function findFeatures($path, $contentFilters = null)
     {
-        $finder = Finder::create()
-            ->sortByName()
-            ->in($path)
-            ->name('*.feature')
-        ;
+        if ($contentFilters == null)
+        {
+            $finder = Finder::create()
+                ->sortByName()
+                ->in($path)
+                ->name('*.feature')
+            ;
+        }
+        else
+        {
+            $finder = Finder::create()
+                ->sortByName()
+                ->in($path)
+                ->name('*.feature')
+                ->contains($contentFilters)
+            ;
+        }
 
         $result = new FeatureDirectory('');
 
