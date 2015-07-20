@@ -50,6 +50,26 @@ class Project implements NormalizableInterface
     private $runnerCount = 1;
 
     /**
+     * @var string
+     */
+    private $behatYmlFile = 'behat.yml';
+
+    /**
+     * @var string
+     */
+    private $profile = 'default';
+
+    /**
+     * @var string
+     */
+    private $tags = '';
+
+    /**
+     * @var string
+     */
+    private $fileFilter = null;
+
+    /**
      * Creates a new Behat Launcher project, to execute runs on it.
      *
      * @param string $name project name
@@ -109,8 +129,8 @@ class Project implements NormalizableInterface
      */
     public function getConfig(array $values = array())
     {
-        if (file_exists($file = $this->path.'/behat.yml')) {
-            $content = Yaml::parse($file);
+        if (file_exists($file = $this->path . DIRECTORY_SEPARATOR . $this->behatYmlFile)) {
+            $content = Yaml::parse(file_get_contents($file));
         } else {
             $content = array();
         }
@@ -139,7 +159,7 @@ class Project implements NormalizableInterface
 
         $finder = new FeatureFinder();
 
-        return $finder->findFeatures($path);
+        return $finder->findFeatures($path, $this->getFileFilter());
     }
 
     /**
@@ -354,4 +374,99 @@ class Project implements NormalizableInterface
 
         return $this;
     }
+
+    /**
+     * Set behat.yml file
+     *
+     * @param $behatYmlFile
+     * @return Project
+     */
+    public function setBehatYmlFile($behatYmlFile)
+    {
+        $this->behatYmlFile = $behatYmlFile;
+
+        return $this;
+    }
+
+    /**
+     * Returns the current behat.yml file
+     *
+     * @return string
+     */
+    public function getBehatYmlFile()
+    {
+        return $this->behatYmlFile;
+    }
+
+    /**
+     * Set the profile to be sent to behat command line
+     *
+     * @param $profile
+     * @return $this
+     */
+    public function setProfile($profile)
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    /**
+     * Get the current set profile
+     *
+     * @return string
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
+
+    /**
+     * Get the current set tags
+     *
+     * @return string
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Set the tags to be sent to behat command line
+     *
+     * @param string $tags
+     * @return $this
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * Get the current set file filters
+     *
+     * @return string
+     */
+    public function getFileFilter()
+    {
+        return $this->fileFilter;
+    }
+
+    /**
+     * Set the filters to be used on .feature files (file contains ...)
+     * used in \Alex\BehatLauncher\Behat\FeatureFinder::findFeatures()
+     * http://symfony.com/doc/current/components/finder.html#file-contents
+     *
+     * @param string $fileFilter
+     * @return $this
+     */
+    public function setFileFilter($fileFilter)
+    {
+        $this->fileFilter = $fileFilter;
+
+        return $this;
+    }
+
 }
