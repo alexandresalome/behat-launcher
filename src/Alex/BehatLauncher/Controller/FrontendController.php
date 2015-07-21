@@ -33,6 +33,6 @@ class FrontendController extends Controller
         if (!in_array($locale, array('en', 'fr'))) {
             $locale = 'en';
         }
-        return $this->serialize(Yaml::parse(__DIR__.'/../Resources/locales/'.$locale.'.yml'));
+        return $this->serialize(Yaml::parse(file_get_contents(__DIR__.'/../Resources/locales/'.$locale.'.yml')));
     }
 }

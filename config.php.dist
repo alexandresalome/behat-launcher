@@ -21,3 +21,16 @@ $app->configureMysql('localhost', 'behat_launcher', 'root', '');
 //         ->setDefault('chrome')
 //         ->setChoices(array('firefox' => 'Mozilla Firefox', 'chrome' => 'Google Chrome'))
 //     ->endProperty()
+
+//// Use specific behat.yml file
+//// Use profile parameter
+//// Use *.feature files filter based on specified tag
+//$app->createProject('INT: [Smoke - Chrome]', '/var/www/bros')
+//    ->setBehatYmlFile('behat_Chrome.yml')
+//    // behat --profile int
+//    ->setProfile('int')
+//    ->setTags('@smoke')
+//    // filter .feature files that contain @smoke tag
+//    // (otherwise behat raises error that no scenario was found)
+//    ->setFileFilter('@smoke')
+//    ->setFeaturesPath('features/all');

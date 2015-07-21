@@ -150,7 +150,12 @@ class RunUnit implements NormalizableInterface
         $pb->add('-f')->add(implode(',', $argFormats));
         $pb->add('--out')->add(implode(',', $argOutputs));
 
-        $pb->add('--ansi');
+        $pb->add('--colors');
+
+        $pb->add('--profile')->add($project->getProfile());
+
+        // add tags parameter only if set (empty by default)
+        $project->getTags() !== '' ? $pb->add('--tags')->add($project->getTags()) : null;
 
         $this->process = $pb->getProcess();
 
