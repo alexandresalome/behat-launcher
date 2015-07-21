@@ -24,8 +24,6 @@ class OutputFileController extends Controller
             $content = $converter->convert($content);
             $template = 'outputFile_text.html.twig';
 
-            // Daniel Candrea: insert screenshots
-
             // extract screenshots messages
             preg_match_all('#Screenshot at: (.*)#', $content, $screenshots, PREG_OFFSET_CAPTURE);
             foreach ($screenshots[0] as $screenshot)
